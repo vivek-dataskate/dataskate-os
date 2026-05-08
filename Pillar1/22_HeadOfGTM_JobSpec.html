@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DataSkate · Head of GTM Job Specification</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B1C0A;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-lt:#EEF1F7;--slate-dk:#141C2E;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-dk:#92400E;
+  --green:#15803D;--green-lt:#F0FDF4;
+  --purple:#6D28D9;--purple-lt:#EDE9FE;
+  --ink:#111827;--muted:#6B7280;--border:#E5E7EB;--white:#fff;--bg:#F8F7F4
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--ink);padding:40px 52px 32px;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-70px;right:-70px;width:280px;height:280px;border-radius:50%;background:var(--coral);opacity:.1}
+.logo{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:8px}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,44px);font-weight:800;color:#fff;line-height:1.1;position:relative;z-index:1}
+header h1 span{color:var(--coral)}
+.header-sub{font-size:13px;color:rgba(255,255,255,.4);margin-top:8px}
+.meta-bar{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.meta-chip{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15)}
+main{padding:36px 52px 72px}
+.sec{margin-bottom:40px}
+.sec-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:6px}
+.sec-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--ink);margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.three-col{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:18px}
+.card-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.item{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5}
+.item:last-child{border-bottom:none}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:7px;display:inline-block;margin-bottom:4px}
+.must{background:#FEE2E2;color:#991B1B}
+.good{background:#DBEAFE;color:#1E40AF}
+.deal{background:var(--red-lt,#FEF2F2);color:#991B1B;font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px}
+/* INTERVIEW */
+.q-block{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px}
+.q-text{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:6px}
+.q-why{font-size:11px;color:var(--muted);line-height:1.6}
+.q-look{font-size:11px;color:var(--teal-dk);margin-top:6px;line-height:1.6}
+/* 30/60/90 */
+.plan-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.plan-card{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.plan-head{padding:12px 16px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.plan-body{background:var(--white);padding:12px 16px;font-size:12px;line-height:1.8}
+.plan-body li{margin-left:14px;margin-bottom:3px}
+/* COMP TABLE */
+.comp-table{width:100%;border-collapse:collapse;font-size:13px;background:var(--white);border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.comp-table th{background:var(--slate);color:#fff;padding:10px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.comp-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:nth-child(even) td{background:#FAFAFA}
+/* ALERT */
+.alert{border-radius:10px;padding:16px 20px;margin-bottom:20px;border:1.5px solid}
+.alert-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.alert-body{font-size:13px;line-height:1.7}
+footer{background:var(--ink);padding:22px 52px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:900px){.two-col,.three-col,.plan-grid{grid-template-columns:1fr}main,header,footer{padding-left:20px;padding-right:20px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">DataSkate · Job Specification</div>
+  <h1>Head of <span>GTM</span></h1>
+  <div class="header-sub">Full-time · Pillar 1 — Partner Alliance & GTM · Reports to VP of Alliances · Manages SDR/BDR</div>
+  <div class="meta-bar">
+    <span class="meta-chip">Full GTM ownership — inbound + outbound</span>
+    <span class="meta-chip">Manages SDR/BDR direct report</span>
+    <span class="meta-chip">First hire: Head of GTM · SDR joins 6–8 weeks later</span>
+    <span class="meta-chip">$75–95K USD · AUD $95–125K</span>
+  </div>
+</header>
+
+<main>
+
+<!-- WHY THIS ROLE EXISTS -->
+<div class="sec">
+  <div class="sec-label">Context</div>
+  <div class="sec-title">Why This Role Exists Now</div>
+  <div class="alert" style="background:var(--coral-lt);border-color:var(--coral-dk)">
+    <div class="alert-title" style="color:var(--coral-dk)">The problem this role solves</div>
+    <div class="alert-body" style="color:var(--coral-dk)">
+      DataSkate's revenue engine has been entirely inbound — waiting for MuleSoft and Salesforce AEs to refer prospects. That model works but it caps growth at the AE's referral willingness. The Head of GTM builds and runs the outbound motion that makes DataSkate the demand generation engine <em>for</em> partner AEs — not just a recipient of their referrals. In parallel, they run the inbound content and brand machine that keeps DataSkate visible and trusted in the Salesforce/MuleSoft ecosystem.<br/><br/>
+      VP of Alliances should be closing deals and managing partner relationships — not managing SDR sequences or reviewing content calendars. Head of GTM owns all of that, runs it independently, and reports outcomes weekly.
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">What success looks like at 6 months</div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>SDR hired, onboarded, and booking 4–6 qualified 3-way calls per week</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Outbound pipeline contributing ≥30% of total qualified leads</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>CEO LinkedIn at 3,000+ followers with consistent engagement</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Weekly GTM KPI report running without VP Alliances asking for it</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Full sequence library — 4 pain bucket variants, tested and iterated</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>VP Alliances is not managing SDR or content day-to-day</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">What this role is NOT</div>
+      <div class="item"><div class="dot" style="background:var(--slate)"></div><div>A content coordinator who takes briefs — this role sets the strategy</div></div>
+      <div class="item"><div class="dot" style="background:var(--slate)"></div><div>A demand gen specialist who ignores content — both sides are owned</div></div>
+      <div class="item"><div class="dot" style="background:var(--slate)"></div><div>A sales role — no discovery calls, no SOW scoping, no closing</div></div>
+      <div class="item"><div class="dot" style="background:var(--slate)"></div><div>A brand/social media manager — content serves pipeline, not vanity metrics</div></div>
+      <div class="item"><div class="dot" style="background:var(--slate)"></div><div>A junior role — managing a direct report (SDR) and owning pipeline outcomes requires seniority</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESPONSIBILITIES -->
+<div class="sec">
+  <div class="sec-label">Role Definition</div>
+  <div class="sec-title">Responsibilities</div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Outbound — owns the machine</div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Define and maintain ICP — company size, titles, tech stack signals, buying triggers — updated monthly based on what's converting</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Build and own the full sequence library — 9-touch 18-day sequences, 4 pain bucket variants, A/B tested continuously</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Set up and manage outbound tool stack — Apollo, Clay, Instantly, domain warmup, email deliverability</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Manage SDR/BDR — weekly review, sequence quality, ramp plan, coaching on objection handling and qualifying calls</div></div>
+      <div class="item"><div class="dot" style="background:var(--coral)"></div><div>Report outbound KPIs to VP Alliances weekly — prospects contacted, reply rate, calls booked, pipeline generated</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Inbound — owns the content engine</div>
+      <div class="item"><div class="dot" style="background:var(--teal)"></div><div>CEO/VP/DH personal brand — draft posts, manage approval workflow, schedule, track performance</div></div>
+      <div class="item"><div class="dot" style="background:var(--teal)"></div><div>Collateral production — case studies, one-pagers, co-branded decks, AE enablement kit, objection guides</div></div>
+      <div class="item"><div class="dot" style="background:var(--teal)"></div><div>AppExchange presence — listing content, reviews, rating maintenance</div></div>
+      <div class="item"><div class="dot" style="background:var(--teal)"></div><div>MDF management — partner co-marketing submissions, deadline tracking, claim submissions</div></div>
+      <div class="item"><div class="dot" style="background:var(--teal)"></div><div>Events and webinars — speaker applications, webinar production coordination, event logistics (agenda only; Admin handles travel)</div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">Performance & Reporting</div>
+    <div class="item"><div class="dot" style="background:var(--amber)"></div><div>Weekly GTM KPI report to VP Alliances — pipeline by motion (inbound vs outbound), conversion rates, what's working, what needs fixing</div></div>
+    <div class="item"><div class="dot" style="background:var(--amber)"></div><div>Monthly full GTM performance review — which of the 5 motions is over/underperforming, where to invest next month's effort</div></div>
+    <div class="item"><div class="dot" style="background:var(--amber)"></div><div>Quarterly GTM strategy review — present to VP Alliances and CEO: pipeline attribution by source, SDR performance, content ROI, next quarter plan</div></div>
+    <div class="item"><div class="dot" style="background:var(--amber)"></div><div>HubSpot pipeline hygiene — ensure all outbound activity is logged and attributed correctly; SDR data is clean and reportable</div></div>
+  </div>
+</div>
+
+<!-- HIRING PROFILE -->
+<div class="sec">
+  <div class="sec-label">Hiring Profile</div>
+  <div class="sec-title">Who You're Looking For</div>
+
+  <div class="alert" style="background:var(--amber-lt);border-color:var(--amber-dk)">
+    <div class="alert-title" style="color:var(--amber-dk)">The rare combination — and why it matters</div>
+    <div class="alert-body" style="color:var(--amber-dk)">
+      Most marketers are strong on one side: content people who understand brand and storytelling, or demand gen people who understand outbound and pipeline. This role needs both. The hire must have genuinely run cold email campaigns — not just "I know what Instantly is" — AND have produced B2B content that drove engagement. Background to look for: <strong>demand gen or growth marketing at a B2B SaaS or SI company</strong>, 4–6 years experience, with direct evidence of both.
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">Must-haves <span class="must">Non-negotiable</span></div>
+      <div class="item"><div class="dot" style="background:#991B1B"></div><div>4–6 years B2B marketing experience — not agency, not B2C</div></div>
+      <div class="item"><div class="dot" style="background:#991B1B"></div><div>Has personally written and run cold email sequences — knows deliverability, reply rate, A/B testing</div></div>
+      <div class="item"><div class="dot" style="background:#991B1B"></div><div>Has used or can immediately learn: Apollo, Clay, Instantly (or equivalent outbound stack)</div></div>
+      <div class="item"><div class="dot" style="background:#991B1B"></div><div>Has produced B2B content — LinkedIn posts, case studies, collateral — that got engagement and drove pipeline</div></div>
+      <div class="item"><div class="dot" style="background:#991B1B"></div><div>Has managed at least one direct report or contractor — not a first-time people manager</div></div>
+      <div class="item"><div class="dot" style="background:#991B1B"></div><div>Comfortable reporting pipeline metrics to a revenue leader — not just vanity metrics</div></div>
+      <div class="item"><div class="dot" style="background:#991B1B"></div><div>Understands the Salesforce / MuleSoft ecosystem — knows what an SI is, what a partner AE does, why co-sell matters</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Strong-to-haves <span class="good">High value</span></div>
+      <div class="item"><div class="dot" style="background:#1E40AF"></div><div>Background at a Salesforce SI, consulting firm, or SaaS company selling to enterprise IT</div></div>
+      <div class="item"><div class="dot" style="background:#1E40AF"></div><div>Has built a personal brand or exec LinkedIn presence — knows what makes content work on LinkedIn</div></div>
+      <div class="item"><div class="dot" style="background:#1E40AF"></div><div>HubSpot experience — can build reports, set up attribution, maintain pipeline hygiene</div></div>
+      <div class="item"><div class="dot" style="background:#1E40AF"></div><div>Experience with Shield App, Buffer/Taplio, Canva, or equivalent content tools</div></div>
+      <div class="item"><div class="dot" style="background:#1E40AF"></div><div>Has been part of a company scaling from $1M to $5M ARR — understands the scrappiness required</div></div>
+      <div class="item"><div class="dot" style="background:#1E40AF"></div><div>Has written objection guides or sales enablement material — understands the sales motion, not just marketing</div></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Immediate disqualifiers — do not progress</div>
+    <div class="item"><div class="dot" style="background:#DC2626"></div><div>Pure content background with no outbound or demand gen experience — will build good content but sequences will fail</div></div>
+    <div class="item"><div class="dot" style="background:#DC2626"></div><div>Pure outbound/sales background with no content experience — will run decent sequences but brand and collateral will be generic and weak</div></div>
+    <div class="item"><div class="dot" style="background:#DC2626"></div><div>Never managed a direct report — SDR management requires people leadership experience</div></div>
+    <div class="item"><div class="dot" style="background:#DC2626"></div><div>Only measured themselves on impressions and followers — needs to be accountable to pipeline metrics</div></div>
+    <div class="item"><div class="dot" style="background:#DC2626"></div><div>Expects a large team or big budget — DataSkate at this stage is lean; this role must do the work, not direct others to do it</div></div>
+  </div>
+</div>
+
+<!-- INTERVIEW QUESTIONS -->
+<div class="sec">
+  <div class="sec-label">Interview Guide</div>
+  <div class="sec-title">Interview Questions — What to Ask and What to Listen For</div>
+
+  <div class="q-block">
+    <div class="q-text">1. "Walk me through a cold email sequence you wrote and ran. What was the pain bucket, what were the open and reply rates, and what did you change after the first 50 sends?"</div>
+    <div class="q-why">Why: Tests real outbound execution experience. Anyone who has done this will have specific numbers and specific changes. Anyone who hasn't will give vague answers about "personalisation" without data.</div>
+    <div class="q-look">Listen for: Specific metrics (open rate %, reply rate %), a named tool (Instantly, Outreach, etc.), a specific sequence structure, and evidence of iteration based on data — not just writing it once and walking away.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">2. "Tell me about a piece of B2B content you produced that drove pipeline. Not impressions — actual pipeline. How do you know it worked?"</div>
+    <div class="q-why">Why: Tests whether they tie content to revenue. A strong candidate connects content to HubSpot UTM tracking, to inbound requests, to conversations started. A weak candidate talks about impressions and engagement without linking to pipeline.</div>
+    <div class="q-look">Listen for: Attribution methodology, specific deal or lead that came from the content, willingness to admit when content didn't convert despite good engagement.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">3. "How would you ICP a list of 500 companies for a MuleSoft implementation partner? Walk me through the filters and priority ranking."</div>
+    <div class="q-why">Why: Tests whether they understand the Salesforce/MuleSoft ecosystem and ICP thinking. Tests Apollo/Clay knowledge. Tests whether they think in terms of intent signals, not just firmographics.</div>
+    <div class="q-look">Listen for: Tech stack detection (MuleSoft/Salesforce users), integration job postings as intent signal, company size logic, title prioritisation (VP IT vs Developer), mention of Clay or Apollo enrichment, scoring logic.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">4. "You have an SDR who's been in the role 6 weeks. They're hitting 15 dials a day but only booking 1 call per week. What do you do?"</div>
+    <div class="q-why">Why: Tests SDR management and diagnostic thinking. The problem could be the ICP, the sequence, the qualifying threshold, the call script, or the prospect list quality. A good Head of GTM knows how to diagnose which one.</div>
+    <div class="q-look">Listen for: Structured diagnostic approach — "first I'd look at X, then Y." Red flag: immediately jumping to "we need to change the sequences" without diagnosing. Green flag: checking the prospect list quality and ICP fit first.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">5. "You're 30 days in. Walk me through exactly what you'd build first, and why in that order."</div>
+    <div class="q-why">Why: Tests prioritisation thinking and understanding of the system dependency chain. The right order is: ICP → domain warmup → sequence library → test personally → SDR hired into working system. Wrong order: hire SDR first, then figure out ICP.</div>
+    <div class="q-look">Listen for: Domain warmup in the first 30 days (critical — 3 weeks minimum before sequences run). ICP definition before sequences. Testing personally before handing to SDR. Structured sequence library before SDR joins.</div>
+  </div>
+
+  <div class="q-block">
+    <div class="q-text">6. "How do you report GTM performance to a revenue leader who doesn't want to hear about impressions?"</div>
+    <div class="q-why">Why: Tests whether they can translate marketing activity to revenue language. VP Alliances cares about pipeline, calls booked, deals influenced — not reach and engagement.</div>
+    <div class="q-look">Listen for: Pipeline by motion, cost per booked call, conversion rate from sequence reply to qualified call, deal influence attribution. Red flag: talking about follower growth and post impressions as primary metrics.</div>
+  </div>
+</div>
+
+<!-- 30/60/90 -->
+<div class="sec">
+  <div class="sec-label">Onboarding Plan</div>
+  <div class="sec-title">30 / 60 / 90 Day Plan</div>
+  <div class="plan-grid">
+    <div class="plan-card">
+      <div class="plan-head" style="background:var(--coral-lt);color:var(--coral-dk)">Days 1–30 · Learn & Design</div>
+      <div class="plan-body"><ul>
+        <li>Shadow 3+ discovery calls with Alliance Mgr/AE — hear what pain prospects articulate in their own words</li>
+        <li>Interview VP Alliances on ICP — which companies close fastest, which titles sign, which pain creates urgency</li>
+        <li>Audit existing content, collateral, and sequences — document what exists and what's missing</li>
+        <li>Set up tool stack — Apollo, Clay, Instantly, Shield, Buffer/Taplio all live and configured</li>
+        <li>Start domain warmup — minimum 3 weeks before any cold sequences launch</li>
+        <li>Take over CEO content workflow — understand the approval process, start producing posts</li>
+        <li><strong>End of Day 30:</strong> ICP documented, tool stack live, domain warmup running, CEO content cadence active</li>
+      </ul></div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-head" style="background:var(--amber-lt);color:var(--amber-dk)">Days 31–60 · Build & Test</div>
+      <div class="plan-body"><ul>
+        <li>Write full 9-touch sequence library — 4 pain bucket variants, tested for tone and personalisation hooks</li>
+        <li>Build first prospect list — 200 contacts enriched via Clay, emails verified, bounce rate checked</li>
+        <li>Launch test sequences personally — Head of GTM sends first batch before SDR joins</li>
+        <li>Iterate based on first open/reply data — rewrite any step with open rate below 30%</li>
+        <li>Produce SDR onboarding pack — ICP doc, sequence playbook, qualifying call script, objection guide, tool walkthroughs</li>
+        <li>Begin SDR hiring process — job posting live, first interviews in progress</li>
+        <li><strong>End of Day 60:</strong> Sequences tested and iterated, first replies received, SDR hired or offer out</li>
+      </ul></div>
+    </div>
+    <div class="plan-card">
+      <div class="plan-head" style="background:var(--teal-lt);color:var(--teal-dk)">Days 61–90 · SDR Joins & Reports</div>
+      <div class="plan-body"><ul>
+        <li>SDR onboarded into a working system — not building from scratch</li>
+        <li>SDR shadows Head of GTM on outreach for first 2 weeks before going solo</li>
+        <li>Weekly SDR review established — Monday 30 min, fixed agenda, data-driven</li>
+        <li>First booked 3-way calls — SDR targets 2/week in ramp month 1</li>
+        <li>Weekly GTM KPI report running every Friday without VP Alliances requesting it</li>
+        <li>First monthly GTM performance review presented to VP Alliances</li>
+        <li><strong>End of Day 90:</strong> SDR booking calls, outbound pipeline visible in HubSpot, VP Alliances not managing SDR day-to-day</li>
+      </ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPENSATION -->
+<div class="sec">
+  <div class="sec-label">Compensation</div>
+  <div class="sec-title">Salary Range & What Drives It</div>
+
+  <div class="alert" style="background:var(--slate-lt);border-color:var(--slate-dk)">
+    <div class="alert-title" style="color:var(--slate-dk)">Why this role commands a higher salary than a coordinator</div>
+    <div class="alert-body" style="color:var(--slate-dk)">
+      This is not a GTM Coordinator with extra responsibilities. It is a Head of GTM who owns strategy, manages a direct report, and is accountable for pipeline outcomes. The rare combination of outbound expertise and content capability at this seniority level is priced accordingly in the market. Underpaying gets you a coordinator who does the easy parts and avoids the hard ones.
+    </div>
+  </div>
+
+  <table class="comp-table">
+    <thead><tr><th>Market</th><th>Base Salary Range</th><th>What determines where in the range</th></tr></thead>
+    <tbody>
+      <tr><td><strong>US (major market)</strong></td><td>$80,000 – $100,000 USD</td><td>Salesforce/MuleSoft ecosystem experience pushes toward top. 4 years experience = lower end. 6+ years = upper end.</td></tr>
+      <tr><td><strong>US (smaller market / remote)</strong></td><td>$72,000 – $85,000 USD</td><td>Geographic flexibility allows lower base. Equity or commission can bridge gap.</td></tr>
+      <tr><td><strong>Australia / NZ</strong></td><td>AUD $95,000 – $125,000</td><td>Sydney/Melbourne market runs higher. Remote roles can be AUD $85K+.</td></tr>
+      <tr><td><strong>UK</strong></td><td>£60,000 – £78,000</td><td>London adds 15–20% premium. Strong Salesforce ecosystem knowledge pushes toward top.</td></tr>
+      <tr><td><strong>OTE / Variable component</strong></td><td>10–15% of base as bonus</td><td>Tied to outbound pipeline generated, SDR ramp achievement, and content-attributed deals. Not commission — bonus.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+<footer>
+  <span>DataSkate · Head of GTM Job Specification · Q2 2026</span>
+  <span>Hire Head of GTM first · SDR joins 6–8 weeks later · Replaces GTM Coordinator scope</span>
+</footer>
+</body>
+</html>

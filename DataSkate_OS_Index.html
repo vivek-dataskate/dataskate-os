@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataSkate — Operating System v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A; --teal:#0D7A6B; --navy:#1B6CA8; --slate:#2A3550;
+  --ink:#111827; --muted:#6B7280; --border:#E5E7EB;
+  --bg:#F0EEE9; --white:#fff;
+  --p1:#1B6CA8; --p1l:#EBF4FB;
+  --p2:#0D7A6B; --p2l:#E6F5F2;
+  --p3:#2A3550; --p3l:#EEF1F7;
+  --amber:#D97706; --amber-lt:#FFFBEB;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* HEADER */
+header{background:var(--ink);padding:20px 48px;display:flex;align-items:center;gap:16px}
+.logo{width:38px;height:38px;background:var(--coral);border-radius:9px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#fff;flex-shrink:0}
+.htxt h1{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:#fff}
+.htxt h1 em{color:var(--coral);font-style:normal}
+.htxt p{font-size:11px;color:rgba(255,255,255,.4);margin-top:1px}
+.hpills{display:flex;gap:8px;margin-left:auto;align-items:center}
+.hp{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.hp1{background:var(--p1l);color:var(--p1)}
+.hp2{background:var(--p2l);color:var(--p2)}
+.hp3{background:var(--p3l);color:var(--p3)}
+.hp-v{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.1)}
+
+/* TABS */
+nav{background:var(--white);border-bottom:2px solid var(--border);padding:0 48px;display:flex;overflow-x:auto;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.tb{padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--muted);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:.15s}
+.tb:hover{color:var(--ink)}
+.tb.on{color:var(--coral);border-bottom-color:var(--coral)}
+
+/* PANES */
+.pane{display:none;padding:40px 48px 60px}
+.pane.on{display:block}
+.ptitle{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:4px}
+.psub{font-size:13px;color:var(--muted);margin-bottom:32px;max-width:640px;line-height:1.7}
+
+/* ── VISION TAB ── */
+.vision-hero{background:var(--ink);border-radius:14px;padding:36px 40px;margin-bottom:28px;position:relative;overflow:hidden}
+.vision-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:var(--coral);opacity:.08}
+.vision-hero::after{content:'DS';position:absolute;right:40px;bottom:-20px;font-family:'Syne',sans-serif;font-size:120px;font-weight:800;color:rgba(255,255,255,.03);line-height:1}
+.vh-eyebrow{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin-bottom:10px}
+.vh-title{font-family:'Syne',sans-serif;font-size:clamp(22px,3.5vw,38px);font-weight:800;color:#fff;line-height:1.1;max-width:560px;position:relative;z-index:1}
+.vh-title span{color:var(--coral)}
+.vh-body{font-size:14px;color:rgba(255,255,255,.55);margin-top:14px;max-width:520px;line-height:1.8;position:relative;z-index:1}
+
+.vision-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px}
+.vc{background:var(--white);border-radius:12px;padding:22px}
+.vc-icon{font-size:22px;margin-bottom:10px}
+.vc-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.vc-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--ink);margin-bottom:8px;line-height:1.2}
+.vc-body{font-size:12px;color:var(--muted);line-height:1.7}
+
+.values-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.val-card{background:var(--white);border-radius:10px;padding:16px;border-top:3px solid var(--coral)}
+.val-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:6px}
+.val-body{font-size:11px;color:var(--muted);line-height:1.6}
+
+.phase-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.phase-card{background:var(--white);border-radius:10px;padding:16px;position:relative;overflow:hidden}
+.phase-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%}
+.phase-card.now::before{background:var(--coral)}
+.phase-card.next::before{background:var(--navy)}
+.phase-card.future::before{background:var(--teal)}
+.phase-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.phase-label.now{color:var(--coral)}
+.phase-label.next{color:var(--navy)}
+.phase-label.future{color:var(--teal)}
+.phase-arrtitle{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.phase-val{font-size:20px;font-family:'Syne',sans-serif;font-weight:800;margin-bottom:4px}
+.phase-items{font-size:11px;color:var(--muted);line-height:1.7}
+
+.why-win{background:var(--white);border-radius:12px;padding:24px;margin-bottom:24px}
+.ww-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:16px}
+.ww-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ww-row{padding:12px;background:var(--bg);border-radius:8px;border-left:3px solid var(--teal)}
+.ww-row.bad{border-left-color:#D1D5DB}
+.ww-q{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px}
+.ww-a{font-size:12px;color:var(--ink);line-height:1.5}
+.ww-a.muted{color:var(--muted)}
+
+/* ── MACHINE TAB ── */
+.machine-svg{width:100%;display:block;min-width:820px}
+.machine-wrap{overflow-x:auto;padding-bottom:8px}
+.loop-note{margin-top:14px;background:var(--white);border-radius:9px;border-left:4px solid var(--coral);padding:12px 20px;font-size:12px;color:var(--muted)}
+.loop-note strong{color:var(--coral)}
+.legend{display:flex;gap:18px;flex-wrap:wrap;margin-top:18px;align-items:center}
+.li{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}
+.ld{width:11px;height:11px;border-radius:3px}
+
+/* ── GTM TAB ── */
+.motions{display:flex;flex-direction:column;gap:14px}
+.mc{background:var(--white);border-radius:11px;padding:18px 22px;display:flex;align-items:center;gap:16px}
+.mc-badge{flex-shrink:0;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:10px;white-space:nowrap}
+.mc-in{background:var(--p2l);color:var(--p2)}
+.mc-out{background:var(--p1l);color:var(--p1)}
+.mc-seq{display:flex;align-items:center;gap:6px;flex:1;flex-wrap:wrap}
+.ms{background:var(--bg);border-radius:7px;padding:6px 10px;font-size:11px;font-weight:500;white-space:nowrap}
+.ms.end{background:var(--ink);color:#fff}
+.ma{color:var(--border);font-weight:900;font-size:14px}
+.mc-meta{margin-left:auto;text-align:right;flex-shrink:0}
+.mc-owner{font-size:10px;color:var(--muted);white-space:nowrap}
+.mc-target{font-size:11px;font-weight:700;color:var(--coral);white-space:nowrap}
+
+/* ── DELIVERY TAB ── */
+.phases{display:flex;gap:0;overflow-x:auto;padding-bottom:8px;min-width:700px}
+.ph{flex:1;background:var(--white);border-top:4px solid;padding:14px 12px;position:relative}
+.ph:not(:last-child)::after{content:'›';position:absolute;right:-9px;top:50%;transform:translateY(-50%);font-size:20px;color:var(--border);z-index:2}
+.ph:first-child{border-radius:11px 0 0 11px}
+.ph:last-child{border-radius:0 11px 11px 0}
+.ph.c1{border-top-color:var(--navy)}
+.ph.c2{border-top-color:var(--p1)}
+.ph.c3{border-top-color:var(--teal)}
+.ph.c4{border-top-color:var(--p2)}
+.ph.c5{border-top-color:#059669}
+.ph.c6{border-top-color:var(--coral)}
+.phlabel{font-size:8.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.phname{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;margin-bottom:8px}
+.phlist{list-style:none}
+.phlist li{font-size:10.5px;color:var(--ink);padding:2px 0;display:flex;gap:5px;line-height:1.35}
+.phlist li::before{content:'·';color:var(--coral);font-weight:900;flex-shrink:0}
+.phsla{margin-top:8px;font-size:9.5px;font-weight:700;color:var(--coral);background:#FDF0ED;border-radius:5px;padding:3px 7px;display:inline-block}
+.phown{margin-top:6px;font-size:9px;color:var(--muted)}
+.pod-box{background:var(--white);border-radius:11px;padding:24px 32px;margin-top:28px}
+.pod-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:20px}
+.pod-svg{display:block;width:100%;max-width:580px;margin:0 auto}
+.sla-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;padding-top:18px;border-top:1px solid var(--border)}
+.sla-chip{background:var(--bg);border-radius:7px;padding:8px 14px;font-size:11px}
+.sla-chip b{display:block;font-size:12px;font-weight:700;color:var(--p2)}
+
+/* ── MY ROLE TAB ── */
+.pb{margin-bottom:40px}
+.ph-row{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.ptag{font-family:'Syne',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;padding:3px 12px;border-radius:20px;color:#fff}
+.ptag1{background:var(--p1)}
+.ptag2{background:var(--p2)}
+.ptag3{background:var(--p3)}
+.ptag-c{background:var(--coral)}
+.plabel{font-family:'Syne',sans-serif;font-size:18px;font-weight:800}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.rc{background:var(--white);border-radius:12px;padding:20px;border-top:3px solid;display:flex;flex-direction:column}
+.rc1{border-top-color:var(--p1)}
+.rc2{border-top-color:var(--p2)}
+.rc3{border-top-color:var(--p3)}
+.rcc{border-top-color:var(--coral)}
+.rc-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;margin-bottom:6px}
+.rc-job{font-size:11px;color:var(--muted);margin-bottom:12px;line-height:1.5;flex:1}
+.rc-machine{font-size:10px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.rc-machine span{color:var(--coral)}
+.rc-wins{font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.6}
+.rc-kpis{display:flex;flex-direction:column;gap:3px;margin-bottom:12px}
+.rc-kpi{font-size:10px;font-weight:600;padding:3px 8px;border-radius:5px;background:var(--bg)}
+.rc-links{display:flex;flex-direction:column;gap:5px;padding-top:10px;border-top:1px solid var(--border);margin-top:auto}
+.rc-link{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--coral);text-decoration:none}
+.rc-link:hover{opacity:.75}
+.rc-link.secondary{color:var(--navy);font-size:10px}
+
+/* ── SCENARIOS TAB ── */
+.sc-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.scf{padding:7px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:.15s}
+.scf:hover{border-color:var(--ink);color:var(--ink)}
+.scf.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.scgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.scc.hidden{display:none}
+.scc{background:var(--white);border-radius:11px;padding:20px}
+.sc-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px}
+.sc-icon{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px}
+.sc-trig{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.sc-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:800}
+.sc-steps{display:flex;flex-direction:column;gap:6px}
+.sc-step{display:flex;align-items:flex-start;gap:8px}
+.sc-n{width:18px;height:18px;flex-shrink:0;border-radius:50%;background:var(--bg);font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.sc-t{font-size:11px;line-height:1.45;padding-top:2px}
+.sc-t strong{color:var(--coral)}
+.sc-out{margin-top:12px;padding:8px 12px;border-radius:7px;background:var(--bg);font-size:11px;font-weight:500;display:flex;align-items:center;gap:6px}
+.sc-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.sc-own{font-size:10px;color:var(--muted)}
+.sc-own strong{color:var(--ink)}
+.sc-lnk{font-size:10.5px;font-weight:700;color:var(--coral);text-decoration:none}
+.sc-lnk:hover{opacity:.75}
+
+/* LINKS BAR */
+.links-bar{margin-top:24px;padding:14px 18px;background:var(--white);border-radius:9px;border-left:4px solid var(--navy);font-size:12px;color:var(--muted);display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.links-bar a{font-weight:700;text-decoration:none}
+.links-bar a.lp1{color:var(--p1)}
+.links-bar a.lp2{color:var(--p2)}
+.links-bar a.lp3{color:var(--p3)}
+
+@media(max-width:1100px){.scgrid{grid-template-columns:1fr 1fr}.vision-grid,.values-row,.phase-cards{grid-template-columns:1fr 1fr}}
+@media(max-width:860px){header,.pane{padding-left:20px;padding-right:20px}nav{padding:0 12px}.scgrid{grid-template-columns:1fr}.mc{flex-wrap:wrap}.mc-meta{margin-left:0}}
+@media(max-width:540px){.rgrid{grid-template-columns:1fr}.vision-grid,.values-row,.phase-cards,.ww-grid{grid-template-columns:1fr}.hpills{display:none}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DS</div>
+  <div class="htxt">
+    <h1>DataSkate <em>OS</em></h1>
+    <p>How we operate · Q2 2026 · v2.0</p>
+  </div>
+  <div class="hpills">
+    <span class="hp hp-v">Start here — read this first</span>
+    <span class="hp hp1">P1 · Revenue</span>
+    <span class="hp hp2">P2 · Delivery</span>
+    <span class="hp hp3">P3 · Admin</span>
+  </div>
+</header>
+
+<nav>
+  <button class="tb on" data-t="vision">🧭 Why We Exist</button>
+  <button class="tb" data-t="machine">⚙️ The Machine</button>
+  <button class="tb" data-t="gtm">🎯 GTM Motions</button>
+  <button class="tb" data-t="delivery">📦 Delivery</button>
+  <button class="tb" data-t="roles">👤 My Role</button>
+  <button class="tb" data-t="scenarios">⚡ Scenarios</button>
+</nav>
+
+
+<!-- ═══ TAB 0 — WHY WE EXIST ═══ -->
+<section id="vision" class="pane on">
+  <h2 class="ptitle">Why DataSkate Exists</h2>
+  <p class="psub">Read this before anything else. Understanding why we exist changes how you do your job. This is not a mission statement on a wall — this is the operating context every decision you make should sit inside.</p>
+
+  <!-- FOUNDER VISION -->
+  <div class="vision-hero">
+    <div class="vh-eyebrow">The Founder's Vision</div>
+    <div class="vh-title">We exist to make<br/><span>integration simple</span><br/>for businesses that can't afford to wait.</div>
+    <div class="vh-body">Salesforce, MuleSoft, Workato, Boomi, Informatica — these are transformational platforms. But most companies that buy them can't get full value without expert help. The enterprise SIs charge $500K+ and take 18 months. Freelancers are cheap but unreliable. DataSkate sits in the middle: specialist, fast, quality, and partner-first. We deliver in weeks, not quarters. We build it right the first time. And we use our partner relationships to generate business rather than wait for it.</div>
+  </div>
+
+  <!-- PROBLEM / SOLUTION / MARKET -->
+  <div class="vision-grid">
+    <div class="vc">
+      <div class="vc-icon">🔥</div>
+      <div class="vc-label">The Problem We Solve</div>
+      <div class="vc-title">Companies buy platforms and can't use them</div>
+      <div class="vc-body">Every year, thousands of companies buy Salesforce, MuleSoft, Workato, or Boomi licences and then struggle to deploy them. They're paying for software they can't use. Their internal teams don't have the specialist skills. The big SIs are too slow and too expensive. Nothing happens. This is our market.</div>
+    </div>
+    <div class="vc">
+      <div class="vc-icon">⚡</div>
+      <div class="vc-label">How We Solve It</div>
+      <div class="vc-title">Fast, specialist delivery. Partner-powered. Quality-gated.</div>
+      <div class="vc-body">DataSkate delivers integration projects in 4 weeks for SMB and 8–12 weeks for mid-market. We use Certified specialists, not generalists. Every project has architecture review, code standards, and a CSAT gate. We source 60%+ of our deals through partner AE relationships — the same partners who sold the client the licence in the first place. We make the partner look good. That's the flywheel.</div>
+    </div>
+    <div class="vc">
+      <div class="vc-icon">🎯</div>
+      <div class="vc-label">The Market Opportunity</div>
+      <div class="vc-title">$30M valuation by December 2028</div>
+      <div class="vc-body">The Salesforce ecosystem alone generates $6 for every $1 of Salesforce revenue in partner services. MuleSoft, Workato, and Boomi add more. DataSkate's addressable market is every SMB and mid-market company in APAC, South Asia, and MEA that has bought one of our 5 partner platforms and needs help using it. That is hundreds of thousands of companies. We are going after a focused slice of them — and doing it better than anyone else in our tier.</div>
+    </div>
+  </div>
+
+  <!-- WHY WE WIN -->
+  <div class="why-win">
+    <div class="ww-title">Why DataSkate Wins — and Why We Don't Compete on Every Deal</div>
+    <div class="ww-grid">
+      <div class="ww-row">
+        <div class="ww-q">We win when the client needs</div>
+        <div class="ww-a">Fast delivery (4–12 weeks), specialist expertise across 5 platforms, a trusted SI that the partner AE personally vouches for, and a structured process they can audit. These clients value reliability over cheapness and speed over enterprise prestige.</div>
+      </div>
+      <div class="ww-row">
+        <div class="ww-q">We lose when the client needs</div>
+        <div class="ww-a ww-a muted">A brand-name global SI for a board-level decision, a single-platform specialist (we do 5), or a project under $5K where our process overhead doesn't make commercial sense. We don't chase these. We qualify them out fast and don't look back.</div>
+      </div>
+      <div class="ww-row">
+        <div class="ww-q">Our unfair advantage</div>
+        <div class="ww-a">We generate pipeline FOR the partner AE before asking for a referral. No other boutique SI does this systematically. When a Salesforce AE compares DataSkate to our competitors, we're the only one who brought them leads. That relationship is not transactional — it compounds. Every AE we help becomes a referral machine.</div>
+      </div>
+      <div class="ww-row">
+        <div class="ww-q">What makes us defensible</div>
+        <div class="ww-a">Multi-platform (5 partners, not 1). Fresher ramp model (low-cost capacity with quality gates). Partner co-sell motion at scale. CSAT-first culture — every project creates a reference. IP library that makes the next delivery faster. None of these are easy to copy quickly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OPERATING VALUES -->
+  <div style="margin-bottom:20px">
+    <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:14px">How We Operate — 4 Non-Negotiable Principles</div>
+    <div class="values-row">
+      <div class="val-card">
+        <div class="val-title">Partner first, always</div>
+        <div class="val-body">Every partner AE interaction is an investment, not a transaction. We make them look good before we ask for anything. If a partner AE looks bad because of DataSkate, we have failed — regardless of whether the project technically delivered.</div>
+      </div>
+      <div class="val-card" style="border-top-color:var(--teal)">
+        <div class="val-title">Quality is not negotiable</div>
+        <div class="val-body">CSAT ≥4.2 is the floor, not the target. Every go-live requires DH sign-off. No code goes to production without code review. If we ship a bad project, we lose the reference, the repeat business, and the partner AE's trust. One bad delivery costs more than the deal was worth.</div>
+      </div>
+      <div class="val-card" style="border-top-color:var(--navy)">
+        <div class="val-title">Speed without shortcuts</div>
+        <div class="val-body">We deliver in 4 weeks for SMB because we are structured and fast — not because we cut corners. The CoE exists to make fast delivery safe. Accelerators, templates, and standards mean we can move quickly without reinventing the wheel or skipping architecture review.</div>
+      </div>
+      <div class="val-card" style="border-top-color:var(--slate)">
+        <div class="val-title">Escalate early, own the outcome</div>
+        <div class="val-body">We surface problems early. A risk flagged on Day 5 is manageable. A risk hidden until Day 25 is a crisis. Every role at DataSkate is expected to raise blockers the same day they appear — not to solve them alone for a week and then panic. Escalation is not failure. Silence is.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GROWTH TRAJECTORY -->
+  <div style="margin-bottom:12px">
+    <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;margin-bottom:14px">Where We Are Going — Three Phases</div>
+    <div class="phase-cards">
+      <div class="phase-card now">
+        <div class="phase-label now">Phase 1 · Now → Q4 2026</div>
+        <div class="phase-arrtitle">Build the foundation</div>
+        <div class="phase-val" style="color:var(--coral)">$2M ARR</div>
+        <div class="phase-items">5 partner relationships active and generating referrals<br/>SDR outbound engine running<br/>6 concurrent delivery projects<br/>CSAT ≥4.2 maintained<br/>First 5 case studies published<br/><strong style="color:var(--coral)">You are here. This is the phase we're executing now.</strong></div>
+      </div>
+      <div class="phase-card next">
+        <div class="phase-label next">Phase 2 · 2027</div>
+        <div class="phase-arrtitle">Scale the engine</div>
+        <div class="phase-val" style="color:var(--navy)">$5M ARR</div>
+        <div class="phase-items">New practice lines (Data Engineering, Advisory)<br/>Nearshore capacity expansion<br/>Partner Gold tier with 3+ platforms<br/>Second SDR onboarded<br/>PM team scaled to 3<br/>APAC and MEA geo expansion</div>
+      </div>
+      <div class="phase-card future">
+        <div class="phase-label future">Phase 3 · Dec 2028</div>
+        <div class="phase-arrtitle">Exit or raise</div>
+        <div class="phase-val" style="color:var(--teal)">$30M Valuation</div>
+        <div class="phase-items">$10M+ ARR · 60%+ gross margin<br/>PE or strategic acquirer ready<br/>Multi-platform, multi-geo SI<br/>IP library as competitive moat<br/>Partner co-sell motion defensible<br/>CSAT-driven reference flywheel proven</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loop-note">
+    <strong>If you're joining DataSkate right now:</strong> You are joining in Phase 1 — the hardest and most important phase. Every process we build, every partner relationship we cement, every CSAT score above 4.2, and every case study we publish is building the foundation for Phase 2 and 3. What you do in this phase matters more than what you do in any other phase. The machine we build together now is the machine that will be worth $30M in 2028.
+  </div>
+</section>
+
+
+<!-- ═══ TAB 1 — THE MACHINE ═══ -->
+<section id="machine" class="pane">
+  <h2 class="ptitle">The Business Machine</h2>
+  <p class="psub">How DataSkate makes money — from partner to referral. Every person owns a stage. The flywheel only works when all 7 stages run simultaneously.</p>
+
+  <div class="machine-wrap">
+  <svg class="machine-svg" viewBox="0 0 980 220" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <marker id="a" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L7,3z" fill="#D1D5DB"/>
+      </marker>
+      <marker id="ac" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L0,6 L7,3z" fill="#E8472A"/>
+      </marker>
+      <filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="rgba(0,0,0,.07)"/></filter>
+    </defs>
+    <!-- 01 PARTNERS -->
+    <rect x="10" y="20" width="128" height="145" rx="9" fill="white" filter="url(#sh)"/>
+    <rect x="10" y="20" width="128" height="5" rx="9" fill="#1B6CA8"/>
+    <text x="74" y="41" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#6B7280" letter-spacing="1">01 · PILLAR 1</text>
+    <text x="74" y="59" text-anchor="middle" font-family="Syne" font-size="15" font-weight="800" fill="#111827">Partners</text>
+    <text x="74" y="76" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">Salesforce · MuleSoft</text>
+    <text x="74" y="89" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">Informatica · Workato</text>
+    <text x="74" y="102" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">Boomi</text>
+    <rect x="18" y="115" width="52" height="15" rx="7" fill="#EBF4FB"/>
+    <text x="44" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#1B6CA8">VP Alliances</text>
+    <rect x="76" y="115" width="54" height="15" rx="7" fill="#EBF4FB"/>
+    <text x="103" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#1B6CA8">Alliance Mgr</text>
+    <text x="74" y="155" text-anchor="middle" font-family="DM Sans" font-size="8.5" font-weight="600" fill="#1B6CA8">→ GTM Strategy</text>
+    <line x1="140" y1="92" x2="154" y2="92" stroke="#D1D5DB" stroke-width="1.8" marker-end="url(#a)"/>
+    <!-- 02 GENERATE -->
+    <rect x="156" y="20" width="128" height="145" rx="9" fill="white" filter="url(#sh)"/>
+    <rect x="156" y="20" width="128" height="5" rx="9" fill="#1B6CA8"/>
+    <text x="220" y="41" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#6B7280" letter-spacing="1">02 · GTM ENGINE</text>
+    <text x="220" y="59" text-anchor="middle" font-family="Syne" font-size="15" font-weight="800" fill="#111827">Generate</text>
+    <text x="220" y="76" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">AE Referral · SDR Cold</text>
+    <text x="220" y="89" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">Events · Webinar</text>
+    <text x="220" y="102" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#E8472A" font-weight="700">60 prospects/week</text>
+    <rect x="164" y="115" width="60" height="15" rx="7" fill="#EBF4FB"/>
+    <text x="194" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#1B6CA8">Head of GTM</text>
+    <rect x="230" y="115" width="46" height="15" rx="7" fill="#EBF4FB"/>
+    <text x="253" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#1B6CA8">SDR/BDR</text>
+    <text x="220" y="155" text-anchor="middle" font-family="DM Sans" font-size="8.5" font-weight="600" fill="#1B6CA8">→ P1 Processes</text>
+    <line x1="286" y1="92" x2="300" y2="92" stroke="#D1D5DB" stroke-width="1.8" marker-end="url(#a)"/>
+    <!-- 03 QUALIFY -->
+    <rect x="302" y="20" width="128" height="145" rx="9" fill="white" filter="url(#sh)"/>
+    <rect x="302" y="20" width="128" height="5" rx="9" fill="#1B6CA8"/>
+    <text x="366" y="41" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#6B7280" letter-spacing="1">03 · QUALIFY</text>
+    <text x="366" y="59" text-anchor="middle" font-family="Syne" font-size="15" font-weight="800" fill="#111827">Qualify</text>
+    <text x="366" y="76" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">5-question call &lt;10 min</text>
+    <text x="366" y="89" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">3-way call booked</text>
+    <text x="366" y="102" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#E8472A" font-weight="700">4–6 calls/week</text>
+    <rect x="310" y="115" width="46" height="15" rx="7" fill="#EBF4FB"/>
+    <text x="333" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#1B6CA8">SDR/BDR</text>
+    <rect x="362" y="115" width="60" height="15" rx="7" fill="#EBF4FB"/>
+    <text x="392" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#1B6CA8">Alliance Mgr</text>
+    <text x="366" y="155" text-anchor="middle" font-family="DM Sans" font-size="8.5" font-weight="600" fill="#1B6CA8">→ SDR Playbook</text>
+    <line x1="432" y1="92" x2="446" y2="92" stroke="#D1D5DB" stroke-width="1.8" marker-end="url(#a)"/>
+    <!-- 04 CLOSE -->
+    <rect x="448" y="20" width="128" height="145" rx="9" fill="white" filter="url(#sh)"/>
+    <rect x="448" y="20" width="128" height="5" rx="9" fill="#E8472A"/>
+    <text x="512" y="41" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#6B7280" letter-spacing="1">04 · REVENUE</text>
+    <text x="512" y="59" text-anchor="middle" font-family="Syne" font-size="15" font-weight="800" fill="#111827">Close</text>
+    <text x="512" y="76" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">SOW scoped &amp; priced</text>
+    <text x="512" y="89" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">CEO/VP sign-off</text>
+    <text x="512" y="102" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#E8472A" font-weight="700">$5K SMB · $25K MM min</text>
+    <rect x="456" y="115" width="25" height="15" rx="7" fill="#FDF0ED"/>
+    <text x="468" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#E8472A">CEO</text>
+    <rect x="487" y="115" width="81" height="15" rx="7" fill="#EBF4FB"/>
+    <text x="527" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#1B6CA8">VP Alliances</text>
+    <text x="512" y="155" text-anchor="middle" font-family="DM Sans" font-size="8.5" font-weight="600" fill="#E8472A">→ RACI Matrix</text>
+    <line x1="578" y1="92" x2="592" y2="92" stroke="#D1D5DB" stroke-width="1.8" marker-end="url(#a)"/>
+    <!-- 05 DELIVER -->
+    <rect x="594" y="20" width="128" height="145" rx="9" fill="white" filter="url(#sh)"/>
+    <rect x="594" y="20" width="128" height="5" rx="9" fill="#0D7A6B"/>
+    <text x="658" y="41" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#6B7280" letter-spacing="1">05 · PILLAR 2</text>
+    <text x="658" y="59" text-anchor="middle" font-family="Syne" font-size="15" font-weight="800" fill="#111827">Deliver</text>
+    <text x="658" y="76" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">4-week SMB delivery</text>
+    <text x="658" y="89" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">Pod: DH → DevLead → Dev+3</text>
+    <text x="658" y="102" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#E8472A" font-weight="700">CSAT ≥4.2 · 0 go-lives</text>
+    <rect x="602" y="115" width="76" height="15" rx="7" fill="#E6F5F2"/>
+    <text x="640" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#0D7A6B">Delivery Head</text>
+    <rect x="684" y="115" width="30" height="15" rx="7" fill="#E6F5F2"/>
+    <text x="699" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#0D7A6B">Pod</text>
+    <text x="658" y="155" text-anchor="middle" font-family="DM Sans" font-size="8.5" font-weight="600" fill="#0D7A6B">→ Delivery Processes</text>
+    <line x1="724" y1="92" x2="738" y2="92" stroke="#D1D5DB" stroke-width="1.8" marker-end="url(#a)"/>
+    <!-- 06 COLLECT -->
+    <rect x="740" y="20" width="128" height="145" rx="9" fill="white" filter="url(#sh)"/>
+    <rect x="740" y="20" width="128" height="5" rx="9" fill="#2A3550"/>
+    <text x="804" y="41" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#6B7280" letter-spacing="1">06 · PILLAR 3</text>
+    <text x="804" y="59" text-anchor="middle" font-family="Syne" font-size="15" font-weight="800" fill="#111827">Collect</text>
+    <text x="804" y="76" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">PM triggers invoice</text>
+    <text x="804" y="89" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#6B7280">within 24hr of sign-off</text>
+    <text x="804" y="102" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#E8472A" font-weight="700">DSO ≤30 days</text>
+    <rect x="748" y="115" width="22" height="15" rx="7" fill="#EEF1F7"/>
+    <text x="759" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#2A3550">PM</text>
+    <rect x="776" y="115" width="84" height="15" rx="7" fill="#EEF1F7"/>
+    <text x="818" y="126" text-anchor="middle" font-family="DM Sans" font-size="8" font-weight="700" fill="#2A3550">Finance Lead</text>
+    <text x="804" y="155" text-anchor="middle" font-family="DM Sans" font-size="8.5" font-weight="600" fill="#2A3550">→ Admin Processes</text>
+    <line x1="870" y1="92" x2="884" y2="92" stroke="#D1D5DB" stroke-width="1.8" marker-end="url(#a)"/>
+    <!-- 07 REPEAT -->
+    <rect x="886" y="20" width="84" height="145" rx="9" fill="#111827" filter="url(#sh)"/>
+    <text x="928" y="41" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="rgba(255,255,255,.35)" letter-spacing="1">07</text>
+    <text x="928" y="60" text-anchor="middle" font-family="Syne" font-size="14" font-weight="800" fill="white">Repeat</text>
+    <text x="928" y="77" text-anchor="middle" font-family="DM Sans" font-size="9" fill="rgba(255,255,255,.55)">Reference</text>
+    <text x="928" y="90" text-anchor="middle" font-family="DM Sans" font-size="9" fill="rgba(255,255,255,.55)">→ next AE</text>
+    <text x="928" y="103" text-anchor="middle" font-family="DM Sans" font-size="9" fill="rgba(255,255,255,.55)">intro</text>
+    <text x="928" y="119" text-anchor="middle" font-family="DM Sans" font-size="8.5" fill="#E8472A" font-weight="700">≥60% ARR</text>
+    <text x="928" y="130" text-anchor="middle" font-family="DM Sans" font-size="8.5" fill="#E8472A" font-weight="700">partners</text>
+    <path d="M928 167 Q928 200 490 200 Q74 200 74 167" fill="none" stroke="#E8472A" stroke-width="1.8" stroke-dasharray="5,4" marker-end="url(#ac)"/>
+    <text x="490" y="213" text-anchor="middle" font-family="DM Sans" font-size="9" fill="#E8472A" font-weight="600">Reference becomes the next AE referral — the flywheel accelerates</text>
+  </svg>
+  </div>
+
+  <div class="legend">
+    <div class="li"><div class="ld" style="background:var(--p1)"></div>Pillar 1 — Revenue &amp; GTM</div>
+    <div class="li"><div class="ld" style="background:var(--p2)"></div>Pillar 2 — Delivery</div>
+    <div class="li"><div class="ld" style="background:var(--p3)"></div>Pillar 3 — Admin &amp; Finance</div>
+    <div class="li"><div class="ld" style="background:var(--coral)"></div>CEO — Cross-pillar</div>
+    <div style="margin-left:auto;display:flex;gap:20px;align-items:center">
+      <a href="CEO/CEO_Command_Center.html" style="font-size:12px;color:var(--coral);font-weight:800;text-decoration:none">⚡ CEO Command Center →</a>
+      <a href="CEO/DataSkate_RACI_v3.html" style="font-size:12px;color:var(--coral);font-weight:700;text-decoration:none">RACI Matrix →</a>
+    </div>
+  </div>
+
+  <div class="loop-note" style="margin-top:20px">
+    <strong>The flywheel logic:</strong> Every successful delivery creates a CSAT score, a case study, and a reference. The reference makes the partner AE more likely to refer us again. Every new referral needs less trust-building because the track record is visible. This compounds — by the 10th project, the AE refers without being asked. That's the machine.
+  </div>
+</section>
+
+
+<!-- ═══ TAB 2 — GTM MOTIONS ═══ -->
+<section id="gtm" class="pane">
+  <h2 class="ptitle">The 5 GTM Motions</h2>
+  <p class="psub">Five ways DataSkate generates pipeline. Run all five in parallel — they compound into the AE flywheel. Motion 2 (SDR Outbound) is the primary growth engine in Phase 1 because it doesn't depend on waiting.</p>
+
+  <div class="motions">
+    <div class="mc">
+      <span class="mc-badge mc-in">INBOUND</span>
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;min-width:160px">1 · AE Referral</div>
+      <div class="mc-seq">
+        <div class="ms">Build AE relationship</div><span class="ma">›</span>
+        <div class="ms">Ask 2 intros/AE</div><span class="ma">›</span>
+        <div class="ms">Warm intro received</div><span class="ma">›</span>
+        <div class="ms">Qualify call</div><span class="ma">›</span>
+        <div class="ms end">SOW ✓</div>
+      </div>
+      <div class="mc-meta">
+        <div class="mc-owner">Alliance Mgr</div>
+        <div class="mc-target">3 referrals/mo</div>
+      </div>
+    </div>
+    <div class="mc" style="border-left:3px solid var(--coral)">
+      <span class="mc-badge mc-out">OUTBOUND ★ PRIMARY</span>
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;min-width:160px">2 · SDR Cold Outbound</div>
+      <div class="mc-seq">
+        <div class="ms">Build list Apollo/Clay</div><span class="ma">›</span>
+        <div class="ms">9-touch 18-day seq</div><span class="ma">›</span>
+        <div class="ms">Book 3-way call</div><span class="ma">›</span>
+        <div class="ms">DS + AE + Prospect</div><span class="ma">›</span>
+        <div class="ms end">SOW ✓</div>
+      </div>
+      <div class="mc-meta">
+        <div class="mc-owner">SDR/BDR → GTM Head</div>
+        <div class="mc-target">4–6 calls/week</div>
+      </div>
+    </div>
+    <div class="mc">
+      <span class="mc-badge mc-out">OUTBOUND</span>
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;min-width:160px">3 · AE Named Accounts</div>
+      <div class="mc-seq">
+        <div class="ms">Get AE named list</div><span class="ma">›</span>
+        <div class="ms">SDR researches</div><span class="ma">›</span>
+        <div class="ms">"Gift intel" to AE</div><span class="ma">›</span>
+        <div class="ms">Co-sell motion</div><span class="ma">›</span>
+        <div class="ms end">SOW ✓</div>
+      </div>
+      <div class="mc-meta">
+        <div class="mc-owner">SDR/BDR → Alliance Mgr</div>
+        <div class="mc-target">10 accounts/AE/mo</div>
+      </div>
+    </div>
+    <div class="mc">
+      <span class="mc-badge mc-in">INBOUND</span>
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;min-width:160px">4 · Events &amp; Webinars</div>
+      <div class="mc-seq">
+        <div class="ms">Partner event</div><span class="ma">›</span>
+        <div class="ms">Attend (+ speak)</div><span class="ma">›</span>
+        <div class="ms">5 warm contacts</div><span class="ma">›</span>
+        <div class="ms">48hr follow-up</div><span class="ma">›</span>
+        <div class="ms end">Pipeline ✓</div>
+      </div>
+      <div class="mc-meta">
+        <div class="mc-owner">Alliance Mgr</div>
+        <div class="mc-target">2 events/month</div>
+      </div>
+    </div>
+    <div class="mc">
+      <span class="mc-badge mc-in">INBOUND</span>
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:800;min-width:160px">5 · Webinar Library</div>
+      <div class="mc-seq">
+        <div class="ms">1 video/2 weeks</div><span class="ma">›</span>
+        <div class="ms">AE shares to prospects</div><span class="ma">›</span>
+        <div class="ms">Inbound view signal</div><span class="ma">›</span>
+        <div class="ms">SDR qualifies 24hr</div><span class="ma">›</span>
+        <div class="ms end">SOW ✓</div>
+      </div>
+      <div class="mc-meta">
+        <div class="mc-owner">GTM Head (produces)</div>
+        <div class="mc-target">1 video/2 wks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="links-bar" style="margin-top:24px">
+    📋 Detail docs:
+    <a href="CEO/DataSkate_GTM_Strategy_v2.html" class="lp1">GTM Strategy →</a>
+    <a href="Pillar1/Pillar1-Partner_Alliance-GTM-Processes-v2.html" class="lp1">Pillar 1 — Revenue Processes →</a>
+    <a href="Pillar1/P1_SDR_BDR_Cadence_v3.html" class="lp1">SDR/BDR Playbook →</a>
+    <a href="Pillar1/22_HeadOfGTM_JobSpec.html" class="lp1">GTM Head Job Spec →</a>
+  </div>
+</section>
+
+
+<!-- ═══ TAB 3 — DELIVERY ═══ -->
+<section id="delivery" class="pane">
+  <h2 class="ptitle">4-Week Delivery Flow</h2>
+  <p class="psub">SOW signed to invoice collected. Every phase has a clear owner, clear SLA, and a gate that cannot be skipped. CSAT ≥4.2 is the non-negotiable exit criteria — if we miss it, we lose the reference and the flywheel stalls.</p>
+
+  <div style="overflow-x:auto;padding-bottom:8px">
+  <div class="phases" style="min-width:680px">
+    <div class="ph c1">
+      <div class="phlabel">Pre · Day 0</div>
+      <div class="phname">SOW Handoff</div>
+      <ul class="phlist">
+        <li>VP hands SOW to DH</li>
+        <li>PM assigned</li>
+        <li>Project folder created</li>
+        <li>Kickoff email sent</li>
+      </ul>
+      <div class="phsla">Same day</div>
+      <div class="phown">DH · PM</div>
+    </div>
+    <div class="ph c2">
+      <div class="phlabel">Week 1</div>
+      <div class="phname">Kickoff &amp; Discovery</div>
+      <ul class="phlist">
+        <li>Day 1: Kickoff call</li>
+        <li>Requirements workshop</li>
+        <li>Architecture review (ARB gate)</li>
+        <li>Sprint 1 plan locked</li>
+      </ul>
+      <div class="phsla">Day 1: Kickoff</div>
+      <div class="phown">PM · Dev Lead · Practice Head</div>
+    </div>
+    <div class="ph c3">
+      <div class="phlabel">Week 2</div>
+      <div class="phname">Build Sprint 1</div>
+      <ul class="phlist">
+        <li>Daily standup</li>
+        <li>Dev + Freshers build</li>
+        <li>Integration testing</li>
+        <li>Sprint 1 demo</li>
+      </ul>
+      <div class="phsla">Demo end of week</div>
+      <div class="phown">Dev Lead · Developer</div>
+    </div>
+    <div class="ph c4">
+      <div class="phlabel">Week 3</div>
+      <div class="phname">UAT &amp; Fix</div>
+      <ul class="phlist">
+        <li>Client UAT session</li>
+        <li>Bug triage + fixes</li>
+        <li>Go/No-Go gate</li>
+        <li>Red flag → DH escalates</li>
+      </ul>
+      <div class="phsla">Go/No-Go Day 19</div>
+      <div class="phown">PM · Dev Lead · DH</div>
+    </div>
+    <div class="ph c5">
+      <div class="phlabel">Week 4</div>
+      <div class="phname">Go-Live</div>
+      <ul class="phlist">
+        <li>Production deploy</li>
+        <li>Handover docs</li>
+        <li>Client training</li>
+        <li>DH sign-off (hard gate)</li>
+      </ul>
+      <div class="phsla">Sign-off Day 28</div>
+      <div class="phown">Dev Lead · PM · DH</div>
+    </div>
+    <div class="ph c6">
+      <div class="phlabel">Post · Day 28+</div>
+      <div class="phname">Invoice &amp; Reference</div>
+      <ul class="phlist">
+        <li>PM triggers invoice 24hr</li>
+        <li>Finance collects</li>
+        <li>CSAT survey sent</li>
+        <li>Ref request by Alliance Mgr</li>
+      </ul>
+      <div class="phsla">Invoice within 24hr</div>
+      <div class="phown">PM · Finance · Alliance Mgr</div>
+    </div>
+  </div>
+  </div>
+
+  <div class="pod-box">
+    <div class="pod-title">🏗 Delivery Pod Structure — Who Does What</div>
+    <svg class="pod-svg" viewBox="0 0 580 200" xmlns="http://www.w3.org/2000/svg">
+      <rect x="190" y="8" width="200" height="40" rx="8" fill="#111827"/>
+      <text x="290" y="24" text-anchor="middle" font-family="Syne" font-size="8" font-weight="800" fill="rgba(255,255,255,.4)" letter-spacing=".5">PILLAR 2 LEAD</text>
+      <text x="290" y="40" text-anchor="middle" font-family="Syne" font-size="12" font-weight="800" fill="white">Delivery Head (DH)</text>
+      <line x1="255" y1="48" x2="180" y2="78" stroke="#D1D5DB" stroke-width="1.5"/>
+      <line x1="325" y1="48" x2="400" y2="78" stroke="#D1D5DB" stroke-width="1.5"/>
+      <rect x="60" y="78" width="220" height="38" rx="8" fill="#E6F5F2" stroke="#0D7A6B" stroke-width="1.5"/>
+      <text x="170" y="93" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#0D7A6B" letter-spacing=".4">NON-BILLABLE · QUALITY GATE</text>
+      <text x="170" y="108" text-anchor="middle" font-family="Syne" font-size="11" font-weight="800" fill="#0D7A6B">Practice Head / SA</text>
+      <rect x="300" y="78" width="220" height="38" rx="8" fill="#EBF4FB" stroke="#1B6CA8" stroke-width="1.5"/>
+      <text x="410" y="93" text-anchor="middle" font-family="Syne" font-size="7.5" font-weight="800" fill="#1B6CA8" letter-spacing=".4">BILLABLE · POD CAPTAIN</text>
+      <text x="410" y="108" text-anchor="middle" font-family="Syne" font-size="11" font-weight="800" fill="#1B6CA8">Dev Lead</text>
+      <line x1="370" y1="116" x2="320" y2="146" stroke="#D1D5DB" stroke-width="1.5"/>
+      <line x1="410" y1="116" x2="410" y2="146" stroke="#D1D5DB" stroke-width="1.5"/>
+      <line x1="455" y1="116" x2="510" y2="146" stroke="#D1D5DB" stroke-width="1.5"/>
+      <rect x="235" y="146" width="170" height="36" rx="7" fill="#EEF1F7" stroke="#2A3550" stroke-width="1.5"/>
+      <text x="320" y="159" text-anchor="middle" font-family="Syne" font-size="7" font-weight="800" fill="#2A3550" letter-spacing=".4">COORDINATION</text>
+      <text x="320" y="173" text-anchor="middle" font-family="Syne" font-size="11" font-weight="800" fill="#2A3550">Project Manager</text>
+      <rect x="355" y="146" width="110" height="36" rx="7" fill="#F9FAFB" stroke="#D1D5DB" stroke-width="1.5"/>
+      <text x="410" y="159" text-anchor="middle" font-family="Syne" font-size="7" font-weight="800" fill="#6B7280" letter-spacing=".4">BILLABLE</text>
+      <text x="410" y="173" text-anchor="middle" font-family="Syne" font-size="11" font-weight="800" fill="#111827">Developer ×1</text>
+      <rect x="465" y="146" width="110" height="36" rx="7" fill="#FDF0ED" stroke="#E8472A" stroke-width="1.5"/>
+      <text x="520" y="159" text-anchor="middle" font-family="Syne" font-size="7" font-weight="800" fill="#E8472A" letter-spacing=".4">LEARNING</text>
+      <text x="520" y="173" text-anchor="middle" font-family="Syne" font-size="11" font-weight="800" fill="#111827">Freshers ×3</text>
+    </svg>
+    <div class="sla-row">
+      <div class="sla-chip"><b>Day 0</b>Pod assigned</div>
+      <div class="sla-chip"><b>Day 1</b>Kickoff call</div>
+      <div class="sla-chip"><b>Day 19</b>Go/No-Go gate</div>
+      <div class="sla-chip"><b>Day 28</b>DH sign-off</div>
+      <div class="sla-chip"><b>Day 29</b>Invoice triggered</div>
+      <div class="sla-chip"><b>CSAT</b>≥4.2 floor · ≥4.5 target</div>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:20px">
+        <a href="Pillar2/Pillar2-Delivery-Processes.html" style="font-size:12px;color:var(--teal);font-weight:700;text-decoration:none">All Delivery Processes →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══ TAB 4 — MY ROLE ═══ -->
+<section id="roles" class="pane">
+  <h2 class="ptitle">My Role — How I Fit Into the Machine</h2>
+  <p class="psub">Every role at DataSkate exists because the machine needs it. Below is not just a job title — it's where you sit in the 7-stage flow, what winning looks like for you, and where to go for your full playbook.</p>
+
+  <!-- CEO -->
+  <div class="pb">
+    <div class="ph-row">
+      <span class="ptag ptag-c">CEO</span>
+      <span class="plabel">CEO / Co-Founder</span>
+    </div>
+    <div class="rgrid">
+      <div class="rc rcc">
+        <div class="rc-title">CEO / Co-Founder</div>
+        <div class="rc-job">Vision, strategic closes, board, partner exec relationships, final SOW sign-off above $50K. The machine is your machine — you designed it and you are accountable for all 7 stages running.</div>
+        <div class="rc-machine">Stage in machine: <span>All stages · cross-pillar authority</span></div>
+        <div class="rc-wins">You win when: revenue hits plan · CSAT stays above 4.2 · partner relationships compound · the team operates without needing you in every decision.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">$2M ARR target · Q4 2026</div>
+          <div class="rc-kpi">≥60% ARR from partner referrals</div>
+          <div class="rc-kpi">Friday report received — no chasing VP</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="CEO/CEO_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="CEO/CEO_Cadence_v3.html">Full Cadence Doc →</a>
+          <a class="rc-link secondary" href="CEO/DataSkate_RACI_v3.html">RACI Matrix →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pillar 1 -->
+  <div class="pb">
+    <div class="ph-row">
+      <span class="ptag ptag1">Pillar 1</span>
+      <span class="plabel">Partner Alliance &amp; GTM — The Revenue Engine</span>
+    </div>
+    <div class="rgrid">
+      <div class="rc rc1">
+        <div class="rc-title">VP of Alliances</div>
+        <div class="rc-job">Own all 5 partner relationships. Every deal, every QBR, every MDF dollar. Revenue is your number — not the CEO's day-to-day problem.</div>
+        <div class="rc-machine">Stage in machine: <span>01 Partners + 04 Close</span></div>
+        <div class="rc-wins">You win when: ≥60% of ARR comes from partners · pipeline is always 3× quarterly target · Friday report lands without CEO asking.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">≥60% ARR partner-sourced</div>
+          <div class="rc-kpi">Pipeline 3× quarterly target</div>
+          <div class="rc-kpi">Partner NPS ≥4/5</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar1/VP_Alliances_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar1/P1_VPAlliances_Cadence_v3.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc1">
+        <div class="rc-title">Alliance Manager / AE</div>
+        <div class="rc-job">Day-to-day with partner AEs. Qualify every lead within 4 hours. Own deal registration, discovery calls, and SOW scoping from lead to signed contract.</div>
+        <div class="rc-machine">Stage in machine: <span>03 Qualify + 04 Close</span></div>
+        <div class="rc-wins">You win when: leads never wait more than 4hr · every deal is registered same day · AEs trust you more than any other SI's AE.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Lead response &lt;4hr always</div>
+          <div class="rc-kpi">CRM logged same day — 100%</div>
+          <div class="rc-kpi">SOW floor: $5K SMB / $25K MM</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar1/Alliance_Mgr_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar1/P1_AllianceMgr_Cadence_v3.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc1">
+        <div class="rc-title">Head of GTM</div>
+        <div class="rc-job">Build and run the full GTM engine — inbound AND outbound. Set the outbound strategy. Manage SDR/BDR. Own all content. Make the CEO's personal brand compound into inbound leads.</div>
+        <div class="rc-machine">Stage in machine: <span>02 Generate (all 5 motions)</span></div>
+        <div class="rc-wins">You win when: SDR books 4+ meetings/week · CEO LinkedIn grows every month · GTM report arrives Friday with no VP chasing · every deal has collateral ready.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">SDR ≥4 meetings/week</div>
+          <div class="rc-kpi">Friday GTM report — no chasing</div>
+          <div class="rc-kpi">CEO LinkedIn: 5K followers EOY</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar1/Head_GTM_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar1/P1_HeadOfGTM_Cadence_v3.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc1">
+        <div class="rc-title">SDR / BDR</div>
+        <div class="rc-job">Prospect, sequence, dial, and book 3-way calls. You are the top of the funnel. Without you, the machine has no new leads entering. 60 prospects/week is the floor, not the target.</div>
+        <div class="rc-machine">Stage in machine: <span>02 Generate + 03 Qualify</span></div>
+        <div class="rc-wins">You win when: 4+ meetings booked per week · reply rate stays above 3% · every booked call has a prospect brief sent to AE before EOD · CRM is logged daily.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">≥4 booked meetings/week</div>
+          <div class="rc-kpi">Reply rate ≥3%</div>
+          <div class="rc-kpi">Prospect brief sent same day</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar1/SDR_BDR_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar1/P1_SDR_BDR_Cadence_v3.html">Full Cadence Doc →</a>
+          <a class="rc-link secondary" href="Pillar1/21_SDR_BDR_Outbound_Playbook.html">Full Outbound Playbook →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pillar 2 -->
+  <div class="pb">
+    <div class="ph-row">
+      <span class="ptag ptag2">Pillar 2</span>
+      <span class="plabel">Delivery &amp; CoE — How We Build and What We Stand For</span>
+    </div>
+    <div class="rgrid">
+      <div class="rc rc2">
+        <div class="rc-title">Delivery Head (DH)</div>
+        <div class="rc-job">Own all delivery quality, capacity, and CSAT across every project. The ARB gate, the go-live sign-off, and the Friday CEO briefing are yours. Nothing ships without your sign-off.</div>
+        <div class="rc-machine">Stage in machine: <span>05 Deliver · Quality authority</span></div>
+        <div class="rc-wins">You win when: CSAT stays ≥4.2 · no go-lives without ARB review · Friday CEO briefing lands at 5pm without being asked · utilisation is ≥76%.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">CSAT ≥4.2 org-wide</div>
+          <div class="rc-kpi">0 ARB gate violations</div>
+          <div class="rc-kpi">Friday 5pm CEO briefing — always</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar2/DH_SA_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar2/P2_DH_Cadence_v3.html">Full Cadence Doc →</a>
+          <a class="rc-link secondary" href="Pillar2/Pillar2-Delivery-Processes.html">All P2 Processes →</a>
+        </div>
+      </div>
+      <div class="rc rc2">
+        <div class="rc-title">Practice Head / SA</div>
+        <div class="rc-job">Set and enforce technical standards. Non-billable. Your only output is quality and CoE excellence — accelerators, reference architectures, certification roadmaps. The rest of the pod builds to your standard.</div>
+        <div class="rc-machine">Stage in machine: <span>05 Deliver · standards authority</span></div>
+        <div class="rc-wins">You win when: zero standards violations on your practice's PRs · CoE library grows each quarter · every Dev Lead in your practice is cert-tracked and on schedule.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">0 CoE standard violations</div>
+          <div class="rc-kpi">ARB sign-off on all architectures</div>
+          <div class="rc-kpi">≥1 cert earned per Dev per quarter</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar2/PracticeHead_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar2/P2_PracticeHead_Cadence_v3.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc2">
+        <div class="rc-title">Dev Lead</div>
+        <div class="rc-job">Run the pod. Billable. Own sprint velocity, code review, and zero defects past the QA gate. Your pod's output is DataSkate's product — how they build is how DataSkate is judged.</div>
+        <div class="rc-machine">Stage in machine: <span>05 Deliver · pod execution</span></div>
+        <div class="rc-wins">You win when: sprint completion report lands Thursday 5pm every week · no PR waits more than 24hr for review · freshers are learning and shipping reliable work.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Sprint report Thu 5pm always</div>
+          <div class="rc-kpi">PR review &lt;24hr SLA</div>
+          <div class="rc-kpi">0 defects past QA gate</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar2/DevLead_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar2/P2_DevLead_Cadence_v3.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc2">
+        <div class="rc-title">Project Manager (PM)</div>
+        <div class="rc-job">Coordinate everything between client and pod. Communicate proactively — always before the client asks. Trigger invoice within 24hr of milestone sign-off. You are the client's single point of contact.</div>
+        <div class="rc-machine">Stage in machine: <span>05 Deliver + 06 Collect</span></div>
+        <div class="rc-wins">You win when: client status goes out every Friday without being asked · invoices are triggered the day milestones are signed · no project slips past Day 28 without DH knowing on Day 20.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Client status: every Friday — always</div>
+          <div class="rc-kpi">Invoice within 24hr of sign-off</div>
+          <div class="rc-kpi">On-time delivery ≥85%</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar2/PM_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar2/P2_DH_Cadence_v3.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc2">
+        <div class="rc-title">Developer</div>
+        <div class="rc-job">Build to spec, test thoroughly, escalate blockers same day. Your code is DataSkate's product. You do not hide blockers for 4 hours — you raise them the moment you know. Good code shipped fast beats perfect code shipped late.</div>
+        <div class="rc-machine">Stage in machine: <span>05 Deliver · execution layer</span></div>
+        <div class="rc-wins">You win when: Harvest is logged daily · PRs are submitted and documented · blockers are raised same day they appear · utilisation stays above 76%.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Harvest logged daily — 100%</div>
+          <div class="rc-kpi">Blockers raised same day</div>
+          <div class="rc-kpi">Utilisation ≥76%</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar2/Developer_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar2/Developer_Command_Center.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc2">
+        <div class="rc-title">Fresher</div>
+        <div class="rc-job">Support the pod, learn fast, and ship reliable work within your scope. The 91-day ramp is your programme — it exists because we've worked out the fastest path from zero to billable. Trust it. Ask early and often. Never wait 4 hours on a blocker alone.</div>
+        <div class="rc-machine">Stage in machine: <span>05 Deliver · learning layer</span></div>
+        <div class="rc-wins">You win when: Day 60 gate is cleared on time · 2 certs earned by Day 91 · daily check-in is logged · you ask for help before you're stuck for more than 30 minutes.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Day 60 gate: on schedule</div>
+          <div class="rc-kpi">2 certs by Day 91</div>
+          <div class="rc-kpi">Daily check-in: logged every day</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar2/Fresher_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar2/P2_Fresher_Cadence_v3.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pillar 3 -->
+  <div class="pb">
+    <div class="ph-row">
+      <span class="ptag ptag3">Pillar 3</span>
+      <span class="plabel">Admin &amp; Operations — The Engine Room That Keeps Everything Running</span>
+    </div>
+    <div class="rgrid">
+      <div class="rc rc3">
+        <div class="rc-title">Admin Head / COO</div>
+        <div class="rc-job">Run internal operations. Protect CEO time. Compile and deliver the monthly CEO briefing. Coordinate headcount decisions, contracts, and compliance. The CEO should never worry about ops — that's your job.</div>
+        <div class="rc-machine">Stage in machine: <span>06 Collect + all cross-pillar ops</span></div>
+        <div class="rc-wins">You win when: CEO has complete intel by the last Friday of every month · headcount decisions move in &lt;2 weeks · no legal or compliance surprises reach the CEO.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Monthly CEO briefing — last Friday</div>
+          <div class="rc-kpi">Headcount decisions: &lt;2 weeks</div>
+          <div class="rc-kpi">0 compliance surprises to CEO</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar3/AdminHead_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar3/P3_AdminHead_Cadence.html">Full Cadence Doc →</a>
+          <a class="rc-link secondary" href="Pillar3/Pillar3-Admin-Processes.html">All P3 Processes →</a>
+        </div>
+      </div>
+      <div class="rc rc3">
+        <div class="rc-title">HR Manager</div>
+        <div class="rc-job">Source, screen, and coordinate hiring to the spec Delivery Head defines. Execute the 91-day fresher ramp. Administer performance reviews. HR does not define role specs independently — that comes from the pillar head who has the need.</div>
+        <div class="rc-machine">Stage in machine: <span>All pillars · talent supply</span></div>
+        <div class="rc-wins">You win when: open roles are filled within 60 days · freshers hit Day 91 gate on schedule · attrition stays below 15% · no hiring mistake reaches the client.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Open roles filled ≤60 days</div>
+          <div class="rc-kpi">Attrition &lt;15% annually</div>
+          <div class="rc-kpi">Fresher ramp: 100% on-schedule</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar3/HR_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar3/P3_HR_Cadence.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc3">
+        <div class="rc-title">Finance Lead</div>
+        <div class="rc-job">Invoice when PM triggers it. Collect. Close monthly books. Report to CEO. Finance does not chase PM — PM chases milestone sign-off, Finance raises the invoice. DSO ≤30 days is the only metric that matters.</div>
+        <div class="rc-machine">Stage in machine: <span>06 Collect · cash engine</span></div>
+        <div class="rc-wins">You win when: every invoice goes out within 24hr of PM trigger · DSO stays ≤30 days · monthly P&amp;L lands with CEO before end of first week · no invoice is disputed because the milestone evidence was weak.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Invoice within 24hr of trigger</div>
+          <div class="rc-kpi">DSO ≤30 days</div>
+          <div class="rc-kpi">Monthly P&L: day 5 to CEO</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link" href="Pillar3/Finance_Command_Center.html">⚡ Open Command Center →</a>
+          <a class="rc-link secondary" href="Pillar3/P3_Finance_Cadence.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+      <div class="rc rc3">
+        <div class="rc-title">Enablement Coordinator (EC)</div>
+        <div class="rc-job">Keep the whole team enabled — tools, content library, cert tracking, training coordination. You are the connective tissue between HR, Delivery, and GTM when it comes to knowledge and capability.</div>
+        <div class="rc-machine">Stage in machine: <span>All pillars · capability supply</span></div>
+        <div class="rc-wins">You win when: every role has the tools they need from Day 1 · cert tracking is always current · no knowledge session is cancelled · the content library is searchable and complete.</div>
+        <div class="rc-kpis">
+          <div class="rc-kpi">Tool access: Day 1 for all new hires</div>
+          <div class="rc-kpi">Cert tracking: always current</div>
+          <div class="rc-kpi">Content library: up-to-date always</div>
+        </div>
+        <div class="rc-links">
+          <a class="rc-link secondary" href="Pillar3/P3_EC_Cadence.html">Full Cadence Doc →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="links-bar">
+    📋 Cross-role accountability:
+    <a href="CEO/DataSkate_RACI_v3.html" class="lp1">RACI Matrix →</a>
+    <a href="CEO/DataSkate_OrgChart_v3.html" class="lp1">Org Chart →</a>
+    <a href="CEO/01_DataSkate_Org_Structure_v2.html" class="lp1">Org Structure Detail →</a>
+    <a href="DataSkate_Master_CommandCenter.html" class="lp1">Master Operating Hub →</a>
+  </div>
+</section>
+
+
+<!-- ═══ TAB 5 — SCENARIOS ═══ -->
+<section id="scenarios" class="pane">
+  <h2 class="ptitle">Cross-Pillar Scenarios — What Happens When…</h2>
+  <p class="psub">14 real situations where all 3 pillars must coordinate. These are the moments that test whether the machine actually works. Filter by category or view all.</p>
+
+  <div class="sc-filters">
+    <button class="scf on" data-cat="all">All · 14</button>
+    <button class="scf" data-cat="revenue">🔴 Revenue · 3</button>
+    <button class="scf" data-cat="client">🟡 Client · 4</button>
+    <button class="scf" data-cat="growth">🟢 Growth · 3</button>
+    <button class="scf" data-cat="ops">🔵 Ops · 2</button>
+    <button class="scf" data-cat="risk">⚪ Risk · 2</button>
+  </div>
+
+  <div class="scgrid" id="scgrid">
+    <!-- REVENUE CRITICAL -->
+    <div class="scc" data-cat="revenue">
+      <div class="sc-head"><div class="sc-icon" style="background:#FDF0ED">🔴</div><div><div class="sc-trig">Revenue Critical · Trigger: Large SOW being scoped</div><div class="sc-name">Large Deal Closing</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>VP Alliances</strong> scopes SOW with AE. Flags deal size to CEO + DH simultaneously.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH confirms delivery capacity</strong> and pod availability before CEO signs — no capacity = no commit.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> reviews contract terms. <strong>Finance</strong> sets payment milestone schedule.</div></div>
+        <div class="sc-step"><div class="sc-n">✓</div><div class="sc-t"><strong>CEO signs</strong> only after P2 capacity confirmed + P3 contract cleared.</div></div>
+      </div>
+      <div class="sc-out">✅ No deal signed without P2 capacity + P3 contract sign-off</div>
+      <div class="sc-foot"><span class="sc-own">Lead: <strong>CEO + VP Alliances</strong> · Gate: <strong>DH + Admin Head</strong></span><a class="sc-lnk" href="CEO/DataSkate_RACI_v3.html">RACI →</a></div>
+    </div>
+
+    <div class="scc" data-cat="revenue">
+      <div class="sc-head"><div class="sc-icon" style="background:#FDF0ED">🏁</div><div><div class="sc-trig">Revenue Critical · Trigger: CEO sets stretch target at month start</div><div class="sc-name">End of Quarter Revenue Sprint</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">CEO</div><div class="sc-t">Sets gap-to-target. All 3 pillar heads briefed simultaneously. Actions assigned.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>VP Alliances</strong> calls all 5 partner AEs. <strong>SDR</strong> doubles outbound. <strong>GTM</strong> activates warm list.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH</strong> identifies in-flight projects near milestone sign-off → accelerates to trigger invoice.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Finance</strong> chases all outstanding invoices. <strong>Admin Head</strong> daily cash report to CEO.</div></div>
+      </div>
+      <div class="sc-out">✅ All 3 pillars running simultaneously — not sequentially</div>
+      <div class="sc-foot"><span class="sc-own">Orchestrator: <strong>CEO</strong> · All pillar heads activated</span><a class="sc-lnk" href="CEO/CEO_Cadence_v3.html">CEO Cadence →</a></div>
+    </div>
+
+    <div class="scc" data-cat="revenue">
+      <div class="sc-head"><div class="sc-icon" style="background:#FDF0ED">⚔️</div><div><div class="sc-trig">Revenue Critical · Trigger: Alliance Mgr reports competitor in active deal</div><div class="sc-name">Competitor Shows Up in a Deal</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>Alliance Mgr</strong> flags to VP + GTM Head. Competitor identified, win-theme decided within 24hr.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>Practice Head</strong> fast-tracks a live proof-of-concept to differentiate on delivery speed.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>GTM Head</strong> produces battle card + case study. <strong>AE</strong> delivers to partner within 48hr.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Finance</strong> checks pricing floor. <strong>CEO</strong> authorises discount band if needed.</div></div>
+      </div>
+      <div class="sc-out">✅ Counter-move deployed within 48hr of competitor flag</div>
+      <div class="sc-foot"><span class="sc-own">Lead: <strong>VP Alliances + GTM Head</strong> · Speed: <strong>Practice Head</strong></span><a class="sc-lnk" href="Pillar1/P1_VPAlliances_Cadence_v3.html">VP Cadence →</a></div>
+    </div>
+
+    <!-- CLIENT LIFECYCLE -->
+    <div class="scc" data-cat="client">
+      <div class="sc-head"><div class="sc-icon" style="background:#E6F5F2">📈</div><div><div class="sc-trig">Client Lifecycle · Trigger: Dev Lead spots upsell opportunity in active project</div><div class="sc-name">Client Asks for Expansion Mid-Project</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>Dev Lead → PM → DH</strong> flags expansion. Do not promise — escalate first.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>Alliance Mgr</strong> re-engages partner AE. New scope priced, deal registered.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> amends contract. <strong>Finance</strong> adds new milestone to invoice schedule.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH</strong> re-plans pod capacity. No expansion work starts until new SOW signed.</div></div>
+      </div>
+      <div class="sc-out">✅ Expansion SOW signed before scope begins — never verbal</div>
+      <div class="sc-foot"><span class="sc-own">Spot: <strong>Dev Lead / PM</strong> · Close: <strong>Alliance Mgr</strong> · Gate: <strong>Admin Head</strong></span><a class="sc-lnk" href="Pillar2/Pillar2-Delivery-Processes.html">Delivery Processes →</a></div>
+    </div>
+
+    <div class="scc" data-cat="client">
+      <div class="sc-head"><div class="sc-icon" style="background:#FDF0ED">🚨</div><div><div class="sc-trig">Client Lifecycle · Trigger: Project goes red AND client threatens to leave</div><div class="sc-name">Client Escalation Reaches CEO</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH</strong> triages and owns recovery plan. <strong>Practice Head</strong> identifies root cause.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>Alliance Mgr</strong> manages partner AE — keeps relationship intact. AE must not hear from client first.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> assesses legal + financial exposure. Flags to CEO with options.</div></div>
+        <div class="sc-step"><div class="sc-n">CEO</div><div class="sc-t"><strong>CEO calls client exec directly.</strong> Recovery plan presented. One call only — then PM takes it back.</div></div>
+      </div>
+      <div class="sc-out">✅ CEO engagement is last resort — DH must contain before it reaches here</div>
+      <div class="sc-foot"><span class="sc-own">Triage: <strong>DH</strong> · Relationship: <strong>Alliance Mgr</strong> · Final: <strong>CEO</strong></span><a class="sc-lnk" href="Pillar2/Pillar2-Delivery-Processes.html">Escalation Processes →</a></div>
+    </div>
+
+    <div class="scc" data-cat="client">
+      <div class="sc-head"><div class="sc-icon" style="background:#E6F5F2">🏆</div><div><div class="sc-trig">Client Lifecycle · Trigger: Project delivered, CSAT ≥4.5</div><div class="sc-name">Client Goes Live → Reference → Next Deal</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>PM</strong> sends CSAT survey. <strong>DH</strong> reviews. Any score &lt;4 → DH calls client personally.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>Alliance Mgr</strong> asks for named reference + intro to 2 new prospects within 2 weeks of go-live.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>GTM Head</strong> interviews client → case study within 30 days → published on AppExchange + LinkedIn.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Finance</strong> confirms full payment received before reference is published.</div></div>
+      </div>
+      <div class="sc-out">✅ Every delivery creates the next deal — flywheel closes</div>
+      <div class="sc-foot"><span class="sc-own">Capture: <strong>Alliance Mgr + GTM Head</strong> · Gate: <strong>Finance</strong></span><a class="sc-lnk" href="CEO/DataSkate_GTM_Strategy_v2.html">GTM Strategy →</a></div>
+    </div>
+
+    <div class="scc" data-cat="client">
+      <div class="sc-head"><div class="sc-icon" style="background:#E6F5F2">🔄</div><div><div class="sc-trig">Client Lifecycle · Trigger: Client requests change to signed SOW scope</div><div class="sc-name">Mid-Project Scope Change Request</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>PM</strong> receives scope request. Work stops on new scope. <strong>DH</strong> assesses impact.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>Alliance Mgr</strong> negotiates change order with partner AE — price, timeline, resources.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> issues SOW amendment. <strong>Finance</strong> adds new payment milestone.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t">Only after amendment signed: <strong>Dev Lead</strong> re-plans sprint. <strong>DH</strong> confirms pod availability.</div></div>
+      </div>
+      <div class="sc-out">✅ Zero scope creep — every change is a signed amendment</div>
+      <div class="sc-foot"><span class="sc-own">Gate: <strong>DH + Admin Head</strong> · Negotiate: <strong>Alliance Mgr</strong></span><a class="sc-lnk" href="Pillar2/Pillar2-Delivery-Processes.html">Delivery Processes →</a></div>
+    </div>
+
+    <!-- GROWTH & SCALE -->
+    <div class="scc" data-cat="growth">
+      <div class="sc-head"><div class="sc-icon" style="background:#E6F5F2">📈</div><div><div class="sc-trig">Growth · Trigger: Pipeline exceeds delivery capacity by 2+ deals</div><div class="sc-name">Hiring Wave — Scaling the Pod</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH</strong> raises capacity gap to CEO. Defines exactly: roles, skills, timeline needed.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> approves headcount. <strong>HR</strong> opens searches simultaneously — not sequentially.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>GTM Head</strong> adjusts outbound pace to match confirmed delivery capacity — no overselling.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Finance</strong> models cost impact. <strong>CEO</strong> signs off on budget before any offer is made.</div></div>
+      </div>
+      <div class="sc-out">✅ Revenue and capacity grow in lockstep — never outpace delivery</div>
+      <div class="sc-foot"><span class="sc-own">Define: <strong>DH</strong> · Approve: <strong>CEO + Admin Head</strong> · Pace: <strong>GTM Head</strong></span><a class="sc-lnk" href="Pillar3/Pillar3-Admin-Processes.html">Admin Processes →</a></div>
+    </div>
+
+    <div class="scc" data-cat="growth">
+      <div class="sc-head"><div class="sc-icon" style="background:#E6F5F2">🚀</div><div><div class="sc-trig">Growth · Trigger: CEO approves new service line or integration platform</div><div class="sc-name">New Service Offering Launch</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>Practice Head</strong> builds CoE — accelerators, standards, reference architecture. Sets go-live gate.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>GTM Head</strong> creates messaging + AE enablement. <strong>VP Alliances</strong> briefs all 5 partner AEs.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> sets pricing model. <strong>Finance</strong> creates contract template.</div></div>
+        <div class="sc-step"><div class="sc-n">ALL</div><div class="sc-t">Launch only when P2 CoE ready + P1 AEs enabled + P3 pricing approved. No exceptions.</div></div>
+      </div>
+      <div class="sc-out">✅ All 3 pillars gate the launch — no GTM before delivery is ready</div>
+      <div class="sc-foot"><span class="sc-own">Build: <strong>Practice Head</strong> · Sell: <strong>VP Alliances</strong> · Ops: <strong>Admin Head</strong></span><a class="sc-lnk" href="Pillar2/Pillar2-Delivery-Processes.html">CoE Processes →</a></div>
+    </div>
+
+    <div class="scc" data-cat="growth">
+      <div class="sc-head"><div class="sc-icon" style="background:#EBF4FB">🤝</div><div><div class="sc-trig">Growth · Trigger: CEO signs new platform partnership agreement</div><div class="sc-name">New Partner Platform Onboarded</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>VP Alliances</strong> owns partner relationship. <strong>Alliance Mgr</strong> maps their AE org within 2 weeks.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>Practice Head</strong> builds platform CoE — certs, accelerators, first reference architecture. Target: 60 days.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> registers partnership legal docs. Provisions portal access for all roles.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>GTM Head</strong> creates partner-specific collateral. First AE co-sell call within 30 days.</div></div>
+      </div>
+      <div class="sc-out">✅ First co-sell call within 30 days · CoE ready within 60 days</div>
+      <div class="sc-foot"><span class="sc-own">Relationship: <strong>VP Alliances</strong> · Practice: <strong>Practice Head</strong> · Ops: <strong>Admin Head</strong></span><a class="sc-lnk" href="Pillar1/P1_VPAlliances_Cadence_v3.html">VP Alliances Cadence →</a></div>
+    </div>
+
+    <!-- OPERATIONAL RHYTHMS -->
+    <div class="scc" data-cat="ops">
+      <div class="sc-head"><div class="sc-icon" style="background:#EBF4FB">📋</div><div><div class="sc-trig">Operations · Trigger: Quarterly (each partner, scheduled in advance)</div><div class="sc-name">QBR with Partner — All 3 Pillars Present</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> compiles financials: revenue from partner, invoiced, collected, pipeline value.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH</strong> prepares delivery scorecard: CSAT, on-time delivery, active projects, case studies.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>VP Alliances</strong> leads the QBR. <strong>Alliance Mgr</strong> presents AE pipeline + referral data.</div></div>
+        <div class="sc-step"><div class="sc-n">ALL</div><div class="sc-t">Actions assigned. Next quarter targets set. Partner NPS collected. <strong>CEO attends</strong> if partner is strategic.</div></div>
+      </div>
+      <div class="sc-out">✅ Partner sees one unified DataSkate — not three separate functions</div>
+      <div class="sc-foot"><span class="sc-own">Lead: <strong>VP Alliances</strong> · Data: <strong>DH + Finance</strong> · Senior: <strong>CEO (if strategic)</strong></span><a class="sc-lnk" href="Pillar1/P1_VPAlliances_Cadence_v3.html">VP Cadence →</a></div>
+    </div>
+
+    <div class="scc" data-cat="ops">
+      <div class="sc-head"><div class="sc-icon" style="background:#EEF1F7">📊</div><div><div class="sc-trig">Operations · Trigger: Last Friday of every month, 3pm</div><div class="sc-name">Monthly Company Review — CEO Briefing</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>VP Alliances:</strong> Partner scorecard (all 5). <strong>GTM Head:</strong> Pipeline + outbound KPIs. <strong>AE:</strong> Status.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH:</strong> Delivery health, CSAT, utilisation, at-risk projects. Escalation flag if red.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Finance:</strong> Cash, DSO, outstanding. <strong>Admin Head:</strong> Headcount, costs, compliance.</div></div>
+        <div class="sc-step"><div class="sc-n">CEO</div><div class="sc-t">Reviews all inputs. Sets next month targets. Assigns owner + deadline to every action item.</div></div>
+      </div>
+      <div class="sc-out">✅ CEO has complete picture by 4pm — every last Friday, no exceptions</div>
+      <div class="sc-foot"><span class="sc-own">Organiser: <strong>Admin Head</strong> · Audience: <strong>CEO</strong></span><a class="sc-lnk" href="Pillar3/P3_AdminHead_Cadence.html">Admin Cadence →</a></div>
+    </div>
+
+    <!-- RISK & RECOVERY -->
+    <div class="scc" data-cat="risk">
+      <div class="sc-head"><div class="sc-icon" style="background:#EEF1F7">⚠️</div><div><div class="sc-trig">Risk · Trigger: VP Alliances flags a key partner going cold</div><div class="sc-name">Strategic Partner Relationship at Risk</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>VP Alliances</strong> flags to CEO immediately. Root cause: delivery issue, displacement, or neglect?</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>DH</strong> audits active projects with that partner. <strong>Practice Head</strong> prepares proof points of quality.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> checks compliance — MOU obligations, SLA breaches, open legal items.</div></div>
+        <div class="sc-step"><div class="sc-n">CEO</div><div class="sc-t"><strong>CEO calls partner exec</strong> within 24hr. Recovery plan: delivery proof + roadmap commitment.</div></div>
+      </div>
+      <div class="sc-out">✅ No partner loss without CEO-level intervention first</div>
+      <div class="sc-foot"><span class="sc-own">Flag: <strong>VP Alliances</strong> · Evidence: <strong>DH + Admin Head</strong> · Rescue: <strong>CEO</strong></span><a class="sc-lnk" href="Pillar1/P1_VPAlliances_Cadence_v3.html">VP Cadence →</a></div>
+    </div>
+
+    <div class="scc" data-cat="risk">
+      <div class="sc-head"><div class="sc-icon" style="background:#EEF1F7">💸</div><div><div class="sc-trig">Risk · Trigger: Client disputes a milestone invoice</div><div class="sc-name">Invoice Disputed by Client</div></div></div>
+      <div class="sc-steps">
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Finance</strong> flags dispute to <strong>PM + Admin Head</strong> within 24hr. No direct client contact by Finance.</div></div>
+        <div class="sc-step"><div class="sc-n">P2</div><div class="sc-t"><strong>PM</strong> compiles milestone evidence: sign-off emails, demo recordings, CSAT. Sent within 48hr.</div></div>
+        <div class="sc-step"><div class="sc-n">P1</div><div class="sc-t"><strong>Alliance Mgr</strong> calls partner AE — keeps relationship intact while dispute resolves.</div></div>
+        <div class="sc-step"><div class="sc-n">P3</div><div class="sc-t"><strong>Admin Head</strong> leads resolution. Legal engaged if unresolved after 5 business days.</div></div>
+      </div>
+      <div class="sc-out">✅ Evidence presented within 48hr · Resolved within 10 business days</div>
+      <div class="sc-foot"><span class="sc-own">Evidence: <strong>PM</strong> · Relationship: <strong>Alliance Mgr</strong> · Resolution: <strong>Admin Head</strong></span><a class="sc-lnk" href="Pillar3/Pillar3-Admin-Processes.html">Admin Processes →</a></div>
+    </div>
+  </div>
+
+  <div class="links-bar">
+    📋 Full process detail:
+    <a href="Pillar1/Pillar1-Partner_Alliance-GTM-Processes-v2.html" class="lp1">Pillar 1 — Revenue Processes →</a>
+    <a href="Pillar2/Pillar2-Delivery-Processes.html" class="lp2">Pillar 2 — Delivery Processes →</a>
+    <a href="Pillar3/Pillar3-Admin-Processes.html" class="lp3">Pillar 3 — Admin Processes →</a>
+    <a href="DataSkate_Master_CommandCenter.html" class="lp1">Master Operating Hub →</a>
+  </div>
+</section>
+
+
+<script>
+  const btns  = document.querySelectorAll('.tb');
+  const panes = document.querySelectorAll('.pane');
+  btns.forEach(b => b.addEventListener('click', () => {
+    btns.forEach(x  => x.classList.remove('on'));
+    panes.forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById(b.dataset.t).classList.add('on');
+  }));
+
+  const filters = document.querySelectorAll('.scf');
+  const cards   = document.querySelectorAll('.scc');
+  filters.forEach(f => f.addEventListener('click', () => {
+    filters.forEach(x => x.classList.remove('on'));
+    f.classList.add('on');
+    const cat = f.dataset.cat;
+    cards.forEach(c => {
+      if (cat === 'all' || c.dataset.cat === cat) c.classList.remove('hidden');
+      else c.classList.add('hidden');
+    });
+  }));
+</script>
+</body>
+</html>

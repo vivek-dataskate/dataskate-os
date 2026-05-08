@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DataSkate · Head of GTM · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B1C0A;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-dk:#92400E;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --purple:#6D28D9;--purple-lt:#EDE9FE;--purple-dk:#4C1D95;
+  --blue:#1D4ED8;--blue-lt:#EFF6FF;--blue-dk:#1E3A8A;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --role-color:#E8472A;--role-lt:#FDF0ED;--role-dk:#9B1C0A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:var(--coral);opacity:.08}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+
+/* LEGEND */
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--coral-lt);color:var(--coral-dk)}
+.t-good{background:var(--amber-lt);color:var(--amber-dk)}
+.t-nice{background:var(--blue-lt);color:var(--blue-dk)}
+.t-self{background:var(--purple-lt);color:var(--purple-dk)}
+.t-brand{background:var(--slate-lt);color:var(--slate-dk)}
+.t-cross{background:var(--teal-lt);color:var(--teal-dk)}
+
+/* ROLE MAP */
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+
+/* SECTIONS */
+.section{margin-bottom:36px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+
+/* FREQUENCY GRID */
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px;background:var(--coral);color:#fff}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--coral);border-color:var(--coral);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+
+/* INFO BOXES */
+.info-box{background:var(--coral-lt);border:1px solid var(--coral-dk);border-radius:10px;padding:14px 18px;margin-bottom:24px;opacity:.85}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px;color:var(--coral-dk)}
+.info-body{font-size:12px;line-height:1.7;color:var(--ink)}
+
+/* PROCESS FLOW */
+.pf{display:flex;align-items:stretch;gap:0;margin:16px 0 24px;flex-wrap:nowrap;overflow-x:auto}
+.pf-step{background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:14px 16px;min-width:130px;flex:1;text-align:center}
+.pf-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--coral);line-height:1}
+.pf-title{font-size:11px;font-weight:600;color:var(--ink);margin-top:4px}
+.pf-sub{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+.pf-arr{display:flex;align-items:center;padding:0 4px;color:var(--muted);font-size:16px;flex-shrink:0}
+
+/* KPI GRID */
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+.kpi-card{background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:16px;text-align:center}
+.kv{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--coral);line-height:1}
+.kl{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+
+/* ACCOUNTABILITY MAP */
+.acc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+@media(max-width:700px){.acc-grid{grid-template-columns:1fr}}
+.acc-card{background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:16px}
+.acc-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.acc-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px}
+.acc-row:last-child{border-bottom:none}
+.acc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="Head_GTM_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Head of GTM Command Center</a></div>
+
+<header>
+  <div>
+    <div class="role-tag">Pillar 1 · Partner Alliance &amp; GTM · Cadence v3</div>
+    <div class="role-name">Head of GTM</div>
+    <div class="role-sub">Owner of outbound pipeline, content engine, SDR management, and brand. Reports to: VP Alliances. Hired between Day 30–60.</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip">60 prospects/week enrolled</span>
+      <span class="kpi-chip">4 meetings/week booked</span>
+      <span class="kpi-chip">Friday GTM report — no VP chasing</span>
+      <span class="kpi-chip">100% MDF utilised</span>
+      <span class="kpi-chip">1 case study/month published</span>
+    </div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8;position:relative;z-index:1">Primary KPI<br/><span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">Pipeline from outbound + content · SDR performance · brand compounding</span></div>
+</header>
+
+<main>
+
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span>
+  <span class="tb t-good">Good to do</span>
+  <span class="tb t-nice">Nice to do</span>
+  <span class="tb t-self">Self-improvement</span>
+  <span class="tb t-brand">Personal brand</span>
+  <span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">P04</span> = process reference · checkboxes reset on reload</span>
+</div>
+
+<!-- ROLE IN THE SYSTEM -->
+<div class="diagram section">
+  <div class="diagram-title">Head of GTM — role in the Pillar 1 system</div>
+  <div class="pf">
+    <div class="pf-step">
+      <div class="pf-num">1</div>
+      <div class="pf-title">Content Engine</div>
+      <div class="pf-sub">Exec LinkedIn, calendar, case studies, webinars, events</div>
+    </div>
+    <div class="pf-arr">→</div>
+    <div class="pf-step">
+      <div class="pf-num">2</div>
+      <div class="pf-title">SDR Management</div>
+      <div class="pf-sub">Sequences, coaching, weekly review, named accounts</div>
+    </div>
+    <div class="pf-arr">→</div>
+    <div class="pf-step">
+      <div class="pf-num">3</div>
+      <div class="pf-title">Pipeline Attribution</div>
+      <div class="pf-sub">100% attributed. Motion-by-motion reporting to VP.</div>
+    </div>
+    <div class="pf-arr">→</div>
+    <div class="pf-step">
+      <div class="pf-num">4</div>
+      <div class="pf-title">Intelligence Layer</div>
+      <div class="pf-sub">ICP, win/loss, competitive intel, ecosystem monitoring</div>
+    </div>
+    <div class="pf-arr">→</div>
+    <div class="pf-step">
+      <div class="pf-num">5</div>
+      <div class="pf-title">MDF & Partner Brand</div>
+      <div class="pf-sub">MDF utilised, partner portals, AppExchange, community</div>
+    </div>
+  </div>
+</div>
+
+<!-- ROLE KPIs -->
+<div class="section">
+  <div class="sec-title">Primary KPIs — Head of GTM</div>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kv">60/wk</div><div class="kl">Prospects enrolled in sequences</div></div>
+    <div class="kpi-card"><div class="kv">4/wk</div><div class="kl">Qualified meetings booked by SDR</div></div>
+    <div class="kpi-card"><div class="kv">≥3%</div><div class="kl">Sequence reply-to-meeting rate</div></div>
+    <div class="kpi-card"><div class="kv">Friday 5pm</div><div class="kl">GTM weekly report — never missed</div></div>
+    <div class="kpi-card"><div class="kv">1/mo</div><div class="kl">Published case study</div></div>
+    <div class="kpi-card"><div class="kv">1/2wk</div><div class="kl">New webinar published</div></div>
+    <div class="kpi-card"><div class="kv">100%</div><div class="kl">MDF funds utilised per quarter</div></div>
+    <div class="kpi-card"><div class="kv">≥3%</div><div class="kl">Exec LinkedIn avg engagement rate</div></div>
+  </div>
+</div>
+
+<!-- OWNS vs SUPPORTS -->
+<div class="section">
+  <div class="sec-title">Owns vs Supports</div>
+  <div class="acc-grid">
+    <div class="acc-card">
+      <div class="acc-title" style="color:var(--coral-dk)">🎯 Fully Owns</div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>SDR/BDR management and coaching (reports to Head of GTM)</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>Executive LinkedIn content — draft, submit, schedule, track</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>Content calendar — planning, production, performance</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>Case study production — trigger to published</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>Webinar production — topic brief to gated landing page</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>MDF planning and utilisation (VP Alliances approves)</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>AppExchange listing and partner portal profiles</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>Weekly GTM performance report</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>Monthly GTM performance review (presented to VP)</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>ICP management, competitive intel, win/loss analysis</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--coral)"></div><div>Ecosystem intelligence monthly report</div></div>
+    </div>
+    <div class="acc-card">
+      <div class="acc-title" style="color:var(--teal-dk)">🤝 Supports / Coordinates</div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--teal)"></div><div>VP Alliances: quarterly GTM strategy review (GTM compiles, VP presents)</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--teal)"></div><div>VP Alliances: QBR deck preparation (GTM compiles data)</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--teal)"></div><div>VP Alliances: partner community thread topics (GTM proposes, VP posts)</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--teal)"></div><div>Alliance Mgr/AE: event selection and follow-up calendar</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--teal)"></div><div>Delivery Head: case study triggers (PM notifies GTM at project close)</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--teal)"></div><div>Practice Lead: webinar recording briefing and technical content</div></div>
+      <div class="acc-row"><div class="acc-dot" style="background:var(--teal)"></div><div>CEO + VP: exec LinkedIn profile quarterly governance</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="info-box">
+  <div class="info-title">⚡ Head of GTM — Hiring Context</div>
+  <div class="info-body">Head of GTM joins Day 30–60. For Days 1–30: VP Alliances drafts exec content and manages SDR directly. By Day 60: Head of GTM owns the full content and outbound machine. By Day 90: SDR joins into a working system — not a blank page. The Head of GTM proves value in the first 30 days by having sequences running and the first 50 contacts enrolled before the SDR starts.</div>
+</div>
+
+<!-- ══════════════════════════════════════
+  DAILY CADENCE
+══════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">Daily · Head of GTM</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">AM Block</span><span style="font-size:11px;color:var(--muted)">7:30–9:30am</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Check Instantly — any SDR replies overnight? Route positive replies to Alliance Mgr/AE within 2hr <span class="proc-ref">P04</span></div><div class="task-tool">🛠 Instantly · Slack to AE</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Draft 1–2 exec LinkedIn posts (CEO + VP Alliances) — submitted for approval by 10am <span class="proc-ref">P22</span></div><div class="task-sub">Write in exec voice. 1 topic, 1 angle. Submit via Slack DM — not email.</div><div class="task-tool">🛠 Buffer drafts · Slack to CEO/VP</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Check SDR progress — prospects enrolled today, any tool or sequence issue?</div><div class="task-tool">🛠 Instantly dashboard · Apollo</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">MID Block</span><span style="font-size:11px;color:var(--muted)">10am–1pm</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Check content performance — any post from yesterday with unusual engagement?</div><div class="task-tool">🛠 LinkedIn analytics · Buffer</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Source raw content material — CEO voice note, win story, ecosystem news article</div><div class="task-sub">Loom DM to CEO/VP: "Give me 3 minutes on any topic." Raw is fine.</div><div class="task-tool">🛠 Loom · Slack DM to CEO</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Webinar/content production work block — if topic approved, content must be live within 5 days <span class="proc-ref">P31</span></div><div class="task-tool">🛠 Loom / Zoom · Vimeo · HubSpot LP</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">PM Block</span><span style="font-size:11px;color:var(--muted)">2pm–5pm</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Sequence review — check reply rates, bounce rates, any deliverability issues</div><div class="task-tool">🛠 Instantly sequence analytics</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Read 1 ecosystem or GTM article — add key insight to content backlog Notion doc</div><div class="task-sub">15 min max. No rabbit holes.</div><div class="task-tool">🛠 Feedly / Substack / LinkedIn</div></div><span class="tb2 t-self">Self</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Post 1 original LinkedIn comment or insight (own voice — not exec ghost)</div><div class="task-tool">🛠 LinkedIn</div></div><span class="tb2 t-brand">Brand</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Competitive scan — any competitor news, product announcement, or pricing change today?</div><div class="task-tool">🛠 LinkedIn · G2 · Product blogs</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  WEEKLY CADENCE
+══════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">Weekly · Head of GTM</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Monday</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SDR weekly review — 9am fixed. KPIs from last week, blockers, sequence adjustments, this week targets <span class="proc-ref">P38</span></div><div class="task-sub">Max 30 minutes. Fixed agenda. Never cancelled.</div><div class="task-tool">🛠 Instantly analytics · HubSpot meetings</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Revenue sync with VP Alliances — pipeline, deals at risk, SDR KPIs, any GTM motion changes</div><div class="task-tool">🛠 Monday meeting, 30 min</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">New sequence approved and live for this week — Monday 9am SLA <span class="proc-ref">P04</span></div><div class="task-tool">🛠 Instantly · Apollo ICP pull</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Mid-week</span><span style="font-size:11px;color:var(--muted)">Tue–Thu</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Content calendar production — all posts for next 2 weeks drafted and scheduled <span class="proc-ref">P25</span></div><div class="task-sub">100% of posts scheduled ≥5 days ahead.</div><div class="task-tool">🛠 Buffer · Notion content calendar</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Webinar pipeline check — is current webinar on track for 5-day topic-to-live SLA? <span class="proc-ref">P31</span></div><div class="task-tool">🛠 Loom / Zoom + LP builder + Vimeo</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Case study queue check — any qualifying projects closed this week? <span class="proc-ref">P26</span></div><div class="task-sub">PM flags project close + CSAT ≥4.2. GTM initiates intake within 5 days.</div><div class="task-tool">🛠 Slack PM → GTM · HubSpot</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SDR shadow: listen to 1–2 SDR calls this week — coaching notes logged</div><div class="task-tool">🛠 Gong / call recorder</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">1 personal LinkedIn post — own thought leadership, not exec ghost</div><div class="task-tool">🛠 LinkedIn</div></div><span class="tb2 t-brand">Brand</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Friday</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">GTM weekly performance report — compiled and sent to VP by 5pm. Every Friday. No exceptions. <span class="proc-ref">P41</span></div><div class="task-sub">Format: pipeline by motion, SDR KPIs, content KPIs, 1 thing that worked, 1 thing to fix, 1 ask of VP.</div><div class="task-tool">🛠 HubSpot + Instantly + Buffer → Slack + email to VP</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Exec post scheduling — all next week's exec posts scheduled in Buffer by Friday EOD</div><div class="task-tool">🛠 Buffer</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SDR next week prep — sequence ready, named account batch researched, ICP confirmed</div><div class="task-tool">🛠 Instantly · Apollo · Clay</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Sequence performance review — any sequence under 1% reply rate this week? Pause or rewrite.</div><div class="task-tool">🛠 Instantly analytics</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Read 1 industry newsletter or GTM podcast — 20 min wind-down</div><div class="task-tool">🛠 Lenny's Newsletter / Outbound Mastery / Demand Gen Live</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  MONTHLY CADENCE
+══════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">Monthly · Head of GTM</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Week 1 of Month</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Monthly GTM performance review — compiled and presented to VP within 3 days of month close <span class="proc-ref">P42</span></div><div class="task-sub">5 motions reviewed: pipeline, conversion, wins, losses. Trend vs prior month.</div><div class="task-tool">🛠 HubSpot + analytics → slide deck</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Pipeline attribution report — 100% pipeline attributed by source (partner / outbound / inbound) <span class="proc-ref">P21</span></div><div class="task-tool">🛠 HubSpot source attribution view</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Content performance review — rank all assets, flag bottom 20% for retirement or refresh <span class="proc-ref">P28</span></div><div class="task-tool">🛠 HubSpot CMS + Buffer analytics</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Webinar performance report — views, captures, conversion per video · retire if 0 captures in 60 days <span class="proc-ref">P32</span></div><div class="task-tool">🛠 Vimeo analytics + HubSpot landing pages</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Ecosystem intelligence report — all 5 partner updates, ICP signals, any GTM changes <span class="proc-ref">P46</span></div><div class="task-tool">🛠 Partner release notes · LinkedIn · Salesforce blog</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Week 2–3 of Month</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">AppExchange review requests — any project closes from last month with CSAT ≥4.2? Send review request. <span class="proc-ref">P33</span></div><div class="task-sub">One follow-up at 5 days if no review left.</div><div class="task-tool">🛠 AppExchange portal + Gmail template</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">MDF tracking — utilisation rate. Any campaigns to launch before partner deadline? <span class="proc-ref">P15</span></div><div class="task-tool">🛠 All 5 partner portals + Notion MDF tracker</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SDR sequence performance review — retire any sequence under 1% reply rate. Write replacement. <span class="proc-ref">P38</span></div><div class="task-tool">🛠 Instantly analytics</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Next month content calendar drafted and submitted to VP for approval by the 25th <span class="proc-ref">P25</span></div><div class="task-sub">30-day calendar: topic, exec, format, date, CTA. VP approves within 3 days.</div><div class="task-tool">🛠 Notion calendar + Buffer → Slack to VP</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">1 case study published this month — if not yet, escalate to Delivery Head for project candidate</div><div class="task-tool">🛠 Canva / Notion · website CMS</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Ongoing Monthly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">1 webinar published per 2-week cadence — if behind, escalate to VP for topic priority</div><div class="task-tool">🛠 Loom + Vimeo + gated LP</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Update personal thought leadership — 1 substantive comment or post on major ecosystem thread</div><div class="task-tool">🛠 LinkedIn</div></div><span class="tb2 t-brand">Brand</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Review own lost case studies or failed campaigns — what pattern am I seeing?</div><div class="task-tool">🛠 Notion debrief log</div></div><span class="tb2 t-self">Self</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Partner portal profiles check — any wins or certs to add? <span class="proc-ref">P34</span></div><div class="task-tool">🛠 All 5 partner portals</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Cross-dept: check Delivery Head's project close list — case study + AppExchange review candidates <span class="proc-ref">P47</span></div><div class="task-tool">🛠 Slack · Notion project tracker</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+  QUARTERLY CADENCE
+══════════════════════════════════════ -->
+<div class="section">
+  <div class="sec-title">Quarterly · Head of GTM</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Strategy & Intelligence</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Quarterly GTM strategy review — full attribution, content ROI, SDR performance, next quarter plan <span class="proc-ref">P43</span></div><div class="task-sub">Presented to VP + CEO within 10 business days of quarter close.</div><div class="task-tool">🛠 Slide deck + HubSpot full attribution</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Win/loss pattern analysis — 100% closed deals reviewed. ICP and sequences updated. <span class="proc-ref">P45</span></div><div class="task-sub">Complete within 10 days of quarter close.</div><div class="task-tool">🛠 HubSpot + Notion debrief logs</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">ICP update — based on win/loss patterns. VP approves. SDR and AE briefed same week. <span class="proc-ref">P37</span></div><div class="task-tool">🛠 ICP document + Slack brief to team</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Competitive intelligence structured update — top 5 competitors, differentiation, objection responses <span class="proc-ref">P44</span></div><div class="task-tool">🛠 Notion competitor tracker</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Enablement Updates</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">AE enablement kit refresh — new case studies, updated messaging, partner wins included <span class="proc-ref">P02</span></div><div class="task-sub">Distributed to Alliance Mgr/AE for delivery to all active AEs within 2 weeks of quarter start.</div><div class="task-tool">🛠 Canva PDF kit + Gmail template</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Objection handling guide update — new objections from this quarter's losses added <span class="proc-ref">P36</span></div><div class="task-tool">🛠 Notion objection library</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">New SDR sequence library for Q+1 — 5 new sequences based on updated ICP and win patterns</div><div class="task-tool">🛠 Instantly sequence builder</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Thought leadership placement — pitch 1 article or podcast to external outlet <span class="proc-ref">P27</span></div><div class="task-tool">🛠 Email to publication editor · LinkedIn podcast host</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge">Brand & Self</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">All 3 exec LinkedIn profiles audited — headline, about, featured posts, banner. Changes live within 5 days. <span class="proc-ref">P23</span></div><div class="task-tool">🛠 LinkedIn direct or copy/approval workflow</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Event calendar locked for Q+1 — 2 events/month, speaker applications 6 weeks ahead <span class="proc-ref">P29</span></div><div class="task-tool">🛠 Event calendar · application submissions</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">1 GTM or product marketing course completed — Reforge, Maven, LinkedIn Learning, or similar</div><div class="task-tool">🛠 Reforge / Maven / LinkedIn Learning</div></div><span class="tb2 t-self">Self</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Own LinkedIn profile optimised — updated with skills, achievements, and new positioning</div><div class="task-tool">🛠 LinkedIn</div></div><span class="tb2 t-brand">Brand</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Career reflection: 1 area of mastery growth this quarter. 1 gap identified. Shared with VP in 1:1.</div><div class="task-tool">🛠 Private Notion doc + VP quarterly 1:1</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CROSS-DEPT HANDOFFS -->
+<div class="section">
+  <div class="sec-title">Cross-Department Handoffs — Head of GTM</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px">
+    <div style="background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:16px">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-dk);margin-bottom:8px">↗ From Delivery (P2)</div>
+      <div style="font-size:12px;color:var(--ink);line-height:1.7">PM notifies GTM at project close → case study intake initiated within 5 days (P26).<br/>Delivery Head flags CSAT ≥4.2 for AppExchange review request (P33).<br/>Practice Lead records webinar content on GTM brief (P31).</div>
+    </div>
+    <div style="background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:16px">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-dk);margin-bottom:8px">↗ From VP Alliances (P1)</div>
+      <div style="font-size:12px;color:var(--ink);line-height:1.7">VP approves monthly content calendar within 3 days (P25).<br/>VP picks webinar topics (P31).<br/>VP approves ICP changes before distribution (P37).<br/>VP reviews weekly GTM report — responds with priorities by Monday AM.</div>
+    </div>
+    <div style="background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:16px">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-dk);margin-bottom:8px">↗ To SDR/BDR</div>
+      <div style="font-size:12px;color:var(--ink);line-height:1.7">Weekly brief: sequence approved, ICP confirmed, named account batch ready (P04).<br/>New sequence live every Monday 9am.<br/>Coaching: weekly review Monday 9am. Call shadowing mid-week.</div>
+    </div>
+    <div style="background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:16px">
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-dk);margin-bottom:8px">↗ From Admin/Finance (P3)</div>
+      <div style="font-size:12px;color:var(--ink);line-height:1.7">Finance tracks MDF reimbursement cash flow — brief Finance on campaign timelines (P15).<br/>Finance confirms event sponsorship payment processing (P35).<br/>Admin tracks tooling subscriptions: Instantly, Clay, Apollo, Buffer.</div>
+    </div>
+  </div>
+</div>
+
+<!-- 90-DAY RAMP PLAN -->
+<div class="section">
+  <div class="sec-title">90-Day Ramp Plan — Head of GTM (New Hire)</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px">
+    <div style="background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:18px">
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--coral);margin-bottom:10px">Days 1–30 · Learn the machine</div>
+      <div style="font-size:12px;color:var(--ink);line-height:1.8">
+        ✓ Shadow VP Alliances on all partner calls<br/>
+        ✓ Map all 5 partner ecosystems<br/>
+        ✓ Learn ICP inside out — interview Alliance Mgr/AE<br/>
+        ✓ 200 contacts enriched via Clay and Apollo<br/>
+        ✓ First sequences live before Day 30<br/>
+        ✓ Content calendar running: CEO + VP posts daily<br/>
+        <br/>
+        <strong>Gate:</strong> First 50 prospects enrolled. Content running.
+      </div>
+    </div>
+    <div style="background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:18px">
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--amber);margin-bottom:10px">Days 31–60 · Build the system</div>
+      <div style="font-size:12px;color:var(--ink);line-height:1.8">
+        ✓ Sequence reply rate ≥1% achieved<br/>
+        ✓ First 3-way calls booked by VP/AE<br/>
+        ✓ Webinar #1 produced and gated<br/>
+        ✓ Case study #1 intake initiated<br/>
+        ✓ GTM weekly report cadence established<br/>
+        ✓ SDR onboarding pack ready for Day 61<br/>
+        <br/>
+        <strong>Gate:</strong> First meetings booked. Webinar live.
+      </div>
+    </div>
+    <div style="background:var(--white);border:1px solid #E5E7EB;border-radius:10px;padding:18px">
+      <div style="font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--teal);margin-bottom:10px">Days 61–90 · Scale with SDR</div>
+      <div style="font-size:12px;color:var(--ink);line-height:1.8">
+        ✓ SDR onboarded into working system<br/>
+        ✓ SDR shadows GTM for 2 weeks before solo<br/>
+        ✓ Monday SDR review established<br/>
+        ✓ SDR targeting 2 meetings/week in ramp<br/>
+        ✓ First GTM performance report to VP<br/>
+        ✓ Case study #1 published<br/>
+        <br/>
+        <strong>Gate:</strong> SDR booking calls. Pipeline visible in CRM.
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <span>DataSkate · Pillar 1 · Head of GTM Cadence v3 · Valid Q2 2026</span>
+  <span>Review trigger: role change · ICP change · SDR ramp complete</span>
+</footer>
+
+<script>
+// Checkboxes persist within session only — intentional
+</script>
+</body>
+</html>

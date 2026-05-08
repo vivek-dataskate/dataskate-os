@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Dev Lead · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --role-color:#1D4ED8;--role-lt:#EFF6FF;--role-dk:#1E3A8A;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--teal-lt);color:var(--teal-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--teal);border-color:var(--teal);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.info-box{background:#F0FDF4;border:1px solid #A7F3D0;border-radius:10px;padding:14px 18px;margin-bottom:28px}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px}
+.info-body{font-size:12px;line-height:1.7}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="DevLead_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Dev Lead Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 2 · Delivery &amp; CoE · Cadence v3</div>
+    <div class="role-name">Dev Lead</div>
+    <div class="role-sub">Player-coach · Pod of 5 · 2–3 concurrent SMB projects · Reports to: Practice Head · ≥70% billable · remainder in pod management and code review</div>
+    <div class="kpi-bar"><span class="kpi-chip">≥70% billability</span><span class="kpi-chip">24hr PR review SLA</span><span class="kpi-chip">≥85% sprint completion</span><span class="kpi-chip">Thursday pod summary EOD</span></div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8">Primary KPI<br/><span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">≥85% sprint completion · 24hr PR review · 0 PRs merged without review</span></div>
+</header>
+<main>
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">D02</span> = process reference · checkboxes reset on reload</span>
+</div>
+<div class="diagram section">
+  <div class="diagram-title">Dev Lead — role in the delivery system</div>
+  <svg viewBox="0 0 700 130" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect x="270" y="5" width="160" height="40" rx="7" fill="#1D4ED8"/>
+    <text x="350" y="21" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Dev Lead</text>
+    <text x="350" y="35" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">Reports to Practice Head</text>
+    <line x1="350" y1="45" x2="350" y2="60" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="100" y1="60" x2="600" y2="60" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="100" y1="60" x2="100" y2="75" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="233" y1="60" x2="233" y2="75" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="467" y1="60" x2="467" y2="75" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="600" y1="60" x2="600" y2="75" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="30" y="75" width="140" height="42" rx="6" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.2"/>
+    <text x="100" y="93" text-anchor="middle" fill="#1E3A8A" font-size="9" font-weight="700">Daily standup</text>
+    <text x="100" y="105" text-anchor="middle" fill="#1E3A8A" font-size="9">Extract blockers · 15 min</text>
+    <rect x="163" y="75" width="140" height="42" rx="6" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.2"/>
+    <text x="233" y="93" text-anchor="middle" fill="#1E3A8A" font-size="9" font-weight="700">PR review ≤24hr</text>
+    <text x="233" y="105" text-anchor="middle" fill="#1E3A8A" font-size="9">No merge without approval</text>
+    <rect x="397" y="75" width="140" height="42" rx="6" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.2"/>
+    <text x="467" y="93" text-anchor="middle" fill="#1E3A8A" font-size="9" font-weight="700">Blocker → 4hr</text>
+    <text x="467" y="105" text-anchor="middle" fill="#1E3A8A" font-size="9">Resolve or escalate to PH</text>
+    <rect x="530" y="75" width="140" height="42" rx="6" fill="#1D4ED8"/>
+    <text x="600" y="93" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Thursday pod summary</text>
+    <text x="600" y="105" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="9">Hard deadline → Practice Head</text>
+    <rect x="303" y="75" width="84" height="42" rx="6" fill="#EFF6FF" stroke="#1D4ED8" stroke-width="1.2"/>
+    <text x="345" y="92" text-anchor="middle" fill="#1E3A8A" font-size="9" font-weight="700">Sprint planning</text>
+    <text x="345" y="104" text-anchor="middle" fill="#1E3A8A" font-size="9">All tickets defined</text>
+    <text x="345" y="114" text-anchor="middle" fill="#1E3A8A" font-size="8">before build starts</text>
+  </svg>
+</div>
+<div class="section"><div class="sec-title">📥 What you receive — reports and data that land on your desk</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Blocker flags from pod — Developer or Fresher stuck for 20+ min <span class="proc-ref">D05</span></div>
+            <div class="task-sub">Must respond within 4hr. Resolve or escalate to Practice Head with full context.</div><div class="task-tool">🛠 Slack DM + Jira Blocked status</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Jira ticket status updates from pod — any stale tickets (no update in 24hr)? <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Jira sprint board</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Hours logged from pod members — verify against sprint plan </div>
+            <div class="task-tool">🛠 Harvest dashboard</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">PRs from pod for review — 24hr review window from time of submission <span class="proc-ref">D06</span></div>
+            <div class="task-tool">🛠 GitHub / Bitbucket</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Sprint completion status from pod — feeds Thursday pod summary to Practice Head <span class="proc-ref">E13</span></div>
+            <div class="task-tool">🛠 Jira sprint metrics</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Accelerator proposals from pod members — review, approve, or decline with reason <span class="proc-ref">C04</span></div>
+            <div class="task-tool">🛠 Notion C04 proposal template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">⚡ What you do — operational cadence</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Run daily standup — done / today / blockers in 15 min. Extract blockers, do not just listen. <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Zoom / Slack huddle</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review sprint burn-down — velocity on track? Drop >30% → flag to Practice Head same day <span class="proc-ref">E08</span></div>
+            <div class="task-tool">🛠 Jira sprint board</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review any open PRs — target zero PRs open more than 24hr <span class="proc-ref">D06</span></div>
+            <div class="task-tool">🛠 GitHub / Bitbucket</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Log own hours before EOD — correct project and code </div>
+            <div class="task-tool">🛠 Harvest</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Follow C10 on own tickets — model the standard you expect from the pod <span class="proc-ref">C10</span></div>
+            <div class="task-tool">🛠 GitHub · Notion library</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Respond to pod blockers within 4hr — resolve or escalate to Practice Head with full context <span class="proc-ref">D05/E02</span></div>
+            <div class="task-tool">🛠 Slack</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Sprint planning session on Day 1 — all tickets defined with acceptance criteria before build starts <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Jira · Linear</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review all PRs from pod — approve or reject with specific written feedback referencing the standard <span class="proc-ref">D06</span></div>
+            <div class="task-tool">🛠 GitHub / Bitbucket</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">C10 compliance spot-check — review 2 random PRs: was library checked? Env standard applied? <span class="proc-ref">C10</span></div>
+            <div class="task-tool">🛠 GitHub PR history + Notion library</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">1:1 with any pod member who had a below-standard week — specific feedback, not general </div>
+            <div class="task-tool">🛠 Google Meet</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review pod cert progress — anyone behind? Flag to Practice Head. <span class="proc-ref">P02</span></div>
+            <div class="task-tool">🛠 Notion cert tracker</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Publish 1 technical LinkedIn post from real project work <span class="proc-ref">G01</span></div>
+            <div class="task-tool">🛠 LinkedIn</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Cross-project pattern review — what patterns from this quarter belong in the library? <span class="proc-ref">C07</span></div>
+            <div class="task-tool">🛠 GitHub accelerator repo</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Performance review with Practice Head — pod health, billability, code quality leadership <span class="proc-ref">P03</span></div>
+            <div class="task-tool">🛠 Notion review template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">📤 What you send up — reporting obligations you own</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Immediate escalations to Practice Head — blocker unresolvable in 4hr, P1 bug, velocity drop >30% <span class="proc-ref">E02/E08</span></div>
+            <div class="task-tool">🛠 Slack direct to Practice Head</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Hours logged in Harvest before EOD — correct project and code <span class="proc-ref">E13</span></div>
+            <div class="task-tool">🛠 Harvest</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">THURSDAY EOD: pod summary to Practice Head — velocity, PR health, blockers, cert progress, morale observation, pod wins <span class="proc-ref">E13</span></div>
+            <div class="task-sub">Hard deadline. Practice Head uses this to compile Friday AM practice roll-up to DH.</div><div class="task-tool">🛠 Notion pod summary template → Slack to Practice Head</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">PRs approved or rejected — written feedback on all rejections referencing specific standard <span class="proc-ref">D06</span></div>
+            <div class="task-tool">🛠 GitHub / Bitbucket</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Accelerator proposal (C04) — minimum 1 per quarter from real project patterns <span class="proc-ref">C04</span></div>
+            <div class="task-tool">🛠 Notion C04 proposal → Practice Head</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Capability breadth scores contribution — secondary practice readiness update to Practice Head <span class="proc-ref">R04</span></div>
+            <div class="task-tool">🛠 Notion R04 template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">🌱 Self-improvement & personal brand</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Publish 1 technical LinkedIn post or article from project work <span class="proc-ref">G01</span></div>
+            <div class="task-tool">🛠 LinkedIn · Hashnode</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">2+ community forum answers in primary practice area <span class="proc-ref">G02</span></div>
+            <div class="task-tool">🛠 Trailblazer Community · Stack Exchange</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Attend 1 community meetup or virtual event in primary practice <span class="proc-ref">G02</span></div>
+            <div class="task-tool">🛠 Salesforce User Group · MuleSoft Meetup</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div></div></div>
+<div class="info-box" style="background:#FEF2F2;border-color:#FECACA;margin:0 40px 32px">
+  <div class="info-title" style="color:#B91C1C">Must NOT do</div>
+  <div class="info-body" style="color:#7F1D1D">✕ Allow any PR to be merged without your review — regardless of timeline pressure or client urgency.<br/>✕ Let a blocker sit more than 4hr without escalating to Practice Head.<br/>✕ Make unilateral architectural decisions deviating from ARB-approved design without Practice Head or DH approval.<br/>✕ Skip sprint planning because the project seems simple — every sprint needs defined tickets.<br/>✕ Miss the Thursday EOD pod summary — Practice Head cannot compile Friday roll-up without it.<br/></div>
+</div>
+</main>
+<footer>
+  <span>DataSkate · Dev Lead Cadence · v3 · Q2 2026 · Pillar 2</span>
+  <a href="Pillar2-Delivery-Processes.html" target="_blank" style="font-size:10px;color:var(--teal,#00C9A7);text-decoration:none;font-weight:700">📖 P2 Process Bible →</a>
+</footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

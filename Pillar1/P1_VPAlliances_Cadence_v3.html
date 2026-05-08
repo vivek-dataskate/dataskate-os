@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · VP Alliances · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B2513;
+  --role-color:#9B2513;--role-lt:#FDF0ED;--role-dk:#9B2513;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--teal-lt);color:var(--teal-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--coral);border-color:var(--coral);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.owns-table{width:100%;border-collapse:collapse;font-size:12px}
+.owns-table th{background:var(--ink);color:#fff;padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.owns-table td{padding:8px 12px;border-bottom:1px solid #F3F4F6;vertical-align:top}
+.owns-table tr:nth-child(even) td{background:#FAFAFA}
+.badge-o{font-size:9px;padding:1px 8px;border-radius:10px;background:var(--coral-lt);color:var(--coral-dk);font-weight:500}
+.badge-s{font-size:9px;padding:1px 8px;border-radius:10px;background:var(--teal-lt);color:var(--teal-dk);font-weight:500}
+.info-box{background:#FFF7F5;border:1px solid #FECACA;border-radius:10px;padding:14px 18px;margin-bottom:28px}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px;color:var(--coral-dk)}
+.info-body{font-size:12px;line-height:1.7}
+.ramp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.ramp-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;padding:14px}
+.ramp-head{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--role-dk);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--role-lt)}
+.ramp-item{font-size:11px;color:var(--ink);padding:3px 0;border-bottom:1px solid #F9FAFB}
+.ramp-item:last-child{border-bottom:none}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="VP_Alliances_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">VP Alliances Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 1 · Partner Alliance &amp; GTM · Cadence v3</div>
+    <div class="role-name">VP Alliances</div>
+    <div class="role-sub">Revenue owner · 5 partner relationships · CEO-level reporting · Reports to: CEO · Target: ≥60% ARR from partner-sourced pipeline</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip">≥60% ARR partner-sourced</span>
+      <span class="kpi-chip">Pipeline 3× quarterly target</span>
+      <span class="kpi-chip">Friday revenue report — no CEO chasing</span>
+      <span class="kpi-chip">MDF fully utilised each quarter</span>
+      <span class="kpi-chip">Partner NPS ≥4/5</span>
+      <span class="kpi-chip">SOW floor: $5K SMB / $25K MM</span>
+    </div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8">
+    Primary KPI<br/>
+    <span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">≥60% ARR from partners · Pipeline 3× target · Friday CEO report</span>
+  </div>
+</header>
+<main>
+
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">P01</span> = Pillar 1 process ref · checkboxes reset on reload</span>
+</div>
+
+<!-- ROLE MAP DIAGRAM -->
+<div class="diagram section">
+  <div class="diagram-title">VP Alliances — role in the revenue system</div>
+  <svg viewBox="0 0 700 140" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect x="270" y="5" width="160" height="36" rx="7" fill="#111827"/>
+    <text x="350" y="20" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">CEO</text>
+    <text x="350" y="33" text-anchor="middle" fill="rgba(255,255,255,.5)" font-size="9">Friday revenue report · Immediate deal escalations</text>
+    <line x1="350" y1="41" x2="350" y2="57" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="215" y="57" width="270" height="36" rx="7" fill="#9B2513"/>
+    <text x="350" y="72" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">VP Alliances</text>
+    <text x="350" y="85" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">5 partner orgs · Pipeline governance · Revenue forecast · QBRs</text>
+    <line x1="350" y1="93" x2="350" y2="108" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="80" y1="108" x2="620" y2="108" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="80" y1="108" x2="80" y2="120" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="230" y1="108" x2="230" y2="120" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="380" y1="108" x2="380" y2="120" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="530" y1="108" x2="530" y2="120" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="80" y="130" text-anchor="middle" fill="#9CA3AF" font-size="8">Alliance Mgr/AE</text>
+    <text x="230" y="130" text-anchor="middle" fill="#9CA3AF" font-size="8">Head of GTM</text>
+    <text x="380" y="130" text-anchor="middle" fill="#9CA3AF" font-size="8">SDR/BDR</text>
+    <text x="530" y="130" text-anchor="middle" fill="#9CA3AF" font-size="8">Delivery Head (P2)</text>
+  </svg>
+</div>
+
+<!-- OWNS VS SUPPORTS -->
+<div class="section">
+  <div class="sec-title">🎯 Owns vs Supports</div>
+  <table class="owns-table">
+    <thead><tr><th>VP Alliances OWNS</th><th>VP Alliances SUPPORTS</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge-o">Owns</span> Partner relationship with 5 ecosystem partners (Salesforce, MuleSoft, Workato, Boomi, Informatica)</td><td><span class="badge-s">Supports</span> Head of GTM on content strategy and brand positioning</td></tr>
+      <tr><td><span class="badge-o">Owns</span> Revenue forecast — weekly to CEO, quarterly QBR</td><td><span class="badge-s">Supports</span> Alliance Mgr/AE on complex deal escalations and partner negotiation</td></tr>
+      <tr><td><span class="badge-o">Owns</span> SOW floor enforcement — no deal below $5K SMB / $25K MM</td><td><span class="badge-s">Supports</span> SDR target list — approves ICP and named account lists quarterly</td></tr>
+      <tr><td><span class="badge-o">Owns</span> MDF utilisation — all co-marketing funds across partners</td><td><span class="badge-s">Supports</span> Delivery Head on delivery-to-client escalations that risk renewal</td></tr>
+      <tr><td><span class="badge-o">Owns</span> Partner tier compliance — hitting thresholds for program requirements</td><td><span class="badge-s">Supports</span> CEO on executive partner relationship at VP/C-level within each partner org</td></tr>
+      <tr><td><span class="badge-o">Owns</span> New partner evaluation and onboarding decisions</td><td><span class="badge-s">Supports</span> Finance on deal registration accuracy for revenue recognition</td></tr>
+      <tr><td><span class="badge-o">Owns</span> Deal stuck escalation — any deal stalled >5 days escalated to CEO</td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- RECEIVES SECTION -->
+<div class="section">
+  <div class="sec-title">📥 What you receive — inputs that land on your desk</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">CRM pipeline alerts — new leads, stage changes, deal activity overnight <span class="proc-ref">P06</span></div><div class="task-tool">🛠 HubSpot / Salesforce pipeline alerts · Slack #pipeline</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Slack messages from partner AEs — referrals, questions, co-sell requests <span class="proc-ref">P01</span></div><div class="task-tool">🛠 Gmail · Slack partner channels (one per partner)</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Escalations from Alliance Mgr/AE — deals stuck, partner unresponsive, pricing question <span class="proc-ref">P07</span></div><div class="task-tool">🛠 Slack DM from AE</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">GTM report from Head of GTM — SDR KPIs, content performance, outbound volume <span class="proc-ref">P41</span></div><div class="task-tool">🛠 Notion or Slack — due Friday EOD from Head of GTM</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Pipeline report from Alliance Mgr/AE — every open deal staged, flagged, next actioned <span class="proc-ref">P18</span></div><div class="task-tool">🛠 HubSpot export or Monday pipeline board meeting</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Co-sell briefing requests from partner AEs — needs deck, case study, scoping support <span class="proc-ref">P08</span></div><div class="task-tool">🛠 Gmail / Slack from partner AE</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Partner health scorecard — lead volume, conversion, avg deal size per partner <span class="proc-ref">P16</span></div><div class="task-tool">🛠 HubSpot custom report — Alliance Mgr prepares</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">MDF utilisation summary — funds claimed, spend ROI, upcoming deadlines from each partner portal</div><div class="task-tool">🛠 Salesforce / Boomi / Workato partner portals</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Delivery Head update on active client health — any at-risk account that VP must know <span class="proc-ref">P12</span></div><div class="task-tool">🛠 Slack briefing from Delivery Head (Pillar 2)</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEEDFE;color:#6D28D9">Quarterly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">QBR packages from each partner org — what they're presenting on pipeline and co-sell activity <span class="proc-ref">P13</span></div><div class="task-tool">🛠 Partner portal / Google Slides sent by partner PDM</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Finance Lead actuals — was forecast within ±10% of actual revenue? <span class="proc-ref">P20</span></div><div class="task-tool">🛠 Pillar 3 Finance report</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPERATIONAL CADENCE -->
+<div class="section">
+  <div class="sec-title">⚡ What you do — daily operational cadence</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Check CRM — new leads logged overnight? Any VP-level action required? <span class="proc-ref">P06</span></div><div class="task-tool">🛠 HubSpot / Salesforce · Slack #pipeline-alerts</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Scan all 5 partner Slack channels and emails — new opportunity or escalation?</div><div class="task-tool">🛠 Gmail · Slack partner channels</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Escalate any deal stuck >5 days to CEO — never let deals stall silently <span class="proc-ref">P07</span></div><div class="task-sub">Slack DM to CEO same day. Log the escalation in CRM.</div><div class="task-tool">🛠 Slack DM to CEO + CRM update</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Engage on 2–3 LinkedIn posts by Salesforce/MuleSoft/Workato partners — comment with substance, not likes</div><div class="task-tool">🛠 LinkedIn</div></div><span class="tb2 t-brand">Brand</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Read Salesforce Partner Community daily digest or partner newsletter update</div><div class="task-tool">🛠 Salesforce Partner Community app</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Pipeline review with Alliance Mgr/AE — stage every open deal, next action, close date <span class="proc-ref">P18</span></div><div class="task-sub">Mon · 30 min. Fixed. Never cancelled.</div><div class="task-tool">🛠 HubSpot pipeline board · Google Meet</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Revenue report to CEO — pipeline total, advancing/stuck deals, forecast vs target <span class="proc-ref">P21</span></div><div class="task-sub">Fri EOD — written Slack note or Notion entry. Non-negotiable.</div><div class="task-tool">🛠 HubSpot export → Notion / Slack #ceo-updates</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Warm outreach to 2 partner PDMs or GTM leads — add value, not asking for leads <span class="proc-ref">P13</span></div><div class="task-tool">🛠 Gmail · LinkedIn · Salesforce Partner Slack</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Confirm deal registration is current in all active partner portals — no stale deals <span class="proc-ref">P09</span></div><div class="task-tool">🛠 Salesforce Partner Community / Boomi / Workato portals</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Brief Head of GTM — new collateral needed? Co-marketing opportunity? Upcoming events? <span class="proc-ref">P25</span></div><div class="task-sub">Mon · 20 min. Slack or short meeting.</div><div class="task-tool">🛠 Notion brief → Slack to Head of GTM</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Approve 1 LinkedIn post drafted by Head of GTM — ecosystem insight or anonymised win</div><div class="task-tool">🛠 Head of GTM drafts → Buffer for scheduling</div></div><span class="tb2 t-brand">Brand</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Watch 1 partner enablement video or product update — stay credible in conversations</div><div class="task-tool">🛠 Salesforce / MuleSoft partner learning hub</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">MDF utilisation review — funds claimed, upcoming deadlines, ROI on past co-marketing spend <span class="proc-ref">P17</span></div><div class="task-tool">🛠 Partner MDF portals (Salesforce, Boomi, Workato)</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Partner health scorecard review — lead volume, conversion rate, avg deal size per partner <span class="proc-ref">P16</span></div><div class="task-tool">🛠 HubSpot custom report → Google Sheets</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SOW minimum enforcement — any deal below $5K SMB / $25K MM that slipped through? <span class="proc-ref">P19</span></div><div class="task-tool">🛠 HubSpot deal filter · escalate to CEO</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">New AE acquisition — identify and brief 2 net-new partner AEs to cultivate this month <span class="proc-ref">P03</span></div><div class="task-tool">🛠 LinkedIn Sales Navigator / Apollo.io</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Attend 1 partner webinar or community event — stay top of mind with partner team</div><div class="task-tool">🛠 Salesforce events calendar / MuleSoft community</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEEDFE;color:#6D28D9">Quarterly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">QBR with each of 5 partners — co-sell wins, pipeline review, next quarter commitments <span class="proc-ref">P13</span></div><div class="task-tool">🛠 Google Slides QBR deck · Zoom · partner portals</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Partner tier compliance — are we hitting thresholds? What's needed for next tier? <span class="proc-ref">P15</span></div><div class="task-tool">🛠 Partner program dashboards</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Forecast accuracy review — was forecast within ±10% of actual revenue? <span class="proc-ref">P20</span></div><div class="task-tool">🛠 HubSpot + Pillar 3 Finance actuals</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">New partner evaluation — Celigo, Azure, other platform? Present recommendation to CEO <span class="proc-ref">P14</span></div><div class="task-tool">🛠 Market research → Notion proposal</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Complete 1 partner certification or advanced enablement track</div><div class="task-tool">🛠 Salesforce Trailhead / MuleSoft Training</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CROSS-DEPT HANDOFFS -->
+<div class="section">
+  <div class="sec-title">🔄 Cross-department handoffs VP Alliances owns</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">→ To Pillar 2 (Delivery)</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Signed SOW handed off to Delivery Head with full client briefing <span class="proc-ref">P11 → D01</span></div><div class="task-sub">Within 24hr of signature. Includes: client contacts, pain points, platform, agreed scope, go-live date.</div><div class="task-tool">🛠 Notion SOW brief → Slack to Delivery Head</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Expansion deal or upsell signal flagged to Delivery Head for CSAT-to-expansion play <span class="proc-ref">P12</span></div><div class="task-tool">🛠 Slack to DH with context</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">→ To Pillar 3 (Finance)</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SOW and invoice schedule sent to Finance Lead on signature day <span class="proc-ref">P11</span></div><div class="task-sub">Finance cannot raise invoice without this. Same-day SLA.</div><div class="task-tool">🛠 Email + Notion deal folder to Finance</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">MDF claim documentation to Finance for tax and accounting treatment quarterly</div><div class="task-tool">🛠 Email to Finance Lead + Pillar 3</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">→ To Head of GTM</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Win story brief — any closed deal becomes case study brief within 5 days <span class="proc-ref">P26</span></div><div class="task-tool">🛠 Notion win brief template → Slack to Head of GTM</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Partner event or webinar confirmed — brief Head of GTM for co-marketing within 48hr <span class="proc-ref">P29</span></div><div class="task-tool">🛠 Slack brief with date, partner, audience size, angle</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 90-DAY RAMP -->
+<div class="section">
+  <div class="sec-title">🚀 90-day onboarding ramp — VP Alliances</div>
+  <div class="info-box">
+    <div class="info-title">Ramp context</div>
+    <div class="info-body">The VP Alliances role is the revenue cornerstone of DataSkate. The first 90 days have a single gate: is pipeline building and are partners referring? All activity should answer that question. CEO receives a 30-day check-in and a 90-day formal ramp review.</div>
+  </div>
+  <div class="ramp-grid">
+    <div class="ramp-col">
+      <div class="ramp-head">Days 1–30 · Learn the ecosystem</div>
+      <div class="ramp-item">Meet all 5 partner PDMs — intro call, understand their current DataSkate awareness</div>
+      <div class="ramp-item">Shadow 3 active deals from CRM — understand DataSkate's deal motion</div>
+      <div class="ramp-item">Read all P1 process docs — P01 to P21 (revenue category)</div>
+      <div class="ramp-item">Learn all 5 partner portals, deal reg process, MDF eligibility</div>
+      <div class="ramp-item">Map AE landscape — who are the 10 highest-potential AEs per partner?</div>
+      <div class="ramp-item">30-day CEO gate: partner intros done, AE map submitted</div>
+    </div>
+    <div class="ramp-col">
+      <div class="ramp-head">Days 31–60 · Build the pipeline</div>
+      <div class="ramp-item">First deal registration live in at least 2 partner portals</div>
+      <div class="ramp-item">MDF claim submitted for any eligible co-marketing spend</div>
+      <div class="ramp-item">First Friday CEO revenue report delivered on time — no chasing</div>
+      <div class="ramp-item">Weekly pipeline cadence with Alliance Mgr established and running</div>
+      <div class="ramp-item">First co-sell motion running with at least 1 partner AE</div>
+      <div class="ramp-item">60-day gate: pipeline 1× target, first GTM brief to Head of GTM sent</div>
+    </div>
+    <div class="ramp-col">
+      <div class="ramp-head">Days 61–90 · Run at full pace</div>
+      <div class="ramp-item">Pipeline at 2× quarterly target — enough to forecast confidently</div>
+      <div class="ramp-item">All 5 partner relationships have active touchpoints this month</div>
+      <div class="ramp-item">First QBR prep initiated with all partners</div>
+      <div class="ramp-item">SOW floor being enforced — zero sub-minimum deals in pipeline</div>
+      <div class="ramp-item">Cross-pillar cadence running: weekly brief to Head of GTM, monthly to DH</div>
+      <div class="ramp-item">90-day gate: partner NPS surveyed, forecast accuracy within ±15%</div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>
+  <span>DataSkate · Pillar 1 · VP Alliances · Cadence v3</span>
+  <span>Cross-refs: Pillar 2 D01 · Pillar 3 Finance · P1 processes P01–P21</span>
+</footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

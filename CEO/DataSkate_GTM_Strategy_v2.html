@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate — GTM Strategy 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-md:#F5C4B3;--coral-dk:#9B1C0A;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-md:#9FD8CF;--teal-dk:#044038;
+  --slate:#2A3550;--slate-lt:#EEF1F7;--slate-md:#B0BBCF;--slate-dk:#141C2E;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-md:#FCD34D;
+  --purple:#6D28D9;--purple-lt:#EDE9FE;--purple-md:#C4B5FD;
+  --blue:#1D4ED8;--blue-lt:#EFF6FF;--blue-md:#BFDBFE;
+  --green:#15803D;--green-lt:#F0FDF4;--green-md:#BBF7D0;
+  --ink:#111827;--muted:#6B7280;--border:#E5E7EB;
+  --white:#FFFFFF;--bg:#F8F7F4;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* HEADER */
+header{background:var(--ink);padding:52px 56px 44px;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-80px;right:-60px;width:360px;height:360px;border-radius:50%;background:var(--coral);opacity:.08}
+header::after{content:'';position:absolute;bottom:-60px;left:280px;width:240px;height:240px;border-radius:50%;background:var(--teal);opacity:.07}
+.logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral-md);margin-bottom:14px}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,48px);font-weight:800;color:#fff;line-height:1.1;position:relative;z-index:1}
+header h1 span{color:var(--coral)}
+.header-meta{margin-top:10px;font-size:13px;color:rgba(255,255,255,.35);position:relative;z-index:1}
+.header-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px;position:relative;z-index:1}
+.hpill{font-size:11px;font-weight:500;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12)}
+
+/* NAV */
+.top-nav{background:var(--white);border-bottom:2px solid var(--border);padding:0 56px;display:flex;gap:0;overflow-x:auto;position:sticky;top:0;z-index:200;scrollbar-width:none}
+.top-nav::-webkit-scrollbar{display:none}
+.tnav{padding:14px 18px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;margin-bottom:-2px}
+.tnav:hover{color:var(--ink)}
+.tnav.active{color:var(--coral);border-bottom-color:var(--coral)}
+
+/* MAIN */
+.main{padding:0 56px 80px}
+
+/* SECTION */
+.section{padding:52px 0 44px;border-bottom:1px solid var(--border)}
+.section:last-child{border-bottom:none}
+.section-hdr{display:flex;align-items:flex-start;gap:16px;margin-bottom:32px}
+.section-num{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
+.section-meta{}
+.section-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--ink)}
+.section-sub{font-size:13px;color:var(--muted);margin-top:4px;line-height:1.5;max-width:680px}
+
+/* MOTION CARDS */
+.motion-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.motion-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px;position:relative;overflow:hidden}
+.motion-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%}
+.mc-coral::before{background:var(--coral)}
+.mc-teal::before{background:var(--teal)}
+.mc-amber::before{background:var(--amber)}
+.mc-purple::before{background:var(--purple)}
+.mc-blue::before{background:var(--blue)}
+.mc-green::before{background:var(--green)}
+.motion-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.motion-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.motion-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.motion-steps{display:flex;flex-direction:column;gap:6px}
+.mstep{display:flex;gap:8px;align-items:flex-start;font-size:12px;color:var(--ink);line-height:1.5}
+.mstep-num{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;margin-top:1px}
+.motion-footer{margin-top:14px;padding-top:12px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap}
+.mf-chip{font-size:10px;font-weight:500;padding:2px 8px;border-radius:10px}
+
+/* OWNER TABLE */
+.owner-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.owner-table th{padding:10px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--bg);border-bottom:1px solid var(--border)}
+.owner-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.5;color:var(--ink)}
+.owner-table tr:last-child td{border-bottom:none}
+.owner-table tr:hover td{background:var(--bg)}
+.role-badge{display:inline-flex;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600}
+.rb-vpa{background:var(--coral-lt);color:var(--coral-dk)}
+.rb-ae{background:#FEF3C7;color:#92400E}
+.rb-gtm{background:var(--blue-lt);color:var(--blue)}
+.rb-ceo{background:var(--purple-lt);color:var(--purple)}
+.rb-pl{background:var(--teal-lt);color:var(--teal-dk)}
+
+/* CADENCE TABLE */
+.cad-table{width:100%;margin-bottom:20px}
+.cad-row{display:grid;grid-template-columns:100px 1fr;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;background:var(--white)}
+.cad-freq-cell{padding:16px 14px;background:var(--ink);display:flex;align-items:flex-start;justify-content:center}
+.cad-freq-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);writing-mode:vertical-rl;transform:rotate(180deg)}
+.cad-items{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.cad-item{display:flex;gap:10px;align-items:flex-start}
+.cad-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.cad-item-body{flex:1}
+.cad-item-title{font-size:13px;font-weight:500;color:var(--ink);line-height:1.4}
+.cad-item-note{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.4}
+.cad-tags{display:flex;gap:6px;margin-top:4px;flex-wrap:wrap}
+.ctag{font-size:10px;font-weight:600;padding:1px 7px;border-radius:8px}
+.ctag-must{background:#FEE2E2;color:#991B1B}
+.ctag-good{background:#FEF3C7;color:#92400E}
+.ctag-nice{background:var(--blue-lt);color:var(--blue)}
+.ctag-own{background:var(--teal-lt);color:var(--teal-dk)}
+
+/* PROSPECT ENGINE */
+.prospect-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.prospect-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px}
+.pc-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:10px}
+.pc-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.pc-sub{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.pc-output{font-size:11px;font-weight:600;padding:3px 8px;border-radius:8px;display:inline-block}
+
+/* WEBINAR ENGINE */
+.webinar-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.webinar-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.wc-head{padding:14px 16px;display:flex;align-items:center;gap:10px}
+.wc-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.wc-body{padding:14px 16px;background:var(--white)}
+.wc-item{display:flex;gap:8px;margin-bottom:8px;font-size:12px;color:var(--ink);line-height:1.5;align-items:flex-start}
+.wc-item:last-child{margin-bottom:0}
+.wc-bullet{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+
+/* PIPELINE ENGINE */
+.pipeline-track{display:flex;gap:0;margin-bottom:20px;border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.pt-stage{flex:1;padding:16px 14px;border-right:1px solid var(--border);background:var(--white)}
+.pt-stage:last-child{border-right:none}
+.pt-label{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.pt-title{font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px}
+.pt-items{display:flex;flex-direction:column;gap:4px}
+.pt-item{font-size:11px;color:var(--muted);display:flex;gap:5px;align-items:flex-start}
+.pt-item::before{content:'→';flex-shrink:0;color:var(--border)}
+.pt-kpi{margin-top:10px;font-size:11px;font-weight:600;padding:3px 8px;border-radius:8px;display:inline-block}
+
+/* KPI STRIP */
+.kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:24px}
+.kpi-box{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center}
+.kpi-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--ink);line-height:1}
+.kpi-label{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.3}
+
+/* FULL WIDTH CARD */
+.full-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:24px;margin-bottom:16px}
+.full-card-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--ink);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.fct-dot{width:8px;height:8px;border-radius:50%}
+
+/* WEEK PLAN */
+.week-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.week-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.wk-head{padding:10px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.wk-body{padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.wk-item{font-size:12px;color:var(--ink);line-height:1.5;display:flex;gap:7px;align-items:flex-start}
+.wk-tag{font-size:10px;font-weight:600;padding:1px 6px;border-radius:8px;white-space:nowrap;flex-shrink:0}
+.wt-must{background:#FEE2E2;color:#991B1B}
+.wt-good{background:#FEF3C7;color:#92400E}
+.wt-own{background:var(--teal-lt);color:var(--teal-dk)}
+
+@media(max-width:900px){
+  .main,.top-nav{padding-left:24px;padding-right:24px}
+  header{padding-left:24px;padding-right:24px}
+  .motion-grid,.prospect-grid,.webinar-grid,.week-grid{grid-template-columns:1fr}
+  .kpi-strip{grid-template-columns:repeat(3,1fr)}
+  .pipeline-track{flex-direction:column}
+  .pt-stage{border-right:none;border-bottom:1px solid var(--border)}
+  .pt-stage:last-child{border-bottom:none}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DataSkate · GTM Strategy 2026</div>
+  <h1>Five motions.<br/><span>One AE flywheel.</span></h1>
+  <p class="header-meta">Owner: VP Alliances · SDR/BDR · Alliance Mgr/AE · GTM Manager · Valid Q2 2026</p>
+  <div class="header-pills">
+    <span class="hpill">Motion 1 · MuleSoft AE Referrals — Inbound</span>
+    <span class="hpill">Motion 2 · SDR Cold Outbound — Aggressive Prospecting</span>
+    <span class="hpill">Motion 3 · Cold Prospect Data from AE Lists</span>
+    <span class="hpill">Motion 4 · Partner Events & Webinars</span>
+    <span class="hpill">Motion 5 · Free Recorded Webinar Library</span>
+    <span class="hpill">AE Enabled in 3 Weeks</span>
+    <span class="hpill">SMB 4-Week Delivery</span>
+  </div>
+</header>
+
+<nav class="top-nav">
+  <div class="tnav active" onclick="scrollTo('overview')">Overview</div>
+  <div class="tnav" onclick="scrollTo('motion1')">Motion 1 · AE Referrals</div>
+  <div class="tnav" onclick="scrollTo('motion-sdr')">Motion 2 · SDR Outbound</div>
+  <div class="tnav" onclick="scrollTo('motion2')">Motion 3 · AE List Data</div>
+  <div class="tnav" onclick="scrollTo('motion3')">Motion 4 · Events</div>
+  <div class="tnav" onclick="scrollTo('motion4')">Motion 5 · Webinar Library</div>
+  <div class="tnav" onclick="scrollTo('roles-gtm')">GTM Team Structure</div>
+  <div class="tnav" onclick="scrollTo('ae-enable')">AE 3-Week Enable</div>
+  <div class="tnav" onclick="scrollTo('delivery')">SMB 4-Week Delivery</div>
+  <div class="tnav" onclick="scrollTo('cadence')">Cadence & Ownership</div>
+</nav>
+
+<div class="main">
+
+<!-- ═══ OVERVIEW ═══ -->
+<div class="section" id="overview">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--ink)">00</div>
+    <div class="section-meta">
+      <div class="section-title">GTM Strategy Overview</div>
+      <div class="section-sub">Four distinct lead generation motions that feed a single AE flywheel. Each motion is independent — they compound when run in parallel. The goal: AEs see DataSkate as a revenue accelerator, not a vendor asking for favors.</div>
+    </div>
+  </div>
+
+  <div class="pipeline-track">
+    <div class="pt-stage">
+      <div class="pt-label" style="color:var(--coral)">Motion 1 · Inbound</div>
+      <div class="pt-title">MuleSoft AE Referrals</div>
+      <div class="pt-items">
+        <div class="pt-item">Existing relationship capital</div>
+        <div class="pt-item">Highest trust, fastest close</div>
+        <div class="pt-item">Ask for 2 warm intros each</div>
+      </div>
+      <div class="pt-kpi" style="background:var(--coral-lt);color:var(--coral-dk)">Target: 3 referrals/mo · Owner: Alliance Mgr/AE</div>
+    </div>
+    <div class="pt-stage" style="border:2px solid var(--coral);background:#FFF8F7">
+      <div class="pt-label" style="color:var(--coral);font-weight:800">Motion 2 · Outbound ★ NEW</div>
+      <div class="pt-title">SDR Aggressive Cold Outbound</div>
+      <div class="pt-items">
+        <div class="pt-item">SDR finds + sequences prospects</div>
+        <div class="pt-item">9-touch 18-day sequence</div>
+        <div class="pt-item">Books 3-way call: prospect + DS + AE</div>
+        <div class="pt-item">DS generates pipeline FOR the AE</div>
+      </div>
+      <div class="pt-kpi" style="background:var(--coral-lt);color:var(--coral-dk)">Target: 4–6 calls/week · Owner: SDR/BDR</div>
+    </div>
+    <div class="pt-stage">
+      <div class="pt-label" style="color:var(--teal)">Motion 3 · Outbound</div>
+      <div class="pt-title">AE Named Account Data</div>
+      <div class="pt-items">
+        <div class="pt-item">AE shares named account list</div>
+        <div class="pt-item">SDR pre-researches each account</div>
+        <div class="pt-item">Bring to AE as gift, not ask</div>
+      </div>
+      <div class="pt-kpi" style="background:var(--teal-lt);color:var(--teal-dk)">Target: 10 accounts/AE/mo · Owner: SDR/BDR</div>
+    </div>
+    <div class="pt-stage">
+      <div class="pt-label" style="color:var(--amber)">Motion 4 · Inbound</div>
+      <div class="pt-title">Events & Webinars</div>
+      <div class="pt-items">
+        <div class="pt-item">Attend partner-hosted events</div>
+        <div class="pt-item">Speak where possible</div>
+        <div class="pt-item">5 warm contacts per event</div>
+      </div>
+      <div class="pt-kpi" style="background:var(--amber-lt);color:#92400E">Target: 2 events/month · Owner: Alliance Mgr/AE</div>
+    </div>
+    <div class="pt-stage">
+      <div class="pt-label" style="color:var(--purple)">Motion 5 · Inbound</div>
+      <div class="pt-title">Webinar Library</div>
+      <div class="pt-items">
+        <div class="pt-item">Free recorded capability demos</div>
+        <div class="pt-item">AEs share to warm prospects</div>
+        <div class="pt-item">Inbound from content views</div>
+      </div>
+      <div class="pt-kpi" style="background:var(--purple-lt);color:var(--purple)">Target: 1 new video/2 weeks · Owner: GTM Manager</div>
+    </div>
+    <div class="pt-stage">
+      <div class="pt-label" style="color:var(--blue)">Outcome</div>
+      <div class="pt-title">AE Flywheel</div>
+      <div class="pt-items">
+        <div class="pt-item">AE enabled in 3 weeks</div>
+        <div class="pt-item">SMB delivered in 4 weeks</div>
+        <div class="pt-item">Reference → next referral</div>
+      </div>
+      <div class="pt-kpi" style="background:var(--blue-lt);color:var(--blue)">Target: ≥60% ARR from partners</div>
+    </div>
+  </div>
+
+  <div class="kpi-strip">
+    <div class="kpi-box"><div class="kpi-val">4</div><div class="kpi-label">GTM motions running in parallel</div></div>
+    <div class="kpi-box"><div class="kpi-val">3wk</div><div class="kpi-label">To fully enable any new AE</div></div>
+    <div class="kpi-box"><div class="kpi-val">4wk</div><div class="kpi-label">SMB delivery from signed SOW</div></div>
+    <div class="kpi-box"><div class="kpi-val">$8K+</div><div class="kpi-label">Minimum SMB SOW floor</div></div>
+    <div class="kpi-box"><div class="kpi-val">≥4.2</div><div class="kpi-label">CSAT required on every delivery</div></div>
+  </div>
+</div>
+
+<!-- ═══ MOTION 1 — MULESOFT REFERRALS ═══ -->
+<div class="section" id="motion1">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--coral)">01</div>
+    <div class="section-meta">
+      <div class="section-title">Motion 1 — MuleSoft AE Referral Program</div>
+      <div class="section-sub">You already have relationships with MuleSoft AEs. This motion converts those relationships into a structured referral pipeline. Existing trust is the asset — turn it into a repeatable ask.</div>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--coral)"></span>Why MuleSoft AEs refer — and why they don't</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;font-size:13px">
+      <div>
+        <div style="font-weight:600;color:var(--green);margin-bottom:8px">They WILL refer when:</div>
+        <div style="display:flex;flex-direction:column;gap:6px;color:var(--muted)">
+          <div>→ You've already delivered cleanly for one of their clients</div>
+          <div>→ You make them look good in front of their client</div>
+          <div>→ The deal is too small for them to touch alone</div>
+          <div>→ The client needs integration work before a MuleSoft renewal</div>
+          <div>→ You bring a prospect they didn't know about</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-weight:600;color:var(--coral);margin-bottom:8px">They WON'T refer when:</div>
+        <div style="display:flex;flex-direction:column;gap:6px;color:var(--muted)">
+          <div>→ They don't know what you actually deliver</div>
+          <div>→ They fear you'll embarrass them with their client</div>
+          <div>→ You've followed up too many times with no value</div>
+          <div>→ They don't see any win for themselves</div>
+          <div>→ You've never delivered anything they can point to</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="motion-grid">
+    <div class="motion-card mc-coral">
+      <div class="motion-label" style="color:var(--coral)">Step 1 — Segment your AE list</div>
+      <div class="motion-title">Tier every MuleSoft AE you know</div>
+      <div class="motion-desc">Not all AEs are equal. Segment before you reach out — waste no time on tier C.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">A</div><div><strong>Tier A</strong> — AEs you've worked a deal with or met 3+ times. Direct ask for referral. Target: 2 warm intros this month.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">B</div><div><strong>Tier B</strong> — AEs you know but haven't co-sold with. Warm up with value first (webinar, prospect card), then ask in 3–4 weeks.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">C</div><div><strong>Tier C</strong> — Cold contacts on your list. Do not cold-ask for referrals. Route through Motion 2 or 3 instead.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">Owner: Alliance Mgr/AE</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Week 1</span>
+      </div>
+    </div>
+
+    <div class="motion-card mc-coral">
+      <div class="motion-label" style="color:var(--coral)">Step 2 — The referral ask</div>
+      <div class="motion-title">One email. One ask. Not a pitch.</div>
+      <div class="motion-desc">The ask must be specific, easy to answer, and show you've done homework.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">1</div><div>Send a 4-line email: "I know you're working [X type of account]. I've attached a one-pager on what we did for [similar client]. Do you have 2 accounts I could help close for you?"</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">2</div><div>Attach: a single-page client result card, not a deck. Make it co-brandable so the AE can forward it as their own resource.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">3</div><div>One follow-up only, 5 days later. No more. If no reply, move to Tier B treatment.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">Owner: Alliance Mgr/AE</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Week 1–2</span>
+      </div>
+    </div>
+
+    <div class="motion-card mc-coral">
+      <div class="motion-label" style="color:var(--coral)">Step 3 — Handle the intro</div>
+      <div class="motion-title">AE makes the intro — you own everything after</div>
+      <div class="motion-desc">The moment an AE makes an intro, you must make them look good immediately.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">1</div><div>Respond to prospect within 4 hours of intro email. Not 24. 4 hours. AE is watching.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">2</div><div>Send the AE a deal status update every week. 3 lines. What happened, what's next, any risk. Never make the AE chase you for status.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">3</div><div>At deal close: get a client reference quote and send it to the AE before they ask. Register the deal in the partner portal same day — do it for them.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">Owner: Alliance Mgr/AE</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Ongoing</span>
+      </div>
+    </div>
+
+    <div class="motion-card mc-coral">
+      <div class="motion-label" style="color:var(--coral)">Step 4 — Lock the cadence</div>
+      <div class="motion-title">Bi-weekly pipeline sync with every Tier A AE</div>
+      <div class="motion-desc">Turn ad-hoc referrals into a structured pipeline exchange.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">1</div><div>Lock a 30-min bi-weekly call per Tier A AE. Fixed agenda: AE shares 3 accounts, DS shares 3 pre-researched prospects. No other agenda.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">2</div><div>Send a "monthly deal report" to each Tier A AE — what we ran together, revenue generated, client quote. Makes the AE look good to their own manager.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">3</div><div>After first closed deal: nominate for partner co-marketing or case study. Elevates AE's visibility inside MuleSoft.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">Owner: VP Alliances</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Month 2+</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MOTION 2 — SDR OUTBOUND (NEW) ═══ -->
+<div class="section" id="motion-sdr">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--coral)">02</div>
+    <div class="section-meta">
+      <div class="section-title">Motion 2 — SDR/BDR Aggressive Cold Outbound <span style="font-size:13px;font-weight:400;color:var(--coral);margin-left:8px">★ New motion</span></div>
+      <div class="section-sub">DataSkate does not wait for AEs to refer leads. The SDR/BDR proactively finds prospects, runs a 9-touch 18-day sequence, qualifies interest, and books a 3-way discovery call: prospect + DataSkate Alliance Mgr/AE + MuleSoft/partner AE. DataSkate generates pipeline <strong>for</strong> the AE — making DataSkate indispensable to every AE we work with.</div>
+    </div>
+  </div>
+
+  <!-- Inbound vs Outbound split -->
+  <div class="full-card" style="margin-bottom:20px">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--coral)"></span>Inbound vs Outbound — both motions run in parallel</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px">
+      <div style="background:var(--teal-lt);border-radius:10px;padding:16px">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal-dk);margin-bottom:10px">Inbound motions (Motions 1, 4, 5)</div>
+        <div style="font-size:12px;color:var(--teal-dk);line-height:1.8">
+          ✓ AE referrals — AE introduces DataSkate to their client<br/>
+          ✓ Events — warm conversations from attending / speaking<br/>
+          ✓ Webinar library — prospects self-identify via gated content<br/>
+          <strong>Owner:</strong> Alliance Mgr/AE + GTM Manager<br/>
+          <strong>Lead quality:</strong> High trust · Slower volume<br/>
+          <strong>Speed to close:</strong> Fast — warm relationship already exists
+        </div>
+      </div>
+      <div style="background:var(--coral-lt);border-radius:10px;padding:16px">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral-dk);margin-bottom:10px">Outbound motions (Motions 2, 3)</div>
+        <div style="font-size:12px;color:var(--coral-dk);line-height:1.8">
+          ✓ SDR cold outbound — DataSkate finds and contacts prospects directly<br/>
+          ✓ AE named accounts — SDR works AE's target list proactively<br/>
+          <strong>Owner:</strong> SDR/BDR · Reports to VP Alliances<br/>
+          <strong>Lead quality:</strong> Lower initial trust · Higher volume<br/>
+          <strong>Speed to close:</strong> Longer — prospect starts cold, warms through sequence
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="motion-grid">
+    <div class="motion-card" style="border-top:3px solid var(--coral)">
+      <div class="motion-label" style="color:var(--coral)">Step 1 — ICP & List Build</div>
+      <div class="motion-title">SDR builds prospect list weekly — 60+ contacts</div>
+      <div class="motion-desc">Two sources run in parallel. Partner AE named accounts are highest priority (3–5x conversion). Self-sourced via Apollo/Clay is the volume engine.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">A</div><div><strong>AE-sourced:</strong> VP Alliances asks each active MuleSoft AE for 20 named accounts. SDR finds right contacts (VP IT, CTO, Dir Integrations) at those companies via Apollo + LinkedIn Sales Nav. These go into a priority sequence.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">B</div><div><strong>Self-sourced:</strong> Apollo filters — tech stack includes MuleSoft/Salesforce, 200–5,000 employees, US. Clay enriches with job postings, funding signals, LinkedIn activity. Intent signals prioritised: hiring MuleSoft dev, recently funded, new exec hire.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">C</div><div><strong>Email verification:</strong> Verify all emails in Apollo before loading to Instantly. Bounce rate must stay below 3% — above this kills domain reputation and all emails land in spam.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">Owner: SDR/BDR</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Weekly · Monday</span>
+      </div>
+    </div>
+
+    <div class="motion-card" style="border-top:3px solid var(--coral)">
+      <div class="motion-label" style="color:var(--coral)">Step 2 — 9-Touch Sequence (18 days)</div>
+      <div class="motion-title">Multi-channel outreach — email, LinkedIn, cold call</div>
+      <div class="motion-desc">Every touch has one job: get a reply or a booked call. Emails are under 100 words. Never educate — interrupt, hook, ask.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D1</div><div><strong>Email 1:</strong> Pattern interrupt. "Are you getting ROI from [platform]?" Personalised first line from Clay enrichment — company-specific detail, not generic.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D2</div><div><strong>LinkedIn:</strong> Connection request — no pitch. Just connect. Message comes after acceptance.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D4</div><div><strong>Email 2:</strong> Case study hook. Industry-matched win — "similar company cut integration time by 60%."</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D6</div><div><strong>Cold call:</strong> 30-second opener referencing emails. If no answer — leave 20-second voicemail, send follow-up email same day.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D8</div><div><strong>Email 3:</strong> Value drop — "3 most common MuleSoft implementation mistakes." No hard ask. Soft CTA with Calendly link.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D10</div><div><strong>LinkedIn DM:</strong> After connection accepted. Short, casual — references email thread.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D13</div><div><strong>Email 4 (highest reply rate):</strong> "Your MuleSoft team asked us to reach out." Co-sell angle. Only used when VP Alliances has AE's approval to reference them. Reply rate: 8–12%.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D16</div><div><strong>Final call:</strong> "I won't keep calling after this." Respects time — gets callbacks.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">D18</div><div><strong>Break-up email:</strong> "Closing the loop — I'll stop following up." Generates 15–25% of all sequence replies.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">Owner: SDR/BDR via Instantly</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)"><a href="../Pillar1/21_SDR_BDR_Outbound_Playbook.html" target="_blank" style="text-decoration:none;font-weight:700">→ Full SDR/BDR Outbound Playbook</a></span>
+      </div>
+    </div>
+
+    <div class="motion-card" style="border-top:3px solid var(--coral)">
+      <div class="motion-label" style="color:var(--coral)">Step 3 — Qualifying Call (5 questions, &lt;10 min)</div>
+      <div class="motion-title">Identify pain bucket before booking 3-way call</div>
+      <div class="motion-desc">When prospect replies with interest, SDR runs a quick qualifying call to identify which of the 4 pain buckets they're in — so the Alliance Mgr/AE and MuleSoft AE walk into the 3-way already knowing what to say.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">Q1</div><div><strong>Bucket A — Licence waste:</strong> Bought MuleSoft/Salesforce, not deployed or underutilised. Pitch: speed to ROI.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">Q2</div><div><strong>Bucket B — Bad implementation:</strong> Previous SI or internal build is broken. Pitch: rescue and rebuild.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">Q3</div><div><strong>Bucket C — Integration build:</strong> Systems don't talk. Manual work, data silos. Pitch: greenfield integration build.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">Q4</div><div><strong>Bucket D — Capacity:</strong> Engineering team overwhelmed, backlog 3+ months. Pitch: capacity extension.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">Owner: SDR/BDR</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Before every booking</span>
+      </div>
+    </div>
+
+    <div class="motion-card" style="border-top:3px solid var(--coral)">
+      <div class="motion-label" style="color:var(--coral)">Step 4 — 3-Way Call Booking & Handoff</div>
+      <div class="motion-title">Prospect + DataSkate + MuleSoft AE on one call</div>
+      <div class="motion-desc">SDR books the call, sends a 1-page prospect brief to Alliance Mgr/AE and MuleSoft AE, then steps out. The brief includes: pain bucket, exact words prospect used, tech stack, decision-maker confirmation, and suggested opening line for the AE.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">1</div><div>SDR books 3-way via Calendly — prospect selects time, invites sent to Alliance Mgr/AE and MuleSoft AE automatically.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">2</div><div>SDR sends 1-page brief via Slack to Alliance Mgr/AE and MuleSoft AE before call: pain bucket, exact prospect quotes, tech stack, authority confirmed, suggested opener.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">3</div><div>Alliance Mgr/AE runs the discovery. MuleSoft AE adds platform credibility. SDR does NOT attend — their job is done at booking.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--coral)">4</div><div>Post-call: Alliance Mgr/AE sends 2-line outcome to SDR — converted/not, next steps. SDR logs in HubSpot and updates sequence status.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--coral-lt);color:var(--coral-dk)">SDR books · Alliance Mgr/AE runs · MuleSoft AE closes</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Every qualified reply</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--coral)"></span>SDR/BDR KPIs — weekly activity floor and pipeline targets</div>
+    <table class="owner-table">
+      <thead><tr><th>Metric</th><th>Target</th><th>If below target</th></tr></thead>
+      <tbody>
+        <tr><td><strong>New prospects contacted per week</strong></td><td>60 minimum</td><td>SDR not using Apollo/Clay correctly — review list building process</td></tr>
+        <tr><td><strong>Cold dials per day</strong></td><td>15–20</td><td>Dial blocks not in calendar — fix scheduling</td></tr>
+        <tr><td><strong>Email open rate</strong></td><td>≥40%</td><td>Subject line problem — A/B test 3 new variants this week</td></tr>
+        <tr><td><strong>Email reply rate</strong></td><td>≥3%</td><td>Body copy problem — rewrite sequences, check personalisation</td></tr>
+        <tr><td><strong>Booked 3-way calls per week</strong></td><td>4–6 at full ramp</td><td>Qualifying too aggressively — lower the bar for booking, qualify on the call</td></tr>
+        <tr><td><strong>Email bounce rate</strong></td><td>&lt;3%</td><td>Domain health at risk — stop sequences, fix email warmup immediately</td></tr>
+        <tr><td><strong>Booked call → qualified pipeline</strong></td><td>30% conversion</td><td>Brief quality is low — improve qualifying call depth</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ GTM TEAM STRUCTURE ═══ -->
+<div class="section" id="roles-gtm">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--slate)">★</div>
+    <div class="section-meta">
+      <div class="section-title">GTM Team Structure — Roles, Reporting Lines & Accountability</div>
+      <div class="section-sub">Head of GTM reports to VP Alliances. SDR/BDR reports to Head of GTM. VP Alliances gets a clean weekly pipeline summary — not SDR babysitting. Head of GTM owns the entire GTM engine: inbound content, outbound strategy, SDR management, and performance reporting.</div>
+    </div>
+  </div>
+
+  <div class="full-card" style="margin-bottom:20px">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--slate)"></span>Reporting structure — Pillar 1 GTM team</div>
+    <div style="background:var(--white);border-radius:10px;padding:20px;overflow-x:auto">
+      <svg viewBox="0 0 700 220" width="100%" xmlns="http://www.w3.org/2000/svg" style="font-family:'DM Sans',sans-serif;max-width:700px">
+        <rect x="275" y="5" width="150" height="36" rx="7" fill="#111827"/>
+        <text x="350" y="20" text-anchor="middle" fill="#fff" font-size="10" font-weight="700" font-family="'Syne',sans-serif">CEO / Co-founder</text>
+        <text x="350" y="33" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="9">Vision · $50K+ deals · Board</text>
+        <line x1="350" y1="41" x2="350" y2="57" stroke="#E5E7EB" stroke-width="1.5"/>
+        <rect x="225" y="57" width="250" height="36" rx="7" fill="#E8472A"/>
+        <text x="350" y="72" text-anchor="middle" fill="#fff" font-size="10" font-weight="700" font-family="'Syne',sans-serif">VP of Alliances</text>
+        <text x="350" y="85" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="9">Owns 5 partners · Revenue strategy · QBRs · Weekly GTM review</text>
+        <line x1="350" y1="93" x2="350" y2="110" stroke="#E5E7EB" stroke-width="1.5"/>
+        <line x1="100" y1="110" x2="600" y2="110" stroke="#E5E7EB" stroke-width="1.5"/>
+        <line x1="100" y1="110" x2="100" y2="125" stroke="#E5E7EB" stroke-width="1.5"/>
+        <line x1="350" y1="110" x2="350" y2="125" stroke="#E5E7EB" stroke-width="1.5"/>
+        <line x1="600" y1="110" x2="600" y2="125" stroke="#E5E7EB" stroke-width="1.5"/>
+        <!-- Alliance Mgr/AE -->
+        <rect x="25" y="125" width="150" height="50" rx="7" fill="#E8472A" opacity=".85"/>
+        <text x="100" y="145" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Alliance Mgr / AE</text>
+        <text x="100" y="158" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="8">Partner AE relationships</text>
+        <text x="100" y="170" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="8">Discovery calls · SOW scoping</text>
+        <!-- Head of GTM -->
+        <rect x="245" y="125" width="210" height="50" rx="7" fill="#2A3550"/>
+        <text x="350" y="145" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Head of GTM</text>
+        <text x="350" y="158" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="8">Content · Outbound strategy · SDR mgmt</text>
+        <text x="350" y="170" text-anchor="middle" fill="rgba(255,255,255,.75)" font-size="8">Inbound · Performance reporting</text>
+        <!-- SDR line down from Head of GTM -->
+        <line x1="350" y1="175" x2="350" y2="190" stroke="#E5E7EB" stroke-width="1.5"/>
+        <rect x="265" y="190" width="170" height="22" rx="5" fill="#EEF1F7" stroke="#2A3550" stroke-width="1"/>
+        <text x="350" y="205" text-anchor="middle" fill="#141C2E" font-size="9" font-weight="600">SDR / BDR — reports to Head of GTM</text>
+        <!-- RevOps -->
+        <rect x="525" y="125" width="150" height="50" rx="7" fill="#EEF1F7" stroke="#E5E7EB" stroke-width="1"/>
+        <text x="600" y="145" text-anchor="middle" fill="#2A3550" font-size="9" font-weight="700">RevOps (function)</text>
+        <text x="600" y="158" text-anchor="middle" fill="#6B7280" font-size="8">CRM hygiene · Pipeline</text>
+        <text x="600" y="170" text-anchor="middle" fill="#6B7280" font-size="8">reporting · Forecasting</text>
+      </svg>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div class="full-card">
+      <div class="full-card-title"><span class="fct-dot" style="background:var(--slate)"></span>Head of GTM — full scope</div>
+      <table class="owner-table">
+        <tbody>
+          <tr><td><strong>Reports to</strong></td><td>VP of Alliances</td></tr>
+          <tr><td><strong>Direct reports</strong></td><td>SDR/BDR</td></tr>
+          <tr><td><strong>Owns — Outbound</strong></td><td>ICP definition, sequence library (Apollo/Clay/Instantly), A/B testing, SDR weekly review, SDR ramp and coaching</td></tr>
+          <tr><td><strong>Owns — Inbound</strong></td><td>CEO/VP/DH personal brand, collateral, AppExchange, MDF, case studies, webinar production, events agenda</td></tr>
+          <tr><td><strong>Owns — Performance</strong></td><td>Weekly KPI report to VP Alliances, monthly full GTM review, quarterly strategy presentation</td></tr>
+          <tr><td><strong>Does NOT own</strong></td><td>Partner AE relationships, discovery calls, SOW scoping, revenue forecast, deal closing</td></tr>
+          <tr><td><strong>Key KPIs</strong></td><td>Outbound pipeline ≥30% of total leads · SDR 4–6 calls/week at ramp · CEO LinkedIn 5K followers EOY · Weekly report every Friday without being asked</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="full-card">
+      <div class="full-card-title"><span class="fct-dot" style="background:var(--coral)"></span>SDR/BDR — reports to Head of GTM</div>
+      <table class="owner-table">
+        <tbody>
+          <tr><td><strong>Reports to</strong></td><td>Head of GTM</td></tr>
+          <tr><td><strong>Owns</strong></td><td>Prospect list building, email sequences, LinkedIn DMs, cold calls, qualifying calls, 3-way call booking, CRM logging</td></tr>
+          <tr><td><strong>Does NOT own</strong></td><td>Discovery calls, SOW scoping, partner AE relationships, content creation, sequence strategy</td></tr>
+          <tr><td><strong>Key KPIs</strong></td><td>60 prospects/week · 15–20 dials/day · 4–6 booked calls/week at ramp · bounce rate &lt;3%</td></tr>
+          <tr><td><strong>Joins when</strong></td><td>6–8 weeks after Head of GTM — into a working system, not a blank slate</td></tr>
+          <tr><td><strong>Reviewed by</strong></td><td>Head of GTM weekly · VP Alliances sees outcomes only (booked calls, pipeline generated)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MOTION 3 — AE LIST DATA (was Motion 2) ═══ -->
+<div class="section" id="motion2">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--teal)">03</div>
+    <div class="section-meta">
+      <div class="section-title">Motion 3 — AE Named Account Data from Partner Enablement</div>
+      <div class="section-sub">The MuleSoft AE shares their named account list. The SDR/BDR pre-researches each account and hands it back to the AE as a gift — pain identified, decision-maker found, outreach drafted. The AE gets a ready-to-call list. DataSkate gets a co-sell opportunity.</div>
+    </div>
+  </div>
+
+  <div class="prospect-grid">
+    <div class="prospect-card">
+      <div class="pc-icon" style="background:var(--teal-lt)">📋</div>
+      <div class="pc-title">Step 1 — Clean the list</div>
+      <div class="pc-sub">Remove accounts that are too small (below $5K SOW potential), wrong industry, or already a DS client. Score each remaining account on: platform fit, company size, and integration complexity signal.</div>
+      <div class="pc-output" style="background:var(--teal-lt);color:var(--teal-dk)">Output: scored prospect list per AE</div>
+    </div>
+    <div class="prospect-card">
+      <div class="pc-icon" style="background:var(--teal-lt)">🔍</div>
+      <div class="pc-title">Step 2 — Pre-research each account</div>
+      <div class="pc-sub">For each account in the AE's territory: find the pain (job postings, LinkedIn, press), identify the decision-maker, and write 2 sentences on why DataSkate is relevant to them right now.</div>
+      <div class="pc-output" style="background:var(--teal-lt);color:var(--teal-dk)">Output: 1-page prospect profile per account</div>
+    </div>
+    <div class="prospect-card">
+      <div class="pc-icon" style="background:var(--teal-lt)">🎁</div>
+      <div class="pc-title">Step 3 — Deliver as a gift to the AE</div>
+      <div class="pc-sub">"Here are 10 accounts in your territory. I've done the research — here's the pain, the contact, and why they need MuleSoft + DS right now. Pick the 2 you want to work." No ask. Pure give.</div>
+      <div class="pc-output" style="background:var(--teal-lt);color:var(--teal-dk)">Output: AE receives ready-to-call accounts</div>
+    </div>
+    <div class="prospect-card">
+      <div class="pc-icon" style="background:var(--teal-lt)">📞</div>
+      <div class="pc-title">Step 4 — Joint outreach</div>
+      <div class="pc-sub">Offer to co-author the outreach email with the AE. AE sends it — their name, their relationship. DS is mentioned as the implementation partner. AE gets the credit, DS gets the deal.</div>
+      <div class="pc-output" style="background:var(--teal-lt);color:var(--teal-dk)">Output: Outreach sent, prospect engaged</div>
+    </div>
+    <div class="prospect-card">
+      <div class="pc-icon" style="background:var(--teal-lt)">🤝</div>
+      <div class="pc-title">Step 5 — DS leads discovery</div>
+      <div class="pc-sub">When prospect responds, DS runs the discovery call. AE attends. DS qualifies against BANT, identifies the SOW scope, and sends the AE a deal summary within 24 hours of the call.</div>
+      <div class="pc-output" style="background:var(--teal-lt);color:var(--teal-dk)">Output: Qualified deal in CRM</div>
+    </div>
+    <div class="prospect-card">
+      <div class="pc-icon" style="background:var(--teal-lt)">📊</div>
+      <div class="pc-title">Step 6 — Track and report</div>
+      <div class="pc-sub">Log every account in CRM with source = "Salesforce Enablement Data." Track which AE sourced it. Send a monthly report to the VP Alliances — conversion rate, deal size, pipeline value by AE.</div>
+      <div class="pc-output" style="background:var(--teal-lt);color:var(--teal-dk)">Output: Pipeline report with attribution</div>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--teal)"></span>ICP filter — which accounts to prioritise from the data</div>
+    <table class="owner-table">
+      <thead><tr><th>Signal</th><th>What to look for</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Platform already licensed</strong></td><td>MuleSoft Anypoint or Salesforce already in use</td><td>Implementation need exists — no platform sell required</td></tr>
+        <tr><td><strong>Integration job postings</strong></td><td>Open roles for MuleSoft Developer, Integration Architect</td><td>They have a need and can't fill it internally</td></tr>
+        <tr><td><strong>Company size</strong></td><td>50–500 employees for SMB, 500–2000 for MM</td><td>Matches your SOW minimum and delivery capacity</td></tr>
+        <tr><td><strong>Recent platform announcement</strong></td><td>Press release mentioning Salesforce, digital transformation, data strategy</td><td>Active initiative = active budget</td></tr>
+        <tr><td><strong>Existing MuleSoft client referral path</strong></td><td>In same industry vertical as a DS win</td><td>Case study is directly applicable — close rate higher</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ MOTION 4 — EVENTS ═══ -->
+<div class="section" id="motion3">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--amber)">04</div>
+    <div class="section-meta">
+      <div class="section-title">Motion 3 — Partner Events & Webinars</div>
+      <div class="section-sub">Events are where AEs and prospects self-identify. The goal is not branding — it's 5 warm contacts per event who become either prospects or AE relationships. Every event must have a post-event action plan before you attend.</div>
+    </div>
+  </div>
+
+  <div class="motion-grid">
+    <div class="motion-card mc-amber">
+      <div class="motion-label" style="color:var(--amber)">Before the event</div>
+      <div class="motion-title">Pre-event prep (Must do)</div>
+      <div class="motion-desc">Never attend an event without a target list and a leave-behind.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">1</div><div>Pull attendee list (if available) or speaker list. Identify 5 target contacts — AEs, CAMs, or prospects. Research each one before the event.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">2</div><div>Prepare one leave-behind: a QR code linking to your best recorded webinar on the capability the event is focused on. Not a brochure.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">3</div><div>Set a clear success metric before attending: "I will leave with 5 LinkedIn connections and 2 follow-up meeting bookings."</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--amber-lt);color:#92400E">Owner: Alliance Mgr/AE</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">1 week before</span>
+      </div>
+    </div>
+
+    <div class="motion-card mc-amber">
+      <div class="motion-label" style="color:var(--amber)">At the event</div>
+      <div class="motion-title">What to do in the room</div>
+      <div class="motion-desc">Conversations, not pitches. Your goal is to learn their problem, not explain your product.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">1</div><div>Opening line to any AE: "What are your hardest accounts to close right now?" Listen first. Offer the prospect profile or webinar link as a tool they can use.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">2</div><div>Opening line to any prospect: "What integration or data challenge is your team working through?" Two minutes of listening gives you everything you need for the follow-up.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">3</div><div>Book the follow-up in the room, not via email later. "Can we get 30 minutes next week? I have something specific for your situation." Calendar invite before you leave the conversation.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--amber-lt);color:#92400E">Owner: Alliance Mgr/AE</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Day of event</span>
+      </div>
+    </div>
+
+    <div class="motion-card mc-amber">
+      <div class="motion-label" style="color:var(--amber)">After the event</div>
+      <div class="motion-title">Post-event action within 24 hours</div>
+      <div class="motion-desc">Most of the value from an event is lost if you don't act within 24 hours.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">1</div><div>Log all contacts in CRM — source = event name. Connect on LinkedIn with a personalised note referencing the conversation. Do this the same night.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">2</div><div>Send follow-up emails to booked meetings — include the specific webinar link relevant to their problem. Not a generic brochure.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">3</div><div>Report to VP Alliances: how many contacts, how many meetings booked, estimated pipeline value, any AE relationships initiated.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--amber-lt);color:#92400E">Owner: Alliance Mgr/AE</span>
+        <span class="mf-chip" style="background:var(--bg);color:var(--muted)">Within 24hrs</span>
+      </div>
+    </div>
+
+    <div class="motion-card mc-amber">
+      <div class="motion-label" style="color:var(--amber)">Speaking slots</div>
+      <div class="motion-title">Apply to speak — every event where possible</div>
+      <div class="motion-desc">Speaking is 10x more effective than attending. A 15-minute slot gives you inbound conversations for the rest of the event.</div>
+      <div class="motion-steps">
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">1</div><div>Pitch topic: "How [Company Type] cut integration time by 40% using MuleSoft + [DS accelerator]." Real client result, specific to the audience.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">2</div><div>Use the recorded webinar library as proof of capability when applying. Link to your best webinar as a sample of your speaking quality.</div></div>
+        <div class="mstep"><div class="mstep-num" style="background:var(--amber)">3</div><div>GTM Manager submits speaker applications 6 weeks ahead. VP Alliances approves topic. CEO attends for major Salesforce or MuleSoft events.</div></div>
+      </div>
+      <div class="motion-footer">
+        <span class="mf-chip" style="background:var(--amber-lt);color:#92400E">Owner: GTM Manager submits · VP Alliances approves</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--amber)"></span>Target events calendar — Q2–Q3 2026</div>
+    <table class="owner-table">
+      <thead><tr><th>Event</th><th>Type</th><th>DS Goal</th><th>Who attends</th><th>Speak?</th></tr></thead>
+      <tbody>
+        <tr><td><strong>MuleSoft CONNECT</strong></td><td>Partner conference</td><td>5 AE relationships, 3 prospect meetings</td><td>VP Alliances + Alliance Mgr/AE</td><td>Apply</td></tr>
+        <tr><td><strong>Salesforce World Tour</strong></td><td>Customer + partner</td><td>10 prospect conversations</td><td>CEO + VP Alliances</td><td>Apply</td></tr>
+        <tr><td><strong>Informatica World</strong></td><td>Customer conference</td><td>3 new AE relationships</td><td>VP Alliances</td><td>Apply</td></tr>
+        <tr><td><strong>MuleSoft webinars (monthly)</strong></td><td>Partner webinar</td><td>Attend + connect with AE hosts</td><td>Alliance Mgr/AE</td><td>Propose DS segment</td></tr>
+        <tr><td><strong>Workato/Boomi partner days</strong></td><td>Partner enablement</td><td>2 AE relationships per event</td><td>Alliance Mgr/AE</td><td>No</td></tr>
+        <tr><td><strong>Local Salesforce User Groups</strong></td><td>Community</td><td>5 prospect conversations</td><td>Alliance Mgr/AE</td><td>Always — it's small enough to get a slot</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ MOTION 5 — WEBINAR LIBRARY ═══ -->
+<div class="section" id="motion4">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--purple)">05</div>
+    <div class="section-meta">
+      <div class="section-title">Motion 5 — Free Recorded Webinar Library for AEs</div>
+      <div class="section-sub">AEs are trying to sell capabilities they don't deeply understand. You give them the tool to do it — a library of short recorded webinars on the exact use cases their prospects ask about. AEs share these to warm cold prospects without calling you. This is the most scalable inbound motion.</div>
+    </div>
+  </div>
+
+  <div class="webinar-grid">
+    <div class="webinar-card">
+      <div class="wc-head" style="background:var(--purple)">
+        <div class="wc-title">What makes a good webinar in this library</div>
+      </div>
+      <div class="wc-body">
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div><strong>10–15 minutes max.</strong> AEs won't watch 45 minutes. Prospects won't either.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div><strong>Use-case specific, not product generic.</strong> "How to integrate Salesforce and SAP in 4 weeks" beats "MuleSoft integration overview."</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div><strong>Real client outcome in the title.</strong> AEs share content that makes them look smart. A specific result does that.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div><strong>Ends with a clear CTA.</strong> "Book a free 30-minute scoping call" with a link. Not a contact form. A direct calendar link.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div><strong>Gated with email capture.</strong> Viewer submits email to watch → goes into DS CRM as a warm inbound lead → Alliance Mgr/AE follows up within 24hrs.</div></div>
+      </div>
+    </div>
+
+    <div class="webinar-card">
+      <div class="wc-head" style="background:var(--purple)">
+        <div class="wc-title">Priority topics — what AEs need most</div>
+      </div>
+      <div class="wc-body">
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--coral)"></div><div><strong>MuleSoft:</strong> "How to migrate from point-to-point integrations to API-led connectivity in 4 weeks"</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--coral)"></div><div><strong>MuleSoft:</strong> "Salesforce + ERP integration — the 3 most common failures and how to avoid them"</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--teal)"></div><div><strong>Salesforce:</strong> "Setting up Agentforce for a 50-person sales team in 3 weeks"</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--teal)"></div><div><strong>Salesforce:</strong> "Sales Cloud implementation — what SMBs get wrong and how to fix it"</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--amber)"></div><div><strong>Informatica:</strong> "How to clean and unify your customer data before a Salesforce go-live"</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--blue)"></div><div><strong>Workato:</strong> "Automating your quote-to-cash process — live demo in 12 minutes"</div></div>
+      </div>
+    </div>
+
+    <div class="webinar-card">
+      <div class="wc-head" style="background:var(--slate)">
+        <div class="wc-title">Production process — 1 new video every 2 weeks</div>
+      </div>
+      <div class="wc-body">
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--slate)"></div><div><strong>Week 1, Day 1:</strong> VP Alliances picks topic based on what AEs are currently asking about. Practice Lead is briefed.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--slate)"></div><div><strong>Week 1, Day 3:</strong> Practice Lead records a raw walkthrough — screen share + voice. No studio. Loom or similar.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--slate)"></div><div><strong>Week 1, Day 5:</strong> GTM Manager edits, adds intro slide and CTA slide, uploads to gated landing page.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--slate)"></div><div><strong>Week 2, Day 1:</strong> Alliance Mgr/AE sends link to all Tier A and B AEs with a 2-line note: "Here's a 12-min walkthrough on [topic]. Your prospects who ask about this can watch it before your call."</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--slate)"></div><div><strong>Ongoing:</strong> GTM Manager tracks views, email captures, and inbound requests from each video. Reports monthly to VP Alliances.</div></div>
+      </div>
+    </div>
+
+    <div class="webinar-card">
+      <div class="wc-head" style="background:var(--slate)">
+        <div class="wc-title">How AEs use the library — the script</div>
+      </div>
+      <div class="wc-body">
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div>AE is on a prospect call. Prospect asks: "How long does MuleSoft integration actually take?" AE says: "I'll send you a 12-minute walkthrough from our implementation partner — they've done this 20+ times."</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div>AE sends the link after the call. Prospect watches. Prospect submits email to access. DS CRM gets the lead. Alliance Mgr/AE follows up within 24 hours.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div>DS informs AE: "Your prospect just watched the MuleSoft video — we're following up. Want to join the discovery call?" AE is now re-engaged without any extra effort.</div></div>
+        <div class="wc-item"><div class="wc-bullet" style="background:var(--purple)"></div><div>This makes the AE look credible to their prospect, requires zero effort from the AE, and puts DS in front of a warm lead. That's the flywheel.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AE 3-WEEK ENABLEMENT ═══ -->
+<div class="section" id="ae-enable">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--blue)">05</div>
+    <div class="section-meta">
+      <div class="section-title">AE 3-Week Enablement Structure</div>
+      <div class="section-sub">Any AE who engages with DataSkate should be fully enabled to pitch, qualify, and intro DS to prospects within 3 weeks — without calling you for help. This is the standard. Build the kit once, reuse it for every AE.</div>
+    </div>
+  </div>
+
+  <div class="week-grid">
+    <div class="week-card">
+      <div class="wk-head" style="background:var(--blue)">Week 1 — Give the weapon. No ask.</div>
+      <div class="wk-body">
+        <div class="wk-item"><span class="wk-tag wt-must">Must</span>Send the AE the Enablement Kit: 1-page pitch card per use case, 5-10 pre-researched prospects in their territory, objection cheat sheet, webinar library link.</div>
+        <div class="wk-item"><span class="wk-tag wt-must">Must</span>No meeting required this week. Drop it in email or Slack. Let them consume it on their schedule. Remove friction.</div>
+        <div class="wk-item"><span class="wk-tag wt-good">Good</span>Add a co-branded one-pager the AE can forward to prospects under their own name. Their brand, DS capability.</div>
+        <div class="wk-item"><span class="wk-tag wt-good">Good</span>Send a 3-line note: "Here's everything you need to position DS to your clients. No prep needed on your end — I handle everything after the intro."</div>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="wk-head" style="background:var(--blue)">Week 2 — One joint call. AE watches.</div>
+      <div class="wk-body">
+        <div class="wk-item"><span class="wk-tag wt-must">Must</span>One 45-minute discovery call with the AE and one prospect from their territory (use your cold prospect data if they haven't offered one). DS runs the call.</div>
+        <div class="wk-item"><span class="wk-tag wt-must">Must</span>Send the AE a deal summary within 24 hours: prospect pain in writing, recommended solution, ballpark SOW range and 4-week delivery timeline.</div>
+        <div class="wk-item"><span class="wk-tag wt-must">Must</span>Register the deal in the partner portal same day — do it for the AE the first time. Explain what you did and why — they learn by seeing.</div>
+        <div class="wk-item"><span class="wk-tag wt-good">Good</span>Book Week 3 call on the same call — keep the momentum without the AE having to re-engage.</div>
+      </div>
+    </div>
+    <div class="week-card">
+      <div class="wk-head" style="background:var(--blue)">Week 3 — AE runs the intro. DS supports.</div>
+      <div class="wk-body">
+        <div class="wk-item"><span class="wk-tag wt-must">Must</span>AE makes the next prospect intro themselves. DS joins only for the technical scoping portion — AE leads the relationship.</div>
+        <div class="wk-item"><span class="wk-tag wt-must">Must</span>DS produces the SOW within 48 hours of the scoping call. No waiting. Speed is the signal that DS is reliable.</div>
+        <div class="wk-item"><span class="wk-tag wt-own">Own</span>Lock the bi-weekly pipeline sync. This is the structural output of Week 3 — the ongoing cadence that replaces ad-hoc follow-up forever.</div>
+        <div class="wk-item"><span class="wk-tag wt-good">Good</span>Send the AE a "what you now have" summary: 1 deal in progress, 1 SOW drafted, 5 prospects pre-researched, webinar library for any prospect question. They can see the value in writing.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="full-card" style="margin-top:16px">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--blue)"></span>AE Enablement Kit — contents (build once, send to every new AE)</div>
+    <table class="owner-table">
+      <thead><tr><th>Asset</th><th>What it contains</th><th>Format</th><th>Owner</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Use-case pitch cards</strong></td><td>1 page per practice: pain → DS solution → delivery time → client result. Co-brandable.</td><td>PDF, 1 page each</td><td>GTM Manager</td></tr>
+        <tr><td><strong>Pre-researched prospect list</strong></td><td>5–10 accounts in AE's territory: company, pain identified, decision-maker name, why DS is relevant now.</td><td>Google Sheet or PDF</td><td>Alliance Mgr/AE</td></tr>
+        <tr><td><strong>Objection cheat sheet</strong></td><td>"What if prospect asks about price?" / "Timeline?" / "Why not a bigger SI?" — one-line answers the AE can use verbatim.</td><td>1-page PDF</td><td>VP Alliances</td></tr>
+        <tr><td><strong>Webinar library link</strong></td><td>Organised by practice and use case. AE bookmarks and shares links to match what their prospect is asking about.</td><td>Hosted landing page</td><td>GTM Manager</td></tr>
+        <tr><td><strong>Process one-pager</strong></td><td>"What happens after you intro us." Discovery → SOW in 48hrs → delivery in 4 weeks → CSAT report back to you.</td><td>1-page PDF</td><td>GTM Manager</td></tr>
+        <tr><td><strong>Deal registration guide</strong></td><td>Step-by-step how to register in partner portal. DS offers to do it for them on the first deal.</td><td>Short PDF or Loom video</td><td>Alliance Mgr/AE</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ═══ SMB 4-WEEK DELIVERY ═══ -->
+<div class="section" id="delivery">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--green)">06</div>
+    <div class="section-meta">
+      <div class="section-title">SMB 4-Week Delivery Structure</div>
+      <div class="section-sub">Fixed scope. Fixed price. Fixed 4-week delivery. AEs quote it without calling DS. The promise to the AE: "Your client goes live in 4 weeks or we explain why in writing." This is DataSkate's SMB product — treat it like one.</div>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--green)"></span>SMB Package Definition — by practice</div>
+    <table class="owner-table">
+      <thead><tr><th>Practice</th><th>Fixed scope</th><th>Price range</th><th>What's out of scope</th><th>Client obligation</th></tr></thead>
+      <tbody>
+        <tr><td><strong>MuleSoft</strong></td><td>Up to 3 API integrations, existing Anypoint platform, standard connectors only</td><td>$8K–$15K</td><td>Custom connectors, org setup, data migration</td><td>Anypoint access Day 1, SME 3hrs/wk</td></tr>
+        <tr><td><strong>Salesforce</strong></td><td>Sales or Service Cloud setup, up to 50 users, standard config + basic automation</td><td>$10K–$20K</td><td>Custom development, third-party integrations, training beyond 1 session</td><td>Org access Day 1, data clean and ready</td></tr>
+        <tr><td><strong>Agentforce</strong></td><td>1 agent type configured, trained, and deployed to 1 channel</td><td>$8K–$12K</td><td>Multi-channel, custom LLM, CRM integrations beyond 1 object</td><td>Salesforce org live, SME 2hrs/wk</td></tr>
+        <tr><td><strong>Workato</strong></td><td>Up to 5 automation workflows, existing Workato license</td><td>$6K–$10K</td><td>Net new platform setup, complex decision logic, real-time triggers at scale</td><td>Workato access Day 1, SME 2hrs/wk</td></tr>
+        <tr><td><strong>Informatica</strong></td><td>Data quality + deduplication for 1 data domain (e.g. customer records)</td><td>$10K–$18K</td><td>MDM full rollout, multi-domain, governance framework</td><td>IDMC access, source data provided</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--green)"></span>4-Week Delivery Clock — what happens each week</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
+      <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+        <div style="background:var(--green);padding:10px 12px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:.06em">WEEK 1</div>
+        <div style="padding:12px;font-size:12px;color:var(--ink);line-height:1.6;display:flex;flex-direction:column;gap:6px">
+          <div>→ Kickoff call (Day 1)</div>
+          <div>→ Environment access confirmed</div>
+          <div>→ Architecture signed off by Delivery Head/SA</div>
+          <div>→ Sprint 1 backlog locked</div>
+          <div>→ First weekly status to AE sent</div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+        <div style="background:#15803d;padding:10px 12px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:.06em">WEEK 2</div>
+        <div style="padding:12px;font-size:12px;color:var(--ink);line-height:1.6;display:flex;flex-direction:column;gap:6px">
+          <div>→ Core build sprint</div>
+          <div>→ Daily standups</div>
+          <div>→ PR reviews by Sr Dev</div>
+          <div>→ Mid-week check-in with client</div>
+          <div>→ Weekly status to AE (3 lines)</div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+        <div style="background:#166534;padding:10px 12px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:.06em">WEEK 3</div>
+        <div style="padding:12px;font-size:12px;color:var(--ink);line-height:1.6;display:flex;flex-direction:column;gap:6px">
+          <div>→ Edge cases and error handling</div>
+          <div>→ Full testing suite run</div>
+          <div>→ Client UAT begins</div>
+          <div>→ Issues logged and resolved</div>
+          <div>→ Go-live plan confirmed with PM</div>
+        </div>
+      </div>
+      <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden">
+        <div style="background:#14532d;padding:10px 12px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#fff;letter-spacing:.06em">WEEK 4</div>
+        <div style="padding:12px;font-size:12px;color:var(--ink);line-height:1.6;display:flex;flex-direction:column;gap:6px">
+          <div>→ UAT sign-off from client</div>
+          <div>→ Go-live</div>
+          <div>→ Hypercare: 2-week window opens</div>
+          <div>→ CSAT collected (≥4.2 required)</div>
+          <div>→ Reference quote sent to AE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--coral)"></span>What keeps it to 4 weeks — the non-negotiables</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:13px">
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span><div>Scope locked at SOW sign — any addition becomes a new SOW. No scope creep inside the 4-week window, no exceptions.</div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span><div>Practice Lead assigned before SOW is signed — not after. No deal starts without a named resource confirmed.</div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span><div>Client SME availability is a SOW condition. If the client misses their 3hrs/week obligation, the delivery clock pauses on their side — not DS's.</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span><div>Delivery Head/SA approves the architecture before kickoff. No surprises in Week 3.</div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--green);font-weight:700;flex-shrink:0">✓</span><div>Environment access confirmed on Day 1. If access is not received in 3 business days of kickoff, PM escalates to client sponsor — not AE.</div></div>
+        <div style="display:flex;gap:8px;align-items:flex-start"><span style="color:var(--coral);font-weight:700;flex-shrink:0">✕</span><div>No delivery work begins before SOW is countersigned. Even if the client says "just get started." This is a hard rule — no exceptions.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CADENCE & OWNERSHIP ═══ -->
+<div class="section" id="cadence">
+  <div class="section-hdr">
+    <div class="section-num" style="background:var(--slate)">07</div>
+    <div class="section-meta">
+      <div class="section-title">GTM Cadence & Role Ownership</div>
+      <div class="section-sub">Who does what and when across all four motions. Referenced to the DataSkate org structure — every task has a single owner and a clear frequency.</div>
+    </div>
+  </div>
+
+  <div class="cad-table">
+    <div class="cad-row">
+      <div class="cad-freq-cell"><div class="cad-freq-label">Daily</div></div>
+      <div class="cad-items">
+        <div class="cad-item">
+          <div class="cad-dot" style="background:#EEF1F7;border:2px solid #2A3550"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">SDR/BDR — check Instantly inbox first thing. Respond to all replies within 1 hour. No exceptions — a reply that waits 4 hours loses the momentum.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:#EEF1F7;color:#141C2E">Motion 2 · SDR</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:#EEF1F7;border:2px solid #2A3550"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">SDR/BDR — load 12–15 new prospects into Instantly sequences from Apollo/Clay. Verify emails first. Bounce rate must stay below 3%.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:#EEF1F7;color:#141C2E">Motion 2 · SDR</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:#EEF1F7;border:2px solid #2A3550"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">SDR/BDR — 15–20 cold dials. Best windows: 8–9am and 4–5pm prospect local time. Log every call in HubSpot same day.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:#EEF1F7;color:#141C2E">Motion 2 · SDR</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--coral)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE — check CRM for inbound from webinar email captures. Follow up within 4 hours, no exceptions.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--coral-lt);color:var(--coral-dk)">Motion 5</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--coral)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE — respond to any AE message within 4 hours. Log all prospect updates in CRM same day.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--coral-lt);color:var(--coral-dk)">All motions</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--green)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Practice Lead — standup with delivery team on any active SMB project. Blockers escalated to PM same day.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--green-lt);color:var(--green)">Delivery</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cad-row">
+      <div class="cad-freq-cell"><div class="cad-freq-label">Weekly</div></div>
+      <div class="cad-items">
+        <div class="cad-item">
+          <div class="cad-dot" style="background:#EEF1F7;border:2px solid #2A3550"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">GTM Manager + SDR/BDR — weekly pipeline review. Booked calls this week, reply rate, sequence performance, what to A/B test next. Monday 30 min.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:#EEF1F7;color:#141C2E">Motion 2 · Monday</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:#EEF1F7;border:2px solid #2A3550"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">SDR/BDR — build next week's full prospect list. 60+ contacts enriched via Clay, emails verified, loaded into Instantly ready to go Monday morning.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:#EEF1F7;color:#141C2E">Motion 2 · Friday build for Monday launch</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:#EEF1F7;border:2px solid #2A3550"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">GTM Manager → VP Alliances: outbound KPI report — prospects contacted, reply rate, calls booked, pipeline generated. Friday written update.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:#EEF1F7;color:#141C2E">Motion 2 · Friday</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--coral)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE → VP Alliances: pipeline review Monday 30 min. Stage every open deal. Agree next action per deal. CRM must be current before this meeting.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--coral-lt);color:var(--coral-dk)">Monday</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--teal)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE — send 3-line deal status update to every active AE whose prospect is in DS delivery. What happened, what's next, any risk.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--teal-lt);color:var(--teal-dk)">Motions 1 &amp; 3</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--purple)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">GTM Manager — publish 2 LinkedIn posts: one thought leadership, one webinar library share or client result. Tag the relevant partner AE where appropriate.</div>
+            <div class="cad-tags"><span class="ctag ctag-good">Good</span><span class="ctag" style="background:var(--purple-lt);color:var(--purple)">Motion 4</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--green)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">PM — weekly client status call on every active delivery. 30 min max. Status report sent same day. AE copied on summary.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--green-lt);color:var(--green)">Delivery</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cad-row">
+      <div class="cad-freq-cell"><div class="cad-freq-label">Bi-weekly</div></div>
+      <div class="cad-items">
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--coral)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE + Tier A AE: bi-weekly pipeline sync. Fixed agenda: AE shares 3 accounts, DS shares 3 pre-researched prospects. 30 min. Never cancel.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--coral-lt);color:var(--coral-dk)">Motion 1</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--purple)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">GTM Manager + Practice Lead: new webinar recording. Practice Lead records raw walkthrough, GTM edits and uploads to gated landing page. New topic briefed by VP Alliances.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--purple-lt);color:var(--purple)">Motion 4</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cad-row">
+      <div class="cad-freq-cell"><div class="cad-freq-label">Monthly</div></div>
+      <div class="cad-items">
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--coral)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE — send "monthly deal report" to every Tier A AE: deals run together, revenue, client quote. Makes the AE look good to their own manager.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--coral-lt);color:var(--coral-dk)">Motion 1</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--teal)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE — refresh the cold prospect data from Salesforce enablement. Re-score and update the pre-researched account list for each active AE.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--teal-lt);color:var(--teal-dk)">Motion 2</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--amber)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">Alliance Mgr/AE — attend at least 1 partner event or webinar. Post-event report to VP Alliances: contacts made, meetings booked, pipeline estimate.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--amber-lt);color:#92400E">Motion 3</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--purple)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">GTM Manager — webinar performance report: views per video, email captures, inbound leads generated, conversion to booked calls. Share with VP Alliances.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--purple-lt);color:var(--purple)">Motion 4</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--slate)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">VP Alliances — pipeline report to CEO: total pipeline by motion, deals by stage, revenue forecast. Which motion is generating most leads? Which AE is most active?</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--slate-lt);color:var(--slate)">All motions</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cad-row">
+      <div class="cad-freq-cell"><div class="cad-freq-label">Quarterly</div></div>
+      <div class="cad-items">
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--slate)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">VP Alliances + CEO — QBR with CAM/PAM at each partner. Present DS performance, pipeline by source, wins. Ask for formal referral commitment next quarter and MDF allocation.</div>
+            <div class="cad-tags"><span class="ctag ctag-must">Must</span><span class="ctag" style="background:var(--slate-lt);color:var(--slate)">CEO attends Salesforce + MuleSoft QBRs</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--amber)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">GTM Manager — speaker application submissions for next quarter's events. Submit 6 weeks before each event. VP Alliances approves topic.</div>
+            <div class="cad-tags"><span class="ctag ctag-good">Good</span><span class="ctag" style="background:var(--amber-lt);color:#92400E">Motion 3</span></div>
+          </div>
+        </div>
+        <div class="cad-item">
+          <div class="cad-dot" style="background:var(--purple)"></div>
+          <div class="cad-item-body">
+            <div class="cad-item-title">VP Alliances — GTM plan for next quarter: which motions to accelerate, which events to attend, webinar topics to produce, MDF budget allocation.</div>
+            <div class="cad-tags"><span class="ctag ctag-own">Own</span><span class="ctag" style="background:var(--purple-lt);color:var(--purple)">With GTM Manager</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="full-card">
+    <div class="full-card-title"><span class="fct-dot" style="background:var(--slate)"></span>Role ownership summary across all 4 motions</div>
+    <table class="owner-table">
+      <thead><tr><th>Activity</th><th>Owner</th><th>Motion</th><th>Frequency</th></tr></thead>
+      <tbody>
+        <tr style="background:#FFF8F7"><td><strong>Outbound ICP definition &amp; sequence strategy</strong></td><td><span class="role-badge" style="background:#EEF1F7;color:#141C2E">GTM Manager</span></td><td>2</td><td>Monthly review · weekly iteration</td></tr>
+        <tr style="background:#FFF8F7"><td><strong>Prospect list building (Apollo/Clay) — 60+/week</strong></td><td><span class="role-badge" style="background:#FDF0ED;color:#9B1C0A">SDR/BDR</span></td><td>2, 3</td><td>Weekly · Monday</td></tr>
+        <tr style="background:#FFF8F7"><td><strong>Email sequences &amp; cold calls</strong></td><td><span class="role-badge" style="background:#FDF0ED;color:#9B1C0A">SDR/BDR</span></td><td>2</td><td>Daily — 15–20 dials, 60 prospects/week</td></tr>
+        <tr style="background:#FFF8F7"><td><strong>Qualifying call (5 questions, &lt;10 min)</strong></td><td><span class="role-badge" style="background:#FDF0ED;color:#9B1C0A">SDR/BDR</span></td><td>2</td><td>Every reply that shows interest</td></tr>
+        <tr style="background:#FFF8F7"><td><strong>3-way call booking + prospect brief</strong></td><td><span class="role-badge" style="background:#FDF0ED;color:#9B1C0A">SDR/BDR</span></td><td>2</td><td>Per qualified prospect</td></tr>
+        <tr style="background:#FFF8F7"><td><strong>SDR pipeline KPI report to VP Alliances</strong></td><td><span class="role-badge" style="background:#EEF1F7;color:#141C2E">GTM Manager</span></td><td>2</td><td>Weekly Friday</td></tr>
+        <tr><td>MuleSoft AE segmentation and warm outreach</td><td><span class="role-badge rb-ae">Alliance Mgr/AE</span></td><td>1</td><td>Week 1, then bi-weekly sync</td></tr>
+        <tr><td>AE named account list — request and receive</td><td><span class="role-badge rb-ae">Alliance Mgr/AE</span> → <span class="role-badge" style="background:#FDF0ED;color:#9B1C0A">SDR/BDR</span></td><td>3</td><td>Monthly per active AE</td></tr>
+        <tr><td>Named account pre-research + profile</td><td><span class="role-badge" style="background:#FDF0ED;color:#9B1C0A">SDR/BDR</span></td><td>3</td><td>Monthly refresh</td></tr>
+        <tr><td>Event attendance and follow-up</td><td><span class="role-badge rb-ae">Alliance Mgr/AE</span></td><td>4</td><td>Monthly minimum</td></tr>
+        <tr><td>Speaker application submissions</td><td><span class="role-badge rb-gtm">GTM Manager</span></td><td>4</td><td>Quarterly</td></tr>
+        <tr><td>Webinar production and upload</td><td><span class="role-badge rb-gtm">GTM Manager</span></td><td>5</td><td>Bi-weekly</td></tr>
+        <tr><td>Webinar topic selection</td><td><span class="role-badge rb-vpa">VP Alliances</span></td><td>5</td><td>Bi-weekly briefing</td></tr>
+        <tr><td>Webinar recording</td><td><span class="role-badge rb-pl">Practice Lead</span></td><td>5</td><td>Bi-weekly</td></tr>
+        <tr><td>AE Enablement Kit — creation</td><td><span class="role-badge rb-gtm">GTM Manager</span></td><td>All</td><td>Once, then quarterly update</td></tr>
+        <tr><td>AE Enablement Kit — delivery and follow-up</td><td><span class="role-badge rb-ae">Alliance Mgr/AE</span></td><td>All</td><td>Per new AE</td></tr>
+        <tr><td>Partner QBR attendance</td><td><span class="role-badge rb-vpa">VP Alliances</span> <span class="role-badge rb-ceo">CEO</span></td><td>All</td><td>Quarterly</td></tr>
+        <tr><td>Pipeline report to CEO (all motions)</td><td><span class="role-badge rb-vpa">VP Alliances</span></td><td>All</td><td>Monthly</td></tr>
+        <tr><td>SMB SOW production</td><td><span class="role-badge rb-vpa">VP Alliances</span></td><td>Delivery</td><td>Within 48hrs of scoping</td></tr>
+        <tr><td>SMB delivery execution</td><td><span class="role-badge rb-pl">Practice Lead</span></td><td>Delivery</td><td>4-week clock per SOW</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+</div><!-- end main -->
+
+<footer style="background:var(--ink);padding:32px 56px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+  <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3)">DataSkate · GTM Strategy · Q2 2026</div>
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
+    <span style="font-size:12px;color:rgba(255,255,255,.3)">5 motions · Inbound + Outbound · SDR/BDR + GTM Manager added · 3-week AE enablement · 4-week SMB delivery</span>
+    <span style="font-size:12px;color:rgba(255,255,255,.3)">Owner: VP Alliances · Review quarterly</span>
+  </div>
+</footer>
+
+<script>
+function scrollTo(id){
+  var el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.tnav').forEach(function(t){t.classList.remove('active')});
+}
+document.addEventListener('scroll',function(){
+  var sections=['overview','motion1','motion-sdr','roles-gtm','motion2','motion3','motion4','ae-enable','delivery','cadence'];
+  var navs=document.querySelectorAll('.tnav');
+  var current=0;
+  sections.forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<120)current=i;
+  });
+  navs.forEach(function(n,i){n.classList.toggle('active',i===current)});
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · VP Alliances · Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#09090E;--surface:#0F1117;--surface2:#14161F;--surface3:#1A1D28;
+  --border:#1E2235;--border2:#252A3C;
+  --ink:#E8EAF4;--muted:#5A6080;--subtle:#2A2F45;
+  --green:#22C55E;--green-lt:rgba(34,197,94,.1);--green-dk:rgba(34,197,94,.2);
+  --red:#EF4444;--red-lt:rgba(239,68,68,.08);--red-dk:rgba(239,68,68,.18);
+  --yellow:#EAB308;--yellow-lt:rgba(234,179,8,.1);
+  --amber:#F59E0B;--amber-lt:rgba(245,158,11,.1);--amber-dk:#D97706;
+  --teal:#00C9A7;--teal-lt:rgba(0,201,167,.08);
+  --role-color:#FF4D2E;--role-lt:rgba(255,77,46,.08);--role-dk:rgba(255,77,46,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5}
+
+/* ── HEADER ── */
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 32px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.role-name{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:.04em;color:var(--ink);line-height:1}
+.role-name span{color:var(--role-color)}
+.role-reports{font-size:11px;color:var(--muted);margin-top:3px}
+.kpi-bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:9px;padding:2px 10px;border-radius:20px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.45);border:1px solid var(--border2)}
+.kpi-chip.warn{background:var(--amber-lt);color:var(--amber);border-color:rgba(245,158,11,.3)}
+.kpi-chip.bad{background:var(--red-lt);color:var(--red);border-color:rgba(239,68,68,.3)}
+.hub-link{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);text-decoration:none;white-space:nowrap}
+.hub-link:hover{color:var(--amber-dk)}
+
+/* ── LAYOUT ── */
+main{max-width:1500px;margin:0 auto;padding:20px 32px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.card-head{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.card-icon{font-size:14px}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card-count{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto}
+.card-sub{font-size:9px;color:var(--muted);margin-left:auto;letter-spacing:.05em;text-transform:uppercase}
+.card-body{padding:13px 16px}
+
+/* ── KPI ROWS ── */
+.kpi-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.kpi-row:last-child{border-bottom:none}
+.kpi-label{font-size:11px;color:var(--muted);flex:1}
+.kpi-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);font-weight:500}
+.kpi-note{font-size:9px;color:var(--muted);text-align:right;min-width:90px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot.ok{background:var(--green)}.dot.warn{background:var(--yellow)}.dot.bad{background:var(--red)}
+
+/* ── ACTIONS / WAITING ── */
+.action-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.action-item:last-child{border-bottom:none}
+.adot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.adot.red{background:var(--red)}.adot.amber{background:var(--amber)}.adot.green{background:var(--green)}
+.action-title{font-size:12px;font-weight:600;color:var(--ink)}
+.action-sub{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5}
+.wait-item{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px;align-items:flex-start}
+.wait-item:last-child{border-bottom:none}
+.wait-from{font-weight:700;color:var(--role-color);min-width:110px;flex-shrink:0}
+.wait-text{color:var(--muted);flex:1}
+.escalation-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;font-size:11px;color:var(--muted);line-height:1.8}
+
+/* ── DOC LINKS ── */
+.doc-links{display:flex;gap:7px;flex-wrap:wrap;padding:13px 16px}
+.doc-link{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:6px;border:1px solid var(--border2);color:var(--muted);text-decoration:none;display:inline-block}
+.doc-link:hover{color:var(--ink);border-color:var(--muted)}
+.doc-link.primary{background:var(--role-lt);border-color:var(--role-color);color:var(--role-color)}
+.doc-link.primary:hover{background:var(--role-dk)}
+
+/* ══════════════════════════════
+   PARTNER PORTFOLIO TABLE
+══════════════════════════════ */
+.partner-table{width:100%;border-collapse:collapse;font-size:11px}
+.partner-table th{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2);background:var(--surface2);white-space:nowrap}
+.partner-table td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.partner-table tr:last-child td{border-bottom:none}
+.partner-table tr:hover td{background:rgba(255,255,255,.02)}
+.partner-table tr.row-red td{background:rgba(239,68,68,.03)}
+.pt-name{font-weight:700;color:var(--ink);font-size:12px}
+.pt-tier{font-size:9px;color:var(--muted);margin-top:1px}
+.badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap;display:inline-block}
+.badge.green{background:var(--green-lt);color:var(--green)}
+.badge.amber{background:var(--amber-lt);color:var(--amber)}
+.badge.red{background:var(--red-lt);color:var(--red)}
+.badge.grey{background:var(--surface3);color:var(--muted)}
+.bar-wrap{width:80px;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;display:inline-block;vertical-align:middle}
+.bar-fill{height:100%;border-radius:2px}
+.bar-fill.g{background:var(--green)}.bar-fill.a{background:var(--amber)}.bar-fill.r{background:var(--red)}
+.mono{font-family:'DM Mono',monospace;font-size:10px}
+.flag-text{font-size:10px;color:var(--muted);line-height:1.4;max-width:200px}
+.flag-text .r{color:var(--red);font-weight:600}
+.flag-text .w{color:var(--amber)}
+.mini-btn{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:5px;background:var(--role-lt);border:1px solid rgba(255,77,46,.3);color:var(--role-color);text-decoration:none;display:inline-block;white-space:nowrap;cursor:pointer;font-family:inherit}
+.mini-btn:hover{background:var(--role-dk)}
+
+/* ══════════════════════════════
+   AE PIPELINE TABLE
+══════════════════════════════ */
+.ae-summary-bar{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2);flex-wrap:wrap}
+.ae-summary-stat{text-align:center}
+.ae-summary-val{font-family:'Bebas Neue',cursive;font-size:22px;line-height:1}
+.ae-summary-lbl{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em}
+.ae-summary-div{width:1px;height:30px;background:var(--border2)}
+
+/* FILTER BAR */
+.filter-bar{display:flex;gap:6px;padding:10px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;align-items:center}
+.filter-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.filter-btn{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--border2);color:var(--muted);cursor:pointer;background:transparent;transition:all .15s}
+.filter-btn:hover{color:var(--ink);border-color:var(--muted)}
+.filter-btn.active{background:var(--role-lt);border-color:var(--role-color);color:var(--role-color)}
+.filter-btn.f-red.active{background:var(--red-lt);border-color:rgba(239,68,68,.4);color:var(--red)}
+.filter-btn.f-amber.active{background:var(--amber-lt);border-color:rgba(245,158,11,.4);color:var(--amber)}
+.filter-btn.f-green.active{background:var(--green-lt);border-color:rgba(34,197,94,.4);color:var(--green)}
+.filter-sep{width:1px;height:16px;background:var(--border2);margin:0 4px}
+
+/* AE TABLE */
+.ae-table{width:100%;border-collapse:collapse;font-size:11px}
+.ae-table th{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);padding:8px 10px;text-align:left;border-bottom:1px solid var(--border2);background:var(--surface2);white-space:nowrap;cursor:pointer;user-select:none}
+.ae-table th:hover{color:var(--ink)}
+.ae-table th .sort-icon{opacity:.4;font-size:8px;margin-left:3px}
+.ae-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:middle}
+.ae-table tr:last-child td{border-bottom:none}
+.ae-table tr:hover td{background:rgba(255,255,255,.025)}
+.ae-table tr.row-red td{background:rgba(239,68,68,.04)}
+.ae-table tr.row-amber td{background:rgba(234,179,8,.03)}
+.ae-table tr.hidden{display:none}
+
+.ae-name-cell{display:flex;flex-direction:column}
+.ae-nm{font-size:11px;font-weight:700;color:var(--ink)}
+.ae-territory{font-size:9px;color:var(--muted)}
+.partner-tag{font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px;white-space:nowrap;display:inline-block}
+.partner-tag.mule{background:rgba(0,161,224,.12);color:#00A1E0}
+.partner-tag.boomi{background:rgba(0,120,215,.1);color:#5B9BD5}
+.partner-tag.work{background:rgba(100,190,120,.1);color:#64BE78}
+.partner-tag.info{background:rgba(255,140,0,.1);color:#FF8C00}
+.partner-tag.celi{background:rgba(167,139,250,.1);color:#A78BFA}
+.deal-stage{font-size:10px;color:var(--ink);max-width:130px;line-height:1.3}
+.deal-stage .stage-num{font-size:9px;color:var(--muted)}
+.last-act{font-size:10px}
+.last-act.fresh{color:var(--green)}
+.last-act.stale{color:var(--amber)}
+.last-act.dead{color:var(--red)}
+.flag-inline{font-size:10px;color:var(--muted);line-height:1.4;max-width:180px}
+.flag-inline .r{color:var(--red);font-weight:600}
+.flag-inline .w{color:var(--amber)}
+.cc-link{font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:5px;background:var(--role-lt);border:1px solid rgba(255,77,46,.3);color:var(--role-color);text-decoration:none;display:inline-block;white-space:nowrap}
+.cc-link:hover{background:var(--role-dk)}
+.check-ok{color:var(--green);font-size:12px}
+.check-bad{color:var(--red);font-size:12px}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="role-tag">Pillar 1 · Partner Alliance & GTM · Command Center</div>
+    <div class="role-name"><span>VP Alliances</span></div>
+    <div class="role-reports">Reports to: CEO · Week of 6 May 2026</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip warn">Partner ARR: 58% / 60% floor</span>
+      <span class="kpi-chip warn">Pipeline: 2.8× / 3× floor</span>
+      <span class="kpi-chip warn">Active AEs: 38 / 50 target</span>
+      <span class="kpi-chip bad">Friday report: 1h late</span>
+      <span class="kpi-chip">5 partners · 15 AEs tracked</span>
+    </div>
+  </div>
+  <a class="hub-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">← Back to Master Hub</a>
+</header>
+
+<main>
+
+<!-- ══════════════════════════════════════════
+     SECTION 1 — PARTNER AGGREGATE (technology level)
+══════════════════════════════════════════ -->
+<div class="card full">
+  <div class="card-head">
+    <div class="card-icon">🤝</div>
+    <div class="card-title">Partner Portfolio — Technology-Level Aggregate</div>
+    <div class="card-sub">5 partners · VP owns every row</div>
+  </div>
+  <div style="overflow-x:auto">
+  <table class="partner-table">
+    <thead>
+      <tr>
+        <th>Partner</th>
+        <th>Health</th>
+        <th>Active AEs</th>
+        <th>AE Coverage</th>
+        <th>Pipeline Total</th>
+        <th>MDF Used</th>
+        <th>Referrals QTD</th>
+        <th>Last QBR</th>
+        <th>VP Flag / Action</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><div class="pt-name">MuleSoft / Salesforce</div><div class="pt-tier">Tier 1 · Primary</div></td>
+        <td><span class="badge green">Healthy</span></td>
+        <td><span class="mono">14 / 18</span></td>
+        <td><div class="bar-wrap"><div class="bar-fill g" style="width:78%"></div></div> <span class="mono" style="color:var(--muted);font-size:9px">78%</span></td>
+        <td><span class="mono" style="color:var(--green)">$320K</span></td>
+        <td><span class="mono">96%</span></td>
+        <td><span class="mono" style="color:var(--green)">7</span></td>
+        <td><span class="mono">3wk ago ✓</span></td>
+        <td class="flag-text"><span class="w">4 inactive AEs — push before quarter close</span></td>
+        <td><button class="mini-btn" onclick="jumpFilter('mule',this)">AE View →</button></td>
+      </tr>
+      <tr>
+        <td><div class="pt-name">Boomi (Dell)</div><div class="pt-tier">Tier 1 · Watch</div></td>
+        <td><span class="badge amber">Watch</span></td>
+        <td><span class="mono">12 / 20</span></td>
+        <td><div class="bar-wrap"><div class="bar-fill a" style="width:60%"></div></div> <span class="mono" style="color:var(--muted);font-size:9px">60%</span></td>
+        <td><span class="mono" style="color:var(--amber)">$280K</span></td>
+        <td><span class="mono" style="color:var(--amber)">84%</span></td>
+        <td><span class="mono" style="color:var(--amber)">3</span></td>
+        <td><span class="mono" style="color:var(--amber)">6wk ago</span></td>
+        <td class="flag-text"><span class="w">QBR overdue. VP personally activate 2 dormant AEs this week</span></td>
+        <td><button class="mini-btn" onclick="jumpFilter('boomi',this)">AE View →</button></td>
+      </tr>
+      <tr>
+        <td><div class="pt-name">Workato</div><div class="pt-tier">Tier 2 · Growing</div></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">6 / 7</span></td>
+        <td><div class="bar-wrap"><div class="bar-fill g" style="width:86%"></div></div> <span class="mono" style="color:var(--muted);font-size:9px">86%</span></td>
+        <td><span class="mono" style="color:var(--green)">$140K</span></td>
+        <td><span class="mono">100%</span></td>
+        <td><span class="mono" style="color:var(--green)">4</span></td>
+        <td><span class="mono">2wk ago ✓</span></td>
+        <td class="flag-text">Healthy. Identify 3 more AEs for next quarter</td>
+        <td><button class="mini-btn" onclick="jumpFilter('work',this)">AE View →</button></td>
+      </tr>
+      <tr class="row-red">
+        <td><div class="pt-name">Informatica</div><div class="pt-tier">Tier 2 · At risk</div></td>
+        <td><span class="badge red">At Risk</span></td>
+        <td><span class="mono">5 / 5</span></td>
+        <td><div class="bar-wrap"><div class="bar-fill r" style="width:100%"></div></div> <span class="mono" style="color:var(--muted);font-size:9px">100%</span></td>
+        <td><span class="mono" style="color:var(--red)">$0</span></td>
+        <td><span class="mono" style="color:var(--red)">0%</span></td>
+        <td><span class="mono" style="color:var(--red)">0</span></td>
+        <td><span class="mono" style="color:var(--red)">10wk — overdue</span></td>
+        <td class="flag-text"><span class="r">CEO action — VP cannot fix exec-level disengagement. CEO → Informatica CRO this week</span></td>
+        <td><button class="mini-btn" onclick="jumpFilter('info',this)">AE View →</button></td>
+      </tr>
+      <tr>
+        <td><div class="pt-name">Celigo</div><div class="pt-tier">Tier 3 · Early</div></td>
+        <td><span class="badge grey">Early Stage</span></td>
+        <td><span class="mono">1 / 5</span></td>
+        <td><div class="bar-wrap"><div class="bar-fill a" style="width:20%"></div></div> <span class="mono" style="color:var(--muted);font-size:9px">20%</span></td>
+        <td><span class="mono">$40K</span></td>
+        <td><span class="mono" style="color:var(--amber)">55%</span></td>
+        <td><span class="mono" style="color:var(--muted)">1</span></td>
+        <td><span class="mono">4wk ago</span></td>
+        <td class="flag-text">Focus on AE enablement first. Do not push referrals yet</td>
+        <td><button class="mini-btn" onclick="jumpFilter('celi',this)">AE View →</button></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     SECTION 2 — AE PIPELINE TABLE (individual level)
+══════════════════════════════════════════ -->
+<div class="card full" id="ae-pipeline-section">
+  <div class="card-head">
+    <div class="card-icon">👤</div>
+    <div class="card-title">AE Pipeline — Individual Level</div>
+    <div class="card-sub">15 AEs · filterable · click column to sort</div>
+  </div>
+
+  <!-- Summary bar -->
+  <div class="ae-summary-bar">
+    <div class="ae-summary-stat">
+      <div class="ae-summary-val" style="color:var(--ink)">15</div>
+      <div class="ae-summary-lbl">Total AEs</div>
+    </div>
+    <div class="ae-summary-div"></div>
+    <div class="ae-summary-stat">
+      <div class="ae-summary-val" style="color:var(--red)">3</div>
+      <div class="ae-summary-lbl">Blocked</div>
+    </div>
+    <div class="ae-summary-div"></div>
+    <div class="ae-summary-stat">
+      <div class="ae-summary-val" style="color:var(--amber)">4</div>
+      <div class="ae-summary-lbl">Watch</div>
+    </div>
+    <div class="ae-summary-div"></div>
+    <div class="ae-summary-stat">
+      <div class="ae-summary-val" style="color:var(--green)">8</div>
+      <div class="ae-summary-lbl">On Track</div>
+    </div>
+    <div class="ae-summary-div"></div>
+    <div class="ae-summary-stat">
+      <div class="ae-summary-val" style="color:var(--amber)">$1.24M</div>
+      <div class="ae-summary-lbl">Total Pipeline</div>
+    </div>
+    <div class="ae-summary-div"></div>
+    <div class="ae-summary-stat">
+      <div class="ae-summary-val" style="color:var(--green)">12</div>
+      <div class="ae-summary-lbl">Active Deals</div>
+    </div>
+    <div class="ae-summary-div"></div>
+    <div class="ae-summary-stat">
+      <div class="ae-summary-val" style="color:var(--muted)">3</div>
+      <div class="ae-summary-lbl">Dormant (&gt;14d)</div>
+    </div>
+  </div>
+
+  <!-- Filter bar -->
+  <div class="filter-bar">
+    <span class="filter-label">Status:</span>
+    <button class="filter-btn active" onclick="filterAE('all',this)">All (15)</button>
+    <button class="filter-btn f-red" onclick="filterAE('blocked',this)">🔴 Blocked (3)</button>
+    <button class="filter-btn f-amber" onclick="filterAE('watch',this)">🟡 Watch (4)</button>
+    <button class="filter-btn f-green" onclick="filterAE('ok',this)">🟢 On Track (8)</button>
+    <div class="filter-sep"></div>
+    <span class="filter-label">Partner:</span>
+    <button class="filter-btn" onclick="filterPartner('mule',this)">MuleSoft</button>
+    <button class="filter-btn" onclick="filterPartner('boomi',this)">Boomi</button>
+    <button class="filter-btn" onclick="filterPartner('work',this)">Workato</button>
+    <button class="filter-btn" onclick="filterPartner('info',this)">Informatica</button>
+    <button class="filter-btn" onclick="filterPartner('celi',this)">Celigo</button>
+  </div>
+
+  <!-- AE Table -->
+  <div style="overflow-x:auto">
+  <table class="ae-table" id="aeTable">
+    <thead>
+      <tr>
+        <th>AE Name <span class="sort-icon">↕</span></th>
+        <th>Partner <span class="sort-icon">↕</span></th>
+        <th>Status</th>
+        <th>Open Deals <span class="sort-icon">↕</span></th>
+        <th>Pipeline $ <span class="sort-icon">↕</span></th>
+        <th>Primary Deal Stage</th>
+        <th>Last Outreach <span class="sort-icon">↕</span></th>
+        <th>Mtgs/Wk <span class="sort-icon">↕</span></th>
+        <th>CRM</th>
+        <th>SOW</th>
+        <th>VP Flag</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="aeTbody">
+      <!-- BLOCKED rows -->
+      <tr class="row-red" data-status="blocked" data-partner="boomi">
+        <td><div class="ae-name-cell"><span class="ae-nm">R. Sharma</span><span class="ae-territory">Boomi · APAC Mid-Market</span></div></td>
+        <td><span class="partner-tag boomi">Boomi</span></td>
+        <td><span class="badge red">Blocked</span></td>
+        <td><span class="mono">3</span></td>
+        <td><span class="mono" style="color:var(--amber)">$95K</span></td>
+        <td><div class="deal-stage">FinServe $45K<div class="stage-num">Procurement hold · 8d stuck</div></div></td>
+        <td><span class="last-act stale">Today</span></td>
+        <td><span class="mono warn" style="color:var(--amber)">1 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline"><span class="r">CEO email to CFO needed. VP drafted — awaiting CEO send.</span></td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr class="row-red" data-status="blocked" data-partner="info">
+        <td><div class="ae-name-cell"><span class="ae-nm">P. Nair</span><span class="ae-territory">Informatica · Enterprise</span></div></td>
+        <td><span class="partner-tag info">Informatica</span></td>
+        <td><span class="badge red">Blocked</span></td>
+        <td><span class="mono">0</span></td>
+        <td><span class="mono" style="color:var(--red)">$0</span></td>
+        <td><div class="deal-stage">No active deals<div class="stage-num">Partner exec disengaged</div></div></td>
+        <td><span class="last-act dead">21d ago</span></td>
+        <td><span class="mono" style="color:var(--red)">0 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline"><span class="r">Partner exec non-responsive. Escalated to VP. CEO must contact Informatica CRO.</span></td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr class="row-red" data-status="blocked" data-partner="boomi">
+        <td><div class="ae-name-cell"><span class="ae-nm">K. Mehta</span><span class="ae-territory">Boomi · SMB West</span></div></td>
+        <td><span class="partner-tag boomi">Boomi</span></td>
+        <td><span class="badge red">Blocked</span></td>
+        <td><span class="mono">1</span></td>
+        <td><span class="mono" style="color:var(--amber)">$28K</span></td>
+        <td><div class="deal-stage">RetailCo $28K<div class="stage-num">Legal review · 12d stuck</div></div></td>
+        <td><span class="last-act stale">2d ago</span></td>
+        <td><span class="mono" style="color:var(--amber)">2 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline"><span class="r">Deal stuck >10d. Alliance Mgr escalating to VP this week.</span></td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <!-- WATCH rows -->
+      <tr class="row-amber" data-status="watch" data-partner="mule">
+        <td><div class="ae-name-cell"><span class="ae-nm">A. Iyer</span><span class="ae-territory">MuleSoft · Enterprise East</span></div></td>
+        <td><span class="partner-tag mule">MuleSoft</span></td>
+        <td><span class="badge amber">Watch</span></td>
+        <td><span class="mono">2</span></td>
+        <td><span class="mono" style="color:var(--amber)">$72K</span></td>
+        <td><div class="deal-stage">TechCorp $72K<div class="stage-num">SOW at CEO · 18h waiting</div></div></td>
+        <td><span class="last-act fresh">Today</span></td>
+        <td><span class="mono" style="color:var(--green)">4 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline"><span class="w">SOW sign-off pending with CEO. Chase if no response by EOD.</span></td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr class="row-amber" data-status="watch" data-partner="boomi">
+        <td><div class="ae-name-cell"><span class="ae-nm">S. Patel</span><span class="ae-territory">Boomi · Mid-Market South</span></div></td>
+        <td><span class="partner-tag boomi">Boomi</span></td>
+        <td><span class="badge amber">Watch</span></td>
+        <td><span class="mono">1</span></td>
+        <td><span class="mono" style="color:var(--amber)">$42K</span></td>
+        <td><div class="deal-stage">LogiTech $42K<div class="stage-num">Proposal sent · awaiting feedback</div></div></td>
+        <td><span class="last-act stale">4d ago</span></td>
+        <td><span class="mono" style="color:var(--amber)">2 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline"><span class="w">Dormant AE — no outreach in 4d. Alliance Mgr to call today.</span></td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr class="row-amber" data-status="watch" data-partner="mule">
+        <td><div class="ae-name-cell"><span class="ae-nm">T. Rao</span><span class="ae-territory">MuleSoft · APAC Commercial</span></div></td>
+        <td><span class="partner-tag mule">MuleSoft</span></td>
+        <td><span class="badge amber">Watch</span></td>
+        <td><span class="mono">2</span></td>
+        <td><span class="mono" style="color:var(--amber)">$55K</span></td>
+        <td><div class="deal-stage">Fintech $35K<div class="stage-num">Discovery · 2 more calls needed</div></div></td>
+        <td><span class="last-act stale">3d ago</span></td>
+        <td><span class="mono" style="color:var(--amber)">2 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline"><span class="w">Below meeting floor 2 weeks. Monitor closely.</span></td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr class="row-amber" data-status="watch" data-partner="celi">
+        <td><div class="ae-name-cell"><span class="ae-nm">D. Kumar</span><span class="ae-territory">Celigo · SMB All</span></div></td>
+        <td><span class="partner-tag celi">Celigo</span></td>
+        <td><span class="badge amber">Watch</span></td>
+        <td><span class="mono">1</span></td>
+        <td><span class="mono">$40K</span></td>
+        <td><div class="deal-stage">RetailGroup $40K<div class="stage-num">Early qualification</div></div></td>
+        <td><span class="last-act stale">5d ago</span></td>
+        <td><span class="mono" style="color:var(--amber)">1 / 3 floor</span></td>
+        <td><span class="check-bad">✗</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline"><span class="w">CRM not logged. Early-stage AE — needs Alliance Mgr coaching.</span></td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <!-- ON TRACK rows -->
+      <tr data-status="ok" data-partner="mule">
+        <td><div class="ae-name-cell"><span class="ae-nm">V. Singh</span><span class="ae-territory">MuleSoft · Enterprise West</span></div></td>
+        <td><span class="partner-tag mule">MuleSoft</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">3</span></td>
+        <td><span class="mono" style="color:var(--green)">$148K</span></td>
+        <td><div class="deal-stage">BankCo $80K<div class="stage-num">Negotiation · close this week</div></div></td>
+        <td><span class="last-act fresh">Today</span></td>
+        <td><span class="mono" style="color:var(--green)">5 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">Top performer. Close BankCo this week.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-status="ok" data-partner="mule">
+        <td><div class="ae-name-cell"><span class="ae-nm">N. Krishnan</span><span class="ae-territory">MuleSoft · Commercial APAC</span></div></td>
+        <td><span class="partner-tag mule">MuleSoft</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">2</span></td>
+        <td><span class="mono" style="color:var(--green)">$100K</span></td>
+        <td><div class="deal-stage">InsureCo $60K<div class="stage-num">Proposal submitted</div></div></td>
+        <td><span class="last-act fresh">Yesterday</span></td>
+        <td><span class="mono" style="color:var(--green)">4 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">Healthy. Proposal follow-up due in 2d.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-status="ok" data-partner="work">
+        <td><div class="ae-name-cell"><span class="ae-nm">M. Pillai</span><span class="ae-territory">Workato · Mid-Market</span></div></td>
+        <td><span class="partner-tag work">Workato</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">2</span></td>
+        <td><span class="mono" style="color:var(--green)">$85K</span></td>
+        <td><div class="deal-stage">TechStart $50K<div class="stage-num">Demo complete · next steps</div></div></td>
+        <td><span class="last-act fresh">Today</span></td>
+        <td><span class="mono" style="color:var(--green)">4 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">On track. Push for decision timeline this week.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-status="ok" data-partner="work">
+        <td><div class="ae-name-cell"><span class="ae-nm">J. Thomas</span><span class="ae-territory">Workato · Enterprise</span></div></td>
+        <td><span class="partner-tag work">Workato</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">1</span></td>
+        <td><span class="mono" style="color:var(--green)">$55K</span></td>
+        <td><div class="deal-stage">HealthGroup $55K<div class="stage-num">SOW being drafted</div></div></td>
+        <td><span class="last-act fresh">Yesterday</span></td>
+        <td><span class="mono" style="color:var(--green)">3 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">SOW being drafted — ensure floor price compliance.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-status="ok" data-partner="boomi">
+        <td><div class="ae-name-cell"><span class="ae-nm">H. Reddy</span><span class="ae-territory">Boomi · Enterprise East</span></div></td>
+        <td><span class="partner-tag boomi">Boomi</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">2</span></td>
+        <td><span class="mono" style="color:var(--green)">$90K</span></td>
+        <td><div class="deal-stage">MediaCorp $65K<div class="stage-num">Technical eval in progress</div></div></td>
+        <td><span class="last-act fresh">Today</span></td>
+        <td><span class="mono" style="color:var(--green)">4 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">Support technical eval. DH to provide SA resource if needed.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-status="ok" data-partner="mule">
+        <td><div class="ae-name-cell"><span class="ae-nm">P. Verma</span><span class="ae-territory">MuleSoft · Public Sector</span></div></td>
+        <td><span class="partner-tag mule">MuleSoft</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">1</span></td>
+        <td><span class="mono" style="color:var(--green)">$68K</span></td>
+        <td><div class="deal-stage">GovDept $68K<div class="stage-num">Procurement cycle — 3wk</div></div></td>
+        <td><span class="last-act fresh">Yesterday</span></td>
+        <td><span class="mono" style="color:var(--green)">3 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">Long public sector cycle. Healthy — no action needed.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-status="ok" data-partner="work">
+        <td><div class="ae-name-cell"><span class="ae-nm">C. Nambiar</span><span class="ae-territory">Workato · Commercial</span></div></td>
+        <td><span class="partner-tag work">Workato</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">0</span></td>
+        <td><span class="mono" style="color:var(--muted)">Pipeline building</span></td>
+        <td><div class="deal-stage">3 leads qualifying<div class="stage-num">No deals yet — early</div></div></td>
+        <td><span class="last-act fresh">Today</span></td>
+        <td><span class="mono" style="color:var(--green)">4 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">New AE, building pipeline. Activity level healthy.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-status="ok" data-partner="mule">
+        <td><div class="ae-name-cell"><span class="ae-nm">B. George</span><span class="ae-territory">MuleSoft · Mid-Market North</span></div></td>
+        <td><span class="partner-tag mule">MuleSoft</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><span class="mono">2</span></td>
+        <td><span class="mono" style="color:var(--green)">$77K</span></td>
+        <td><div class="deal-stage">DigitalCo $45K<div class="stage-num">Negotiation stage</div></div></td>
+        <td><span class="last-act fresh">Today</span></td>
+        <td><span class="mono" style="color:var(--green)">5 / 3 floor</span></td>
+        <td><span class="check-ok">✓</span></td>
+        <td><span class="check-ok">0</span></td>
+        <td class="flag-inline">Strong performer. Support with discount authority if needed.</td>
+        <td><a class="cc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ══ MY KPIs ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">📊</div><div class="card-title">My KPIs This Week</div></div>
+  <div class="card-body">
+    <div class="kpi-row"><div class="kpi-label">Partner-sourced ARR %</div><div class="kpi-val">58%</div><div class="kpi-note">≥60% floor</div><div class="dot warn"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Pipeline coverage</div><div class="kpi-val">2.8×</div><div class="kpi-note">3× floor — watch</div><div class="dot warn"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Active AEs nurtured</div><div class="kpi-val">38 / 50</div><div class="kpi-note">target 50</div><div class="dot warn"></div></div>
+    <div class="kpi-row"><div class="kpi-label">MDF utilised (org-wide)</div><div class="kpi-val">91%</div><div class="kpi-note">target 100%</div><div class="dot ok"></div></div>
+    <div class="kpi-row"><div class="kpi-label">SOW floor breaches</div><div class="kpi-val">0</div><div class="kpi-note">must be 0 always</div><div class="dot ok"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Friday revenue report</div><div class="kpi-val">1h 42m late</div><div class="kpi-note">5pm hard SLA</div><div class="dot bad"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Partner QBRs current</div><div class="kpi-val">3 / 5</div><div class="kpi-note">Boomi + Informatica overdue</div><div class="dot warn"></div></div>
+  </div>
+</div>
+
+<!-- ══ ACTIONS TODAY ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">⚡</div><div class="card-title">Actions Required Today</div><div class="card-count" style="background:var(--red-lt);color:var(--red)">4 items</div></div>
+  <div class="card-body">
+    <div class="action-item"><div class="adot red"></div><div><div class="action-title">Send Friday revenue report — 1h 42m past SLA</div><div class="action-sub">CEO waiting. Pipeline total, deals advancing/stuck, partner breakdown by technology, forecast vs target.</div></div></div>
+    <div class="action-item"><div class="adot red"></div><div><div class="action-title">Draft CEO email for FinServe $45K (R. Sharma)</div><div class="action-sub">Deal stuck 8d. Write the draft for CEO to send to client CFO. VP leverage insufficient — only CEO breaks procurement holds.</div></div></div>
+    <div class="action-item"><div class="adot amber"></div><div><div class="action-title">Personally activate 2 dormant Boomi AEs</div><div class="action-sub">Partner ARR at 58% vs 60% floor. AE-level outreach from Alliance Mgr not moving them — VP direct call required.</div></div></div>
+    <div class="action-item"><div class="adot amber"></div><div><div class="action-title">Book Boomi QBR — 6 weeks overdue</div><div class="action-sub">VP-level attendance required. Contact Boomi partner manager directly today. Non-negotiable for Tier 1 partners.</div></div></div>
+  </div>
+</div>
+
+<!-- ══ WAITING ON ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">⏳</div><div class="card-title">Waiting On</div></div>
+  <div class="card-body">
+    <div class="wait-item"><div class="wait-from">CEO</div><div class="wait-text">SOW sign-off — TechCorp $72K — submitted 18h ago, SLA is 24h</div></div>
+    <div class="wait-item"><div class="wait-from">CEO</div><div class="wait-text">Executive outreach to Informatica CRO — VP cannot fix exec disengagement</div></div>
+    <div class="wait-item"><div class="wait-from">Alliance Mgr</div><div class="wait-text">Win/loss debrief for last 3 closed deals — 5 days overdue</div></div>
+    <div class="wait-item"><div class="wait-from">Head of GTM</div><div class="wait-text">Monthly ICP review + SDR sequence adjustment plan</div></div>
+  </div>
+</div>
+
+<!-- ══ ESCALATION ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">🚨</div><div class="card-title">Escalation Path</div></div>
+  <div class="card-body">
+    <div class="escalation-box">
+      Deal stuck &gt;5 days → CEO same day<br/>
+      SOW above $50K → CEO within 24hr<br/>
+      AE below meeting floor 3 consecutive weeks → VP + GTM Head plan to CEO by Friday<br/>
+      Partner exec disengagement → CEO direct outreach to partner CRO<br/>
+      SDR meetings below floor week 4+ → root cause + recovery plan to CEO
+    </div>
+  </div>
+</div>
+
+<!-- ══ DOC LINKS ══ -->
+<div class="card full">
+  <div class="card-head"><div class="card-icon">📁</div><div class="card-title">My Documents</div></div>
+  <div class="doc-links">
+    <a class="doc-link primary" href="P1_VPAlliances_Cadence_v3.html" target="_blank">My Cadence Doc</a>
+    <a class="doc-link primary" href="Pillar1-Partner_Alliance-GTM-Processes-v2.html" target="_blank">Pillar 1 Process Bible</a>
+    <a class="doc-link" href="Alliance_Mgr_Command_Center.html" target="_blank">Alliance Mgr Command Center</a>
+    <a class="doc-link" href="SDR_BDR_Command_Center.html" target="_blank">SDR/BDR Command Center</a>
+    <a class="doc-link" href="Head_GTM_Command_Center.html" target="_blank">GTM Head Command Center</a>
+    <a class="doc-link primary" href="../CEO/DataSkate_GTM_Strategy_v2.html" target="_blank">GTM Strategy</a>
+    <a class="doc-link" href="../CEO/DataSkate_RACI_v3.html" target="_blank">RACI Matrix</a>
+    <a class="doc-link" href="../CEO/01_DataSkate_Org_Structure_v2.html" target="_blank">Org Structure</a>
+    <a class="doc-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">Master Hub</a>
+  </div>
+</div>
+
+</main>
+<footer>
+  <span>DataSkate · VP Alliances · Command Center · Pillar 1 · Partner Alliance & GTM</span>
+  <span>5 partners · 15 AEs · Reports to CEO</span>
+</footer>
+
+<script>
+// ── JUMP FROM PARTNER TABLE → AE TABLE, filtered by partner ──
+function jumpFilter(partner, btn) {
+  // Find the matching partner filter button in the filter bar and trigger it
+  const filterBtns = document.querySelectorAll('.filter-bar .filter-btn');
+  let partnerBtn = null;
+  filterBtns.forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + partner + "'")) {
+      partnerBtn = b;
+    }
+  });
+  if (partnerBtn) filterPartner(partner, partnerBtn);
+  // Scroll AE section into view
+  const target = document.getElementById('ae-pipeline-section');
+  if (target) target.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+// ── FILTER BY STATUS ──
+function filterAE(status, btn) {
+  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => {
+    if (b.onclick.toString().includes('filterAE') || b.onclick.toString().includes('filterPartner')) {
+      b.classList.remove('active');
+    }
+  });
+  btn.classList.add('active');
+  document.querySelectorAll('#aeTbody tr').forEach(row => {
+    if (status === 'all') {
+      row.classList.remove('hidden');
+    } else {
+      const rowStatus = row.getAttribute('data-status');
+      row.classList.toggle('hidden', rowStatus !== status);
+    }
+  });
+  updateCount();
+}
+
+// ── FILTER BY PARTNER ──
+function filterPartner(partner, btn) {
+  // Clear all active states
+  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#aeTbody tr').forEach(row => {
+    const rowPartner = row.getAttribute('data-partner');
+    row.classList.toggle('hidden', rowPartner !== partner);
+  });
+  updateCount();
+}
+
+function updateCount() {
+  const visible = document.querySelectorAll('#aeTbody tr:not(.hidden)').length;
+  const total = document.querySelectorAll('#aeTbody tr').length;
+  // Update summary bar first stat
+}
+
+// ── SORT by column ──
+let sortDir = {};
+document.querySelectorAll('.ae-table th').forEach((th, idx) => {
+  th.addEventListener('click', () => {
+    const tbody = document.getElementById('aeTbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const asc = !sortDir[idx];
+    sortDir = {};
+    sortDir[idx] = asc;
+    rows.sort((a, b) => {
+      const aT = (a.cells[idx] ? a.cells[idx].innerText : '').trim();
+      const bT = (b.cells[idx] ? b.cells[idx].innerText : '').trim();
+      const aN = parseFloat(aT.replace(/[^0-9.]/g, ''));
+      const bN = parseFloat(bT.replace(/[^0-9.]/g, ''));
+      if (!isNaN(aN) && !isNaN(bN)) return asc ? aN - bN : bN - aN;
+      return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+    th.querySelectorAll('.sort-icon').forEach(s => s.textContent = asc ? '↑' : '↓');
+  });
+});
+</script>
+</body>
+</html>

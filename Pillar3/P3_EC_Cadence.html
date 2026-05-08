@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DataSkate · EC · Cadence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;--border:#E5E7EB;--role-color:#444441;--role-lt:#F1EFE8;--role-dk:#444441;--amber:#D97706;--amber-lt:#FFFBEB;--amber-dk:#92400E;--teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;--coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B1C0A;--green:#15803D;--green-lt:#F0FDF4;--green-dk:#14532D;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+header{background:var(--ink);color:#fff;padding:28px 40px;}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:5px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff}
+.role-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.65)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid var(--border);font-size:11px;color:var(--muted)}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--amber-lt);color:var(--amber-dk)}
+.t-good{background:#EEF1F7;color:#141C2E}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.freq-head{padding:10px 14px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--amber);border-color:var(--amber);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:600;margin-left:3px}
+.report-box{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.rb-hdr{background:var(--ink);padding:13px 18px}
+.rb-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--amber)}
+.rb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.rb-row{padding:10px 18px;border-bottom:1px solid var(--border);font-size:12px;display:grid;grid-template-columns:120px 1fr;gap:12px}
+.rb-row:last-child{border-bottom:none}
+.rb-label{font-weight:600;color:var(--ink)}
+.rb-val{color:var(--muted);line-height:1.5}
+.alert{border-radius:10px;padding:11px 14px;font-size:12px;line-height:1.5;border-left:3px solid;margin-top:16px}
+.alert-g{background:var(--green-lt);border-color:var(--green);color:var(--green-dk)}
+.alert-r{background:var(--coral-lt);border-color:var(--coral);color:var(--coral-dk)}
+.not-box{background:var(--coral-lt);border:1px solid var(--coral-dk);border-radius:12px;padding:14px 18px;margin-top:20px}
+.not-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--coral-dk);margin-bottom:8px}
+.not-item{display:flex;gap:8px;font-size:12px;color:var(--coral-dk);margin-bottom:6px;line-height:1.4}
+footer{background:var(--ink);padding:14px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="AdminHead_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">EC/Ops Command Center</a></div>
+<header>
+  <div class="role-tag">Pillar 3 · Enablement · Cadence</div>
+  <div class="role-name">Enablement Coordinator (EC)</div>
+  <div class="role-sub">Administers ramp and cert programmes defined by DH · Reports to Admin Head · Friday 12pm report is primary output</div>
+  <div class="kpi-bar">
+    <span class="kpi-chip">Friday 12pm report — non-negotiable</span>
+    <span class="kpi-chip">Cert announcement ≤24hr of pass</span>
+    <span class="kpi-chip">Reimbursement ≤5 business days</span>
+    <span class="kpi-chip">14-day exam reminder</span>
+  </div>
+</header>
+<main>
+<div class="legend">Task tiers: &nbsp;<span class="tb t-must">Must</span>&nbsp;<span class="tb t-good">Good</span>&nbsp;<span class="tb t-nice">Nice</span>&nbsp;<span class="tb t-self">Self</span>&nbsp;<span class="tb t-brand">Brand</span>&nbsp;<span class="tb t-cross">Cross-dept</span></div>
+
+<!-- WHAT YOU RECEIVE -->
+<div class="section"><div class="sec-title">📥 What you receive</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">On new hire confirmed</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">DH 90-day ramp plan — what the new hire must complete D1–D91 <span class="proc-ref">E01</span></div><div class="task-sub">Received from Delivery Head on offer countersign</div><div class="task-tool">🛠 Notion · Slack from DH</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">DH cert roadmap — which certs, in which order, by which milestone <span class="proc-ref">E02</span></div><div class="task-sub">EC adds to cert tracker on Day 1</div><div class="task-tool">🛠 Notion cert tracker</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">H05 Day 1 confirmation — tools live, buddy assigned, schedule set <span class="proc-ref">H05</span></div><div class="task-sub">Received from HR Manager before Day 1</div><div class="task-tool">🛠 Notion H05 checklist</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Ongoing / weekly</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Exam result from employee — pass or fail confirmation <span class="proc-ref">E02</span></div><div class="task-sub">Employee submits within 24hr of exam</div><div class="task-tool">🛠 Notion form / Slack</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Reimbursement claim — pass certificate + receipt from employee <span class="proc-ref">E03</span></div><div class="task-sub">EC validates cert is on DH roadmap before processing</div><div class="task-tool">🛠 Notion reimbursement form</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Milestone completion updates from new hire or Practice Head <span class="proc-ref">E01</span></div><div class="task-sub">Weekly check-in or Notion task updates</div><div class="task-tool">🛠 Notion ramp tracker</div></div><span class="tb2 t-good">Good</span></div>
+</div></div>
+</div></div>
+
+<!-- WHAT YOU DO -->
+<div class="section"><div class="sec-title">⚡ What you do</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">Daily</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Check cert tracker — any exam date within 14 days without a reminder sent? <span class="proc-ref">E02</span></div><div class="task-tool">🛠 Notion cert tracker · 5 min</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Check ramp tracker — any new hire milestone that was due yesterday not marked complete? <span class="proc-ref">E01</span></div><div class="task-sub">If slipped → flag to Admin Head same day. Do not wait for Friday.</div><div class="task-tool">🛠 Notion ramp tracker · 5 min</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Process any reimbursement claims received — submit to Finance within 24hr of receiving <span class="proc-ref">E03</span></div><div class="task-tool">🛠 Notion → Finance Lead task</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Weekly — Friday is the key day</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">FRIDAY by 12pm: Send ramp + cert RAG report to Admin Head <span class="proc-ref">E04</span></div><div class="task-sub">Hard deadline. 5 lines. RAG per domain. Passes this week. Fails this week. Any flags.</div><div class="task-tool">🛠 Notion template → Slack to Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Send 14-day exam reminders for any cert due in next 2 weeks <span class="proc-ref">E02</span></div><div class="task-sub">Email or Slack to employee + their Practice Head</div><div class="task-tool">🛠 Notion exam date view · filtered by due date</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Update cert tracker — any new certs booked, any dates changed, any results logged <span class="proc-ref">E02</span></div><div class="task-tool">🛠 Notion cert tracker · Thu/Fri</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Post cert achievement announcement within 24hr of confirmed pass <span class="proc-ref">E05</span></div><div class="task-sub">Slack #wins · tag CEO, DH, Practice Head · ask consent for LinkedIn</div><div class="task-tool">🛠 Slack #wins · LinkedIn if consent</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Extract monthly cert count per partner — cross-check against L03 partner minimums <span class="proc-ref">L03</span></div><div class="task-sub">Monthly task · first week. Share with Admin Head.</div><div class="task-tool">🛠 Notion cert tracker filtered by partner</div></div><span class="tb2 t-good">Good</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">On cert pass</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Log pass in cert tracker — update status, add date, note cert level <span class="proc-ref">E02</span></div><div class="task-sub">Within 24hr of result received</div><div class="task-tool">🛠 Notion cert tracker</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Trigger reimbursement — create Finance task with amount, employee, cert, receipt attached <span class="proc-ref">E03</span></div><div class="task-tool">🛠 Notion → Finance Lead</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Post Slack #wins announcement within 24hr — cert, employee, what it means for DataSkate <span class="proc-ref">E05</span></div><div class="task-tool">🛠 Slack #wins · tag CEO + DH</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Ask employee for LinkedIn consent — if yes, notify Head of GTM within 24hr <span class="proc-ref">E05</span></div><div class="task-tool">🛠 Slack to employee · Slack to Head of GTM</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#9B1C0A">On cert fail</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Log fail in cert tracker — note result, flag to Admin Head same day <span class="proc-ref">E02</span></div><div class="task-sub">Do not wait for Friday report. Flag immediately.</div><div class="task-tool">🛠 Notion cert tracker + Slack to Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Notify DH — awaiting decision: rebook or adjust roadmap. EC does not decide this. <span class="proc-ref">E02</span></div><div class="task-sub">EC notifies. DH decides. EC executes whatever DH decides.</div><div class="task-tool">🛠 Slack to DH · same day</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">No reimbursement on fail — EC confirms to Finance no payment due</div><div class="task-tool">🛠 Notion — no Finance task created</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+</div></div>
+
+<!-- WHAT YOU SEND UP -->
+<div class="section"><div class="sec-title">📤 What you send up — Friday 12pm report</div>
+<div class="report-box">
+  <div class="rb-hdr"><div class="rb-title">Friday 12pm Report to Admin Head — E04 · 5 lines max · RAG · no narrative</div><div class="rb-sub">Admin Head uses this to build the Enablement section of the Friday 3pm CEO briefing. If it's late, Admin Head's briefing is incomplete.</div></div>
+  <div class="rb-row"><div class="rb-label">Ramp status</div><div class="rb-val">[Name] — Day X of 90 — on track / behind / at risk. Any milestone missed this week and why.</div></div>
+  <div class="rb-row"><div class="rb-label">Cert pipeline</div><div class="rb-val">[Name] — [Cert] — exam date [date] — booked / on track / at risk.</div></div>
+  <div class="rb-row"><div class="rb-label">Passes this week</div><div class="rb-val">[Name] passed [Cert]. Reimbursement submitted (E03). Announcement posted (E05).</div></div>
+  <div class="rb-row"><div class="rb-label">Fails this week</div><div class="rb-val">[Name] failed [Cert]. DH notified. Awaiting rebook/roadmap decision from DH.</div></div>
+  <div class="rb-row"><div class="rb-label">Flags &amp; asks</div><div class="rb-val">Anything needing Admin Head or CEO attention. If nothing — "No flags."</div></div>
+</div>
+<div class="alert alert-g"><strong>If nothing to report</strong> — send "All ramps on track. No certs due this week. No flags." Still send it. Friday 12pm. Every week.</div>
+<div class="alert alert-r"><strong>Red flags that bypass Friday</strong> — D91 gate failure (email Admin Head same day) · Cert pass rate drops below 60% (flag immediately) · Ramp completely blocked (flag immediately, do not wait).</div>
+</div>
+
+<div class="not-box">
+<div class="not-title">EC Must NOT Do These</div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Define cert roadmap or ramp content — DH defines. EC executes and tracks.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Answer technical questions from new hires — route to Dev Lead or Practice Head immediately.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Approve reimbursements for certs not on DH's roadmap — Admin Head approval required first.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Post LinkedIn content without written consent from the employee.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Make ramp gate decisions — EC reports status. DH decides pass/fail at D30/D60/D91 gates.</div></div>
+</div>
+</main>
+<footer><span>DataSkate · EC Cadence · Q2 2026</span><span>Pillar 3 · Reports to Admin Head · Friday 12pm is the hard deadline</span></footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

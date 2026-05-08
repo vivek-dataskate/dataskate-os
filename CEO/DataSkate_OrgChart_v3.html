@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate — Org Structure 2026 v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;
+  --teal:#0D7A6B;
+  --slate:#2A3550;
+  --amber:#D97706;
+  --ink:#111827;
+  --muted:#6B7280;
+  --border:#D1D5DB;
+  --white:#FFFFFF;
+  --bg:#F0EEE9;
+  --p1:#1B6CA8;
+  --p2:#0D7A6B;
+  --p3:#2A3550;
+  --p1-lt:#EBF4FB;
+  --p2-lt:#E6F5F2;
+  --p3-lt:#EEF1F7;
+}
+
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--ink);
+  padding:32px 20px 60px;
+  min-width:960px;
+}
+
+/* ─── LOGO ─── */
+.logo-bar{display:flex;align-items:center;gap:8px;margin-bottom:28px;}
+.logo-mark{
+  width:28px;height:28px;border-radius:5px;background:var(--coral);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#fff;
+}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--ink);}
+
+/* ─── CHART WRAPPER ─── */
+.chart{display:flex;flex-direction:column;align-items:center;}
+
+/* ─── CEO ─── */
+.ceo-node{
+  background:var(--ink);color:#fff;
+  border-radius:10px;padding:14px 28px;
+  width:340px;text-align:center;
+}
+.ceo-node .n-title{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;}
+.ceo-node .n-tag{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--coral);margin-bottom:4px;}
+.ceo-node .n-sub{font-size:9.5px;color:rgba(255,255,255,.5);margin-top:4px;line-height:1.5;}
+
+/* ─── V LINE ─── */
+.vl{width:2px;background:var(--border);margin:0 auto;}
+
+/* ─── H CONNECTOR ─── */
+.hbar{
+  height:2px;background:var(--border);
+  margin:0 auto;
+}
+
+/* ─── COS ROW ─── */
+.cos-row{
+  display:flex;align-items:center;gap:0;
+  width:100%;max-width:900px;
+  justify-content:center;
+  position:relative;
+}
+.buf-label{
+  font-family:'Syne',sans-serif;font-size:7px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  writing-mode:vertical-rl;transform:rotate(180deg);
+  padding:0 6px;border-left:2px dashed var(--border);
+  height:70px;display:flex;align-items:center;
+}
+.cos-node{
+  background:var(--slate);color:#fff;
+  border-radius:10px;padding:14px 18px;
+  width:280px;
+}
+.cos-node .n-title{font-family:'Syne',sans-serif;font-weight:800;font-size:12px;line-height:1.3;}
+.cos-node .n-sub{font-size:9px;color:rgba(255,255,255,.5);margin-top:4px;line-height:1.5;}
+.cos-node .cos-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;}
+.cos-chip{background:rgba(255,255,255,.1);border-radius:4px;padding:2px 7px;font-size:8.5px;color:rgba(255,255,255,.8);}
+
+.fac-connector{
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 10px;
+  font-family:'Syne',sans-serif;font-size:7.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  gap:4px;
+}
+.fac-line-h{width:40px;height:2px;background:var(--border);}
+
+/* ─── COE ─── */
+.coe-node{
+  background:var(--white);
+  border:1.5px dashed #8896B3;
+  border-radius:10px;padding:12px 14px;
+  width:220px;
+}
+.coe-node .n-title{font-family:'Syne',sans-serif;font-weight:800;font-size:10.5px;color:var(--slate);letter-spacing:.01em;}
+.coe-node .n-sub{font-size:8.5px;color:var(--muted);margin-top:2px;}
+.coe-inner{margin-top:8px;display:flex;flex-direction:column;gap:5px;}
+.coe-row{
+  display:flex;align-items:center;gap:5px;
+  background:var(--p3-lt);border:1px solid #CBD5E0;
+  border-radius:5px;padding:4px 8px;font-size:8.5px;color:var(--slate);
+}
+.coe-arrow{color:var(--muted);font-size:9px;}
+.phase-badge{
+  background:var(--ink);color:#fff;
+  border-radius:4px;padding:3px 8px;
+  font-family:'Syne',sans-serif;font-size:7.5px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;
+  white-space:nowrap;
+}
+.std-connector{display:flex;align-items:center;gap:3px;margin-top:6px;}
+.std-dash{
+  width:22px;height:2px;
+  background:repeating-linear-gradient(90deg,var(--coral) 0,var(--coral) 3px,transparent 3px,transparent 6px);
+}
+.std-arrow-head{color:var(--coral);font-size:9px;font-weight:700;}
+
+/* ─── PILLARS ─── */
+.pillars-row{
+  display:flex;align-items:flex-start;justify-content:center;
+  gap:0;width:100%;max-width:980px;
+  position:relative;margin-top:0;
+}
+.pillars-row::before{
+  content:'';position:absolute;top:0;left:12%;right:12%;
+  height:2px;background:var(--border);
+}
+
+.pillar{
+  display:flex;flex-direction:column;align-items:center;
+  flex:1;max-width:300px;padding:0 6px;
+}
+.pillar-vtop{width:2px;height:24px;background:var(--border);}
+
+/* Pillar header */
+.ph{
+  width:100%;border-radius:10px;
+  padding:13px 14px;text-align:center;
+}
+.ph.p1{background:var(--p1);}
+.ph.p2{background:var(--p2);}
+.ph.p3{background:var(--p3);}
+.ph-tag{font-family:'Syne',sans-serif;font-size:8px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:3px;}
+.ph-name{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff;line-height:1.15;}
+.ph-head{font-size:9.5px;color:rgba(255,255,255,.65);margin-top:4px;}
+.ph-head strong{color:#fff;}
+.ph-count{font-size:8.5px;color:rgba(255,255,255,.45);margin-top:2px;display:block;}
+
+/* Sub-label */
+.sub-lbl{
+  font-family:'Syne',sans-serif;font-size:7.5px;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--muted);
+  width:100%;margin:10px 0 2px 4px;
+}
+
+/* Role card */
+.rc{
+  width:100%;background:var(--white);
+  border:1px solid var(--border);border-radius:8px;
+  padding:9px 12px;margin-top:5px;
+}
+.rc.p1{border-left:3px solid var(--p1);}
+.rc.p2{border-left:3px solid var(--p2);}
+.rc.p3{border-left:3px solid var(--p3);}
+.rc.amber{border-left:3px solid var(--amber);background:#FFFBEB;}
+.rc.warn{border-left:3px solid var(--coral);background:#FDF0ED;}
+.rc-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px;}
+.rc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:var(--ink);line-height:1.25;}
+.rc-badge{
+  flex-shrink:0;border-radius:4px;padding:2px 6px;
+  font-family:'Syne',sans-serif;font-size:7.5px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;white-space:nowrap;
+}
+.badge-exec{background:#FDF0ED;color:var(--coral);}
+.badge-lead{background:var(--p2-lt);color:var(--teal);}
+.badge-ops{background:var(--p3-lt);color:var(--slate);}
+.badge-jr{background:#FFFBEB;color:var(--amber);}
+.badge-fn{background:#F3F4F6;color:var(--muted);}
+.badge-outbound{background:#FDF0ED;color:var(--coral);font-weight:700;}
+.rc-kpi{font-size:8.5px;color:var(--muted);margin-top:5px;line-height:1.4;display:flex;align-items:flex-start;gap:4px;}
+.kpi-dot{width:5px;height:5px;border-radius:50%;background:var(--coral);flex-shrink:0;margin-top:3px;}
+
+/* Nested group */
+.ng{
+  width:100%;border:1px dashed var(--border);
+  border-radius:7px;padding:7px 9px 8px;margin-top:6px;
+}
+.ng.p2b{border-color:var(--teal);}
+.ng-lbl{font-family:'Syne',sans-serif;font-size:7.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.ng-lbl.teal{color:var(--teal);}
+.chips{display:flex;flex-wrap:wrap;gap:3px;}
+.chip{border-radius:4px;padding:2px 7px;font-size:8.5px;font-weight:500;}
+.chip.teal{background:var(--p2-lt);border:1px solid #9FD8CF;color:var(--teal);}
+.chip.slate{background:var(--p3-lt);border:1px solid #B0BBCF;color:var(--slate);}
+.chip.amber{background:#FFFBEB;border:1px solid #FDE68A;color:var(--amber);}
+
+/* Gate box */
+.gates{
+  width:100%;background:var(--p2-lt);
+  border:1px solid #9FD8CF;border-radius:7px;
+  padding:8px 10px;margin-top:6px;
+}
+.gates-title{font-family:'Syne',sans-serif;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px;}
+.gate-item{display:flex;align-items:flex-start;gap:7px;margin-top:4px;}
+.gate-num{
+  width:16px;height:16px;border-radius:50%;
+  background:var(--teal);color:#fff;
+  font-family:'Syne',sans-serif;font-size:8px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.gate-txt{font-size:8.5px;color:var(--slate);line-height:1.4;}
+
+/* Method strip */
+.method{
+  width:100%;margin-top:6px;
+  background:var(--ink);border-radius:7px;
+  padding:8px 10px;
+}
+.method-lbl{font-family:'Syne',sans-serif;font-size:7.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:5px;}
+.method-phases{display:flex;flex-wrap:wrap;gap:3px;}
+.mphase{
+  background:rgba(255,255,255,.12);border-radius:3px;
+  padding:2px 6px;font-size:8px;font-weight:600;
+  font-family:'Syne',sans-serif;color:#fff;
+}
+
+/* Handshake note */
+.handshake{
+  width:100%;background:#FFF7ED;
+  border:1px solid #FED7AA;border-radius:7px;
+  padding:9px 11px;margin-top:6px;
+}
+.hs-title{font-family:'Syne',sans-serif;font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#C2410C;margin-bottom:4px;}
+.hs-txt{font-size:8.5px;color:#7C2D12;line-height:1.5;}
+
+/* Footer KPIs */
+.footer{
+  background:var(--ink);border-radius:12px;
+  padding:24px 32px;margin-top:40px;
+  display:flex;align-items:center;gap:32px;flex-wrap:wrap;
+  max-width:980px;width:100%;
+}
+.kpi-item{text-align:center;}
+.kpi-val{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--coral);}
+.kpi-lbl{font-size:9px;color:rgba(255,255,255,.4);margin-top:1px;}
+.footer-note{font-size:10px;color:rgba(255,255,255,.25);max-width:220px;line-height:1.6;margin-left:auto;}
+
+/* Legend */
+.legend{display:flex;gap:18px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.leg{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--muted);}
+.leg-ln{width:22px;height:2px;}
+.leg-solid{background:var(--border);}
+.leg-dash{background:repeating-linear-gradient(90deg,var(--muted) 0,var(--muted) 3px,transparent 3px,transparent 6px);}
+.leg-coral{background:var(--coral);}
+</style>
+</head>
+<body>
+
+<!-- LOGO -->
+<div class="logo-bar">
+  <div class="logo-mark">DS</div>
+  <div class="logo-name">DataSkate · Org Structure 2026 · v3</div>
+</div>
+
+<div class="chart">
+
+  <!-- ══ CEO ══ -->
+  <div class="ceo-node">
+    <div class="n-tag">Strategy Level</div>
+    <div class="n-title">CEO / Co-Founder</div>
+    <div class="n-sub">Board of Directors · Investors · Market Evaluation · Strategic Partnerships · Final SOW &gt;$50K</div>
+  </div>
+
+  <div class="vl" style="height:24px;"></div>
+
+  <!-- ══ CoS ROW ══ -->
+  <div class="cos-row">
+
+    <!-- Buffer label -->
+    <div class="buf-label">LEADERSHIP BUFFER</div>
+
+    <!-- CoS node -->
+    <div class="cos-node">
+      <div class="n-title">HEAD OF ADMINISTRATION &amp;<br/>CHIEF OF STAFF (CoS)</div>
+      <div class="n-sub">Internal Governance · SOW Quality Gatekeeper · Internal Branding · P&amp;L · Tools &amp; Systems</div>
+      <div class="cos-chips">
+        <span class="cos-chip">Admin Head / COO</span>
+        <span class="cos-chip">HR Manager</span>
+        <span class="cos-chip">Finance Lead</span>
+        <span class="cos-chip">Enablement Coordinator</span>
+      </div>
+    </div>
+
+    <!-- Facilitate connector -->
+    <div class="fac-connector">
+      <div class="fac-line-h"></div>
+      <span>FACILITATE</span>
+      <div class="fac-line-h"></div>
+    </div>
+
+    <!-- COE node -->
+    <div class="coe-node">
+      <div class="n-title">CENTER OF EXCELLENCE (COE)</div>
+      <div class="n-sub">Federated Consortium · Standards Governance</div>
+      <div class="coe-inner">
+        <div class="coe-row">
+          <span style="font-weight:600;">COE Facilitator</span>
+          <span class="coe-arrow">→</span>
+          <span>Practice Ambassadors</span>
+        </div>
+        <div class="std-connector">
+          <div class="std-dash"></div>
+          <span class="std-arrow-head">→</span>
+          <span class="phase-badge">8-Phase Methodology</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="vl" style="height:28px;"></div>
+
+  <!-- ══ THREE PILLARS ══ -->
+  <div class="pillars-row">
+
+    <!-- ── PILLAR 1 ── -->
+    <div class="pillar">
+      <div class="pillar-vtop"></div>
+
+      <div class="ph p1">
+        <div class="ph-tag">Pillar 1 · Revenue</div>
+        <div class="ph-name">Partner Alliance<br/>&amp; GTM</div>
+        <div class="ph-head">Head: <strong>VP of Alliances</strong></div>
+        <span class="ph-count">3–4 people · primary revenue engine · inbound + outbound</span>
+      </div>
+
+      <div class="sub-lbl">Roles</div>
+
+      <div class="rc p1">
+        <div class="rc-top">
+          <div class="rc-title">VP of Alliances</div>
+          <span class="rc-badge badge-exec">Exec</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>All 5 partner relationships · QBR cadence · MDF · AppExchange · SOW pricing ≤$50K · ≥60% ARR from partner referral · partner NPS ≥4/5</div>
+      </div>
+
+      <div class="rc p1">
+        <div class="rc-top">
+          <div class="rc-title">Alliance Manager / AE</div>
+          <span class="rc-badge badge-lead">Lead</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Day-to-day AE relationships · co-sell calls · deal registration · inbound follow-up &lt;24hr · pipeline 3× target · SOW min $5K SMB / $25K MM</div>
+      </div>
+
+      <div class="sub-lbl">GTM &amp; Marketing</div>
+
+      <div class="rc p1">
+        <div class="rc-top">
+          <div class="rc-title">Head of GTM</div>
+          <span class="rc-badge badge-lead">Lead</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Full GTM ownership — inbound + outbound · Content · Personal branding (CEO/VP/DH) · Collateral · AppExchange · MDF · Outbound ICP &amp; sequence strategy · SDR management · Weekly KPI report to VP Alliances · Reports to VP Alliances · Manages SDR/BDR</div>
+      </div>
+
+      <div class="rc p1" style="border-left:3px solid var(--coral);padding-left:10px;margin-left:8px;">
+        <div class="rc-top">
+          <div class="rc-title">SDR / BDR</div>
+          <span class="rc-badge badge-ops">Outbound</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Reports to Head of GTM · Prospect list building (Apollo/Clay) · 9-touch 18-day cold sequences (Instantly) · Cold calls 15–20/day · Qualifying calls · 3-way call booking: prospect + DS + partner AE · 60 prospects/week · 4–6 booked calls/week at ramp · Joins 6–8 weeks after Head of GTM</div>
+      </div>
+
+      <div class="rc amber">
+        <div class="rc-top">
+          <div class="rc-title">RevOps Function</div>
+          <span class="rc-badge badge-fn">Function</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>CRM hygiene · pipeline reporting · SOW min enforcement · revenue forecast to CEO weekly · forecast accuracy ±10%</div>
+      </div>
+
+      <div class="ng">
+        <div class="ng-lbl">Partner Stack</div>
+        <div class="chips">
+          <span class="chip teal">Salesforce</span>
+          <span class="chip teal">MuleSoft</span>
+          <span class="chip teal">Informatica</span>
+          <span class="chip teal">Workato</span>
+          <span class="chip teal">Boomi</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── PILLAR 2 ── -->
+    <div class="pillar" style="max-width:320px;">
+      <div class="pillar-vtop"></div>
+
+      <div class="ph p2">
+        <div class="ph-tag">Pillar 2 · Delivery &amp; CoE</div>
+        <div class="ph-name">Delivery</div>
+        <div class="ph-head">Head: <strong>Delivery Head / SA</strong></div>
+        <span class="ph-count">Largest team · all billable except Delivery Head + PM + Practice Heads</span>
+      </div>
+
+      <div class="sub-lbl">Leadership Roles</div>
+
+      <div class="rc p2">
+        <div class="rc-top">
+          <div class="rc-title">Delivery Head / Solution Architect</div>
+          <span class="rc-badge badge-exec" style="background:var(--p2-lt);color:var(--teal);">Exec · CoE</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>All delivery quality · ARB gate authority · coding standards · IP library · cert roadmap · CSAT ≥4.2 · 0 go-lives without ARB sign-off · <strong>Hire first — everything else is blocked.</strong></div>
+      </div>
+
+      <div class="rc p2">
+        <div class="rc-top">
+          <div class="rc-title">Project Manager (shared)</div>
+          <span class="rc-badge badge-lead">Lead</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Timelines · client status reporting · risk log · escalation · 3–4 projects simultaneously · on-time delivery ≥85%</div>
+      </div>
+
+      <div class="sub-lbl">Practice Heads (non-billable · own practice P&amp;L)</div>
+
+      <div class="ng p2b">
+        <div class="ng-lbl teal">Practice Heads — report to Delivery Head</div>
+        <div class="chips">
+          <span class="chip teal">Practice Head — Salesforce / Agentforce</span>
+          <span class="chip teal">Practice Head — MuleSoft</span>
+          <span class="chip teal">Practice Head — Informatica / IDMC</span>
+          <span class="chip teal">Practice Head — Workato / Boomi</span>
+        </div>
+        <div style="font-size:8px;color:var(--muted);margin-top:6px;">Own practice P&amp;L · manage Dev Leads · define hiring brief · non-billable · technical scoping on discovery calls</div>
+      </div>
+
+      <div class="sub-lbl">Dev Leads — Pod of 5 (billable · player-coaches)</div>
+
+      <div class="rc p2">
+        <div class="rc-top">
+          <div class="rc-title">Dev Lead (e.g. Sasank)</div>
+          <span class="rc-badge badge-lead">Lead</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Runs pod of 5 · manages 2–3 SMB projects · sprint planning · client technical comms · 100% PR review · billable ≥70% · reports to Practice Head</div>
+      </div>
+
+      <div class="sub-lbl">Pod Structure (under each Dev Lead)</div>
+
+      <div class="rc p2">
+        <div class="rc-top">
+          <div class="rc-title">Developer (1× per pod)</div>
+          <span class="rc-badge badge-ops" style="background:#DBEAFE;color:#1E40AF;">Mid</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Feature dev · unit testing · docs · day-to-day supervision of Freshers · billable ≥80% · 1–3 yrs exp · pursuing next cert</div>
+      </div>
+
+      <div class="rc p2">
+        <div class="rc-top">
+          <div class="rc-title">Fresher / Junior Developer (3× per pod)</div>
+          <span class="rc-badge badge-jr">Junior</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Config tasks · docs · testing support · supervised by Developer · billable reduced rate day 31 · full billable day 91</div>
+      </div>
+
+      <div class="gates">
+        <div class="gates-title">CoE Quality Gates · mandatory every project</div>
+        <div class="gate-item"><span class="gate-num">1</span><div class="gate-txt"><strong>ARB gate</strong> — Delivery Head/SA approves solution design before build</div></div>
+        <div class="gate-item"><span class="gate-num">2</span><div class="gate-txt"><strong>Code review</strong> — Dev Lead reviews every PR, no exceptions</div></div>
+        <div class="gate-item"><span class="gate-num">3</span><div class="gate-txt"><strong>QA &amp; UAT</strong> — structured test plan + client sign-off before go-live</div></div>
+        <div class="gate-item"><span class="gate-num">4</span><div class="gate-txt"><strong>Retro &amp; CSAT</strong> — PM runs retro, CSAT collected within 72hr post go-live</div></div>
+      </div>
+
+      <div class="method">
+        <div class="method-lbl">16-Week, 8-Phase Methodology</div>
+        <div class="method-phases">
+          <span class="mphase">Discovery</span>
+          <span class="mphase">Design</span>
+          <span class="mphase">Security</span>
+          <span class="mphase">Prototype</span>
+          <span class="mphase">Build</span>
+          <span class="mphase">Integration</span>
+          <span class="mphase">Training</span>
+          <span class="mphase">Optimization</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── PILLAR 3 ── -->
+    <div class="pillar">
+      <div class="pillar-vtop"></div>
+
+      <div class="ph p3">
+        <div class="ph-tag">Pillar 3 · Internal</div>
+        <div class="ph-name">Administration</div>
+        <div class="ph-head">Head: <strong>Admin Head / COO</strong></div>
+        <span class="ph-count">2–3 people · internal-facing only</span>
+      </div>
+
+      <div class="sub-lbl">Leadership Role</div>
+
+      <div class="rc p3">
+        <div class="rc-top">
+          <div class="rc-title">Admin Head / COO</div>
+          <span class="rc-badge badge-exec">Exec</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>All internal ops — HR, finance, legal, tools, enablement. Does NOT define hiring specs (Delivery Head does). All roles filled per plan · P&amp;L monthly · zero contract lapses</div>
+      </div>
+
+      <div class="sub-lbl">HR &amp; Talent Acquisition</div>
+
+      <div class="rc p3">
+        <div class="rc-top">
+          <div class="rc-title">HR Manager / Talent Lead</div>
+          <span class="rc-badge badge-lead">Lead</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Recruiting execution (to Delivery Head spec) · onboarding · offer letters · comp bands · time-to-hire ≤45d · offer acceptance ≥80% · attrition ≤15%</div>
+      </div>
+
+      <div class="sub-lbl">Internal Enablement</div>
+
+      <div class="rc p3">
+        <div class="rc-top">
+          <div class="rc-title">Enablement Coordinator</div>
+          <span class="rc-badge badge-ops">Ops</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Administers 90-day fresher ramp (designed by Delivery Head) · cert tracking · LMS management · training calendar monthly · cert completion ≥80%</div>
+      </div>
+
+      <div class="sub-lbl">Finance &amp; Ops</div>
+
+      <div class="rc p3">
+        <div class="rc-top">
+          <div class="rc-title">Finance Lead / Accountant</div>
+          <span class="rc-badge badge-ops">Finance</span>
+        </div>
+        <div class="rc-kpi"><span class="kpi-dot"></span>Monthly P&amp;L · invoicing &amp; collections · payroll · budget tracking per pillar · vendor renewals · invoices within 5d of milestone · DSO ≤30d</div>
+      </div>
+
+      <div class="ng">
+        <div class="ng-lbl">Functions (not FTE)</div>
+        <div class="chips">
+          <span class="chip slate">Legal &amp; Contracts</span>
+          <span class="chip slate">Tools &amp; Systems Admin</span>
+          <span class="chip slate">MSA Management</span>
+          <span class="chip slate">Inter-company Ledgers</span>
+        </div>
+      </div>
+
+      <div class="handshake">
+        <div class="hs-title">Critical Handshake: Admin ↔ Delivery</div>
+        <div class="hs-txt">Delivery Head defines cert spec &amp; role brief → Admin recruits to that spec → Delivery Head interviews for technical fit. Without this, HR attracts wrong candidates.</div>
+      </div>
+
+    </div>
+
+  </div><!-- end pillars-row -->
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <div class="leg"><div class="leg-ln leg-solid"></div>Reporting</div>
+    <div class="leg"><div class="leg-ln leg-dash"></div>Functional</div>
+    <div class="leg"><div class="leg-ln leg-coral"></div>Standards flow</div>
+  </div>
+
+  <!-- FOOTER KPIS -->
+  <div class="footer">
+    <div class="kpi-item"><div class="kpi-val">3</div><div class="kpi-lbl">Pillars</div></div>
+    <div class="kpi-item"><div class="kpi-val">$5K</div><div class="kpi-lbl">Min SOW · SMB</div></div>
+    <div class="kpi-item"><div class="kpi-val">$25K</div><div class="kpi-lbl">Min SOW · Mid-Market</div></div>
+    <div class="kpi-item"><div class="kpi-val">75%</div><div class="kpi-lbl">Target utilisation</div></div>
+    <div class="kpi-item"><div class="kpi-val">90d</div><div class="kpi-lbl">Fresher to billable</div></div>
+    <div class="kpi-item"><div class="kpi-val">$30M</div><div class="kpi-lbl">Valuation target Dec 2028</div></div>
+    <div class="footer-note">DataSkate org v3.0 · Q2 2026 · Head of GTM + SDR/BDR added · Review at $8M ARR or when concurrent projects exceed 8.</div>
+  </div>
+
+</div><!-- end chart -->
+
+</body>
+</html>

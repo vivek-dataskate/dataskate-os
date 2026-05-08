@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Project Manager · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --role-color:#6D28D9;--role-lt:#EDE9FE;--role-dk:#3C3489;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--teal-lt);color:var(--teal-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--teal);border-color:var(--teal);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.info-box{background:#F0FDF4;border:1px solid #A7F3D0;border-radius:10px;padding:14px 18px;margin-bottom:28px}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px}
+.info-body{font-size:12px;line-height:1.7}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="PM_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Project Manager Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 2 · Delivery &amp; CoE · Cadence v3</div>
+    <div class="role-name">Project Manager</div>
+    <div class="role-sub">Cross-practice · 3–4 concurrent projects · Commercial owner · Reports to: Delivery Head · Non-billable — runs 3–4 concurrent projects</div>
+    <div class="kpi-bar"><span class="kpi-chip">≥85% on-time delivery</span><span class="kpi-chip">Friday client status — every project</span><span class="kpi-chip">Invoice within 24hr</span><span class="kpi-chip">Slippage >3 days → DH same day</span></div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8">Primary KPI<br/><span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">On-time delivery ≥85% · Weekly status reports without chasing · Invoice within 24hr of milestone</span></div>
+</header>
+<main>
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">D02</span> = process reference · checkboxes reset on reload</span>
+</div>
+<div class="diagram section">
+  <div class="diagram-title">Project Manager — role in the delivery system</div>
+  <svg viewBox="0 0 700 120" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="35" width="110" height="50" rx="7" fill="#EDE9FE" stroke="#6D28D9" stroke-width="1.5"/>
+    <text x="65" y="57" text-anchor="middle" fill="#3C3489" font-size="9" font-weight="700">Monday baseline</text>
+    <text x="65" y="70" text-anchor="middle" fill="#3C3489" font-size="8">All projects updated</text>
+    <text x="65" y="82" text-anchor="middle" fill="#3C3489" font-size="8">Slippage → DH same day</text>
+    <text x="130" y="63" text-anchor="middle" fill="#6D28D9" font-size="12">→</text>
+    <rect x="140" y="35" width="110" height="50" rx="7" fill="#EDE9FE" stroke="#6D28D9" stroke-width="1.5"/>
+    <text x="195" y="57" text-anchor="middle" fill="#3C3489" font-size="9" font-weight="700">Risk register</text>
+    <text x="195" y="70" text-anchor="middle" fill="#3C3489" font-size="8">Log same day</text>
+    <text x="195" y="82" text-anchor="middle" fill="#3C3489" font-size="8">P1/P2 → DH immediately</text>
+    <text x="260" y="63" text-anchor="middle" fill="#6D28D9" font-size="12">→</text>
+    <rect x="270" y="35" width="110" height="50" rx="7" fill="#EDE9FE" stroke="#6D28D9" stroke-width="1.5"/>
+    <text x="325" y="57" text-anchor="middle" fill="#3C3489" font-size="9" font-weight="700">Client comms</text>
+    <text x="325" y="70" text-anchor="middle" fill="#3C3489" font-size="8">4hr response · 2hr</text>
+    <text x="325" y="82" text-anchor="middle" fill="#3C3489" font-size="8">call summary</text>
+    <text x="390" y="63" text-anchor="middle" fill="#6D28D9" font-size="12">→</text>
+    <rect x="400" y="35" width="130" height="50" rx="7" fill="#EDE9FE" stroke="#6D28D9" stroke-width="1.5"/>
+    <text x="465" y="57" text-anchor="middle" fill="#3C3489" font-size="9" font-weight="700">Friday AM: all-projects</text>
+    <text x="465" y="70" text-anchor="middle" fill="#3C3489" font-size="8">table to DH</text>
+    <text x="465" y="82" text-anchor="middle" fill="#3C3489" font-size="8">Hard deadline</text>
+    <text x="540" y="63" text-anchor="middle" fill="#6D28D9" font-size="12">→</text>
+    <rect x="550" y="35" width="140" height="50" rx="7" fill="#6D28D9"/>
+    <text x="620" y="57" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Friday: client status</text>
+    <text x="620" y="70" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="8">Written report every client</text>
+    <text x="620" y="82" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="8">every week no exceptions</text>
+  </svg>
+</div>
+<div class="section"><div class="sec-title">📥 What you receive — reports and data that land on your desk</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Client communications — must respond within 4hr <span class="proc-ref">D12</span></div>
+            <div class="task-tool">🛠 Gmail · project Slack channel</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Risk or blocker flags from Dev Lead or Practice Head affecting timeline or client <span class="proc-ref">E01</span></div>
+            <div class="task-tool">🛠 Slack</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Sprint completion report from Dev Lead — arrives Thursday EOD, feeds Friday client status <span class="proc-ref">E13</span></div>
+            <div class="task-sub">Chase Dev Lead if not received by Thursday EOD. You cannot write Friday status without it.</div><div class="task-tool">🛠 Slack from Dev Lead</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Hours data from Harvest — verify against SOW budget burn <span class="proc-ref">E12</span></div>
+            <div class="task-tool">🛠 Harvest budget report</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Budget burn Harvest report — verify 70% threshold has not been crossed without flagging <span class="proc-ref">E12</span></div>
+            <div class="task-tool">🛠 Harvest</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEEDFE;color:#6D28D9">Per event</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">UAT bug reports during hypercare window — from client during UAT (D08) or post-go-live (E07) <span class="proc-ref">D08/E07</span></div>
+            <div class="task-tool">🛠 Email / Slack from client</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">⚡ What you do — operational cadence</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Check all active project boards — sprint blockers, overdue tasks, milestone risk <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Jira / Notion project dashboard</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Respond to client communications within 4 hours <span class="proc-ref">D12</span></div>
+            <div class="task-tool">🛠 Gmail · project Slack</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Log any scope change request in writing before acting — never acknowledge as something DataSkate will do <span class="proc-ref">E05</span></div>
+            <div class="task-tool">🛠 Notion scope change log + email</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Log any new risk in Notion risk register same day as detection — classify P1/P2/P3 <span class="proc-ref">E01</span></div>
+            <div class="task-tool">🛠 Notion risk log</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Send call summary within 2hr of every client call — decisions, actions, next call date <span class="proc-ref">D12</span></div>
+            <div class="task-tool">🛠 Email · Notion call log</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Monday: update all active project baselines — slippage >3 days → notify DH same day <span class="proc-ref">D11</span></div>
+            <div class="task-tool">🛠 Notion project plans</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Thursday: request sprint completion report from Dev Lead for Friday status <span class="proc-ref">E13</span></div>
+            <div class="task-tool">🛠 Slack to Dev Lead</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Friday: send written status report to every active client — 5 sections, no exceptions <span class="proc-ref">D12</span></div>
+            <div class="task-sub">Done this week / Next week / Decisions needed from client / RAG status / Upcoming milestones</div><div class="task-tool">🛠 Email · Notion status template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">UAT daily check-in with client during open UAT windows — any issues? Any blockers on their side? <span class="proc-ref">D08</span></div>
+            <div class="task-tool">🛠 Slack to client SME</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Budget burn review — anyone crossing 70% of SOW hours? Flag to DH same day with 3 options <span class="proc-ref">E12</span></div>
+            <div class="task-tool">🛠 Harvest budget report</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Performance review with DH — delivery rate, client feedback, invoice discipline, commercial awareness <span class="proc-ref">P03</span></div>
+            <div class="task-tool">🛠 Notion review template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEEDFE;color:#6D28D9">Per event</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Milestone sign-off received → trigger invoice to Finance within 24hr <span class="proc-ref">D13</span></div>
+            <div class="task-tool">🛠 Email to Finance with project name + milestone + amount</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Go-live: CSAT survey sent within 72hr, hypercare daily check-in days 1–5 <span class="proc-ref">B01/E07</span></div>
+            <div class="task-tool">🛠 Email CSAT survey · Slack to client</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">📤 What you send up — reporting obligations you own</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">P1/P2 risk identified → DH notified same day with assessed brief (not raw data) <span class="proc-ref">E01/E03</span></div>
+            <div class="task-sub">Never hold a P1/P2 risk overnight. DH must hear it from PM before hearing it from client.</div><div class="task-tool">🛠 Slack direct to DH</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Call summary to all attendees within 2hr of every client call <span class="proc-ref">D12</span></div>
+            <div class="task-tool">🛠 Email</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Upsell signal detected → route to AE within 24hr <span class="proc-ref">D12</span></div>
+            <div class="task-tool">🛠 Slack to AE</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">FRIDAY AM: all-projects table to DH — RAG, milestone, budget burn %, client risk, CSAT status, invoices triggered, upsell signals <span class="proc-ref">E13</span></div>
+            <div class="task-sub">Hard deadline. DH cannot compile CEO Friday briefing without this.</div><div class="task-tool">🛠 Notion PM summary template → Slack to DH</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Friday: written status report to every active client <span class="proc-ref">D12</span></div>
+            <div class="task-tool">🛠 Email to client sponsor</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEEDFE;color:#6D28D9">Per event</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Milestone sign-off → invoice trigger to Finance within 24hr <span class="proc-ref">D13</span></div>
+            <div class="task-tool">🛠 Email to Finance</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Slippage >3 days detected → DH notified same day <span class="proc-ref">D11</span></div>
+            <div class="task-tool">🛠 Slack to DH</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">70% budget burn hit → DH notified same day with 3-option brief: absorb / CO / client conversation <span class="proc-ref">E12</span></div>
+            <div class="task-tool">🛠 Slack to DH</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">🌱 Self-improvement & personal brand</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">1 LinkedIn post on project management, delivery, or SI industry insight <span class="proc-ref">G01</span></div>
+            <div class="task-tool">🛠 LinkedIn</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Performance review with DH — delivery metrics, commercial growth, career plan <span class="proc-ref">P03</span></div>
+            <div class="task-tool">🛠 Notion review template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="info-box" style="background:#FEF2F2;border-color:#FECACA;margin:0 40px 32px">
+  <div class="info-title" style="color:#B91C1C">Must NOT do</div>
+  <div class="info-body" style="color:#7F1D1D">✕ Make technical decisions or commitments — route all technical questions to Dev Lead or Practice Head.<br/>✕ Allow scope change to enter build without a DH-approved Change Order or documented absorption decision.<br/>✕ Send client communications about P1 incidents, delays, or budget overruns without DH review.<br/>✕ Trigger invoice without written sign-off from client.<br/>✕ Let DH discover a slippage or risk before you have flagged it — DH must never know first.<br/></div>
+</div>
+</main>
+<footer>
+  <span>DataSkate · Project Manager Cadence · v3 · Q2 2026 · Pillar 2</span>
+  <a href="Pillar2-Delivery-Processes.html" target="_blank" style="font-size:10px;color:var(--teal,#00C9A7);text-decoration:none;font-weight:700">📖 P2 Process Bible →</a>
+</footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

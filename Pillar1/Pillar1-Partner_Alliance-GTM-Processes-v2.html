@@ -1,0 +1,1835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DataSkate · Pillar 1 Process Bible</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-md:#F5C4B3;--coral-dk:#9B1C0A;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-md:#9FD8CF;--teal-dk:#044038;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-md:#FCD34D;--amber-dk:#92400E;
+  --purple:#6D28D9;--purple-lt:#EDE9FE;--purple-md:#C4B5FD;--purple-dk:#4C1D95;
+  --slate:#2A3550;--slate-lt:#EEF1F7;--slate-md:#B0BBCF;--slate-dk:#141C2E;
+  --blue:#1D4ED8;--blue-lt:#EFF6FF;--blue-md:#BFDBFE;--blue-dk:#1E3A8A;
+  --green:#15803D;--green-lt:#F0FDF4;--green-md:#BBF7D0;--green-dk:#14532D;
+  --rose:#BE185D;--rose-lt:#FDF2F8;--rose-md:#FBCFE8;--rose-dk:#831843;
+  --ink:#111827;--muted:#6B7280;--border:#E5E7EB;--white:#fff;--bg:#F8F7F4;
+  /* role colors */
+  --vp-bg:#EDE9FE;--vp-dk:#4C1D95;
+  --ae-bg:#E6F5F2;--ae-dk:#044038;
+  --gtm-bg:#FDF0ED;--gtm-dk:#9B1C0A;
+  --sdr-bg:#FFFBEB;--sdr-dk:#92400E;
+  --ceo-bg:#EEF1F7;--ceo-dk:#141C2E;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;font-size:14px}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* ── HEADER ── */
+header{background:var(--ink);padding:48px 56px 40px;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-80px;right:-60px;width:360px;height:360px;border-radius:50%;background:var(--coral);opacity:.08}
+header::after{content:'';position:absolute;bottom:-60px;left:300px;width:240px;height:240px;border-radius:50%;background:var(--amber);opacity:.06}
+.logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral-md);margin-bottom:14px}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,44px);font-weight:800;color:#fff;line-height:1.1;position:relative;z-index:1}
+header h1 span{color:var(--coral)}
+.header-sub{margin-top:10px;font-size:13px;color:rgba(255,255,255,.35);position:relative;z-index:1;max-width:680px;line-height:1.5}
+.header-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px;position:relative;z-index:1}
+.hpill{font-size:11px;padding:4px 12px;border-radius:20px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.55);border:1px solid rgba(255,255,255,.1)}
+.hpill.accent{background:rgba(232,71,42,.2);color:var(--coral-md);border-color:rgba(232,71,42,.3)}
+
+/* ── STICKY NAV ── */
+.top-nav{background:var(--white);border-bottom:2px solid var(--border);padding:0 56px;display:flex;gap:0;overflow-x:auto;position:sticky;top:0;z-index:300;scrollbar-width:none}
+.top-nav::-webkit-scrollbar{display:none}
+.tnav-btn{padding:13px 16px;font-family:'Syne',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;margin-bottom:-2px;background:none;border-top:none;border-left:none;border-right:none}
+.tnav-btn:hover{color:var(--ink)}
+.tnav-btn.active{color:var(--coral);border-bottom-color:var(--coral)}
+
+/* ── MAIN LAYOUT ── */
+main{padding:0 56px 100px}
+.page-section{display:none;padding-top:0}
+.page-section.active{display:block}
+
+/* ── REGISTER PAGE ── */
+.register-intro{padding:40px 0 32px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.reg-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.reg-sub{font-size:13px;color:var(--muted);line-height:1.6;max-width:700px}
+.reg-stats{display:flex;gap:28px;margin-top:20px;flex-wrap:wrap}
+.stat{text-align:center}
+.stat-n{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--coral)}
+.stat-l{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── FILTERS ── */
+.filters-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.filter-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:4px}
+.filter-btn{font-size:11px;padding:5px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);color:var(--muted);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.filter-btn:hover{border-color:var(--coral);color:var(--coral)}
+.filter-btn.on{background:var(--coral);border-color:var(--coral);color:#fff}
+.filter-sep{width:1px;height:20px;background:var(--border);flex-shrink:0}
+.search-box{padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);background:var(--white);color:var(--ink);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;width:220px;transition:border-color .15s}
+.search-box:focus{border-color:var(--coral)}
+.search-box::placeholder{color:var(--muted)}
+
+/* ── REGISTER TABLE ── */
+.reg-table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;background:var(--white)}
+.reg-table{width:100%;border-collapse:collapse;font-size:12px}
+.reg-table thead tr{background:var(--bg)}
+.reg-table th{padding:10px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+.reg-table td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:middle;line-height:1.4}
+.reg-table tbody tr:last-child td{border-bottom:none}
+.reg-table tbody tr{cursor:pointer;transition:background .1s}
+.reg-table tbody tr:hover td{background:var(--coral-lt)}
+.plink{color:var(--coral);font-weight:600;font-size:12px}
+.pid{font-size:10px;color:var(--muted);font-family:'Syne',sans-serif;font-weight:700}
+.cat-group-row td{background:var(--bg);font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:8px 14px}
+
+/* ── BADGES ── */
+.badge{font-size:10px;padding:2px 8px;border-radius:20px;white-space:nowrap;font-weight:600;display:inline-block}
+.b-vp{background:var(--vp-bg);color:var(--vp-dk)}
+.b-ae{background:var(--ae-bg);color:var(--ae-dk)}
+.b-gtm{background:var(--gtm-bg);color:var(--gtm-dk)}
+.b-sdr{background:var(--sdr-bg);color:var(--sdr-dk)}
+.b-ceo{background:var(--ceo-bg);color:var(--ceo-dk)}
+.b-rev{background:var(--coral-lt);color:var(--coral-dk)}
+.b-brand{background:var(--amber-lt);color:var(--amber-dk)}
+.b-enable{background:var(--purple-lt);color:var(--purple-dk)}
+.cross-badge{font-size:9px;padding:1px 7px;border-radius:10px;background:var(--blue-lt);color:var(--blue-dk);font-weight:600}
+
+/* ── RACI PAGE ── */
+.raci-intro{padding:40px 0 28px}
+.raci-wrap{overflow-x:auto}
+.raci-table{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;font-size:12px}
+.raci-table th{background:var(--ink);color:#fff;padding:11px 14px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:center;white-space:nowrap}
+.raci-table th:first-child{text-align:left;width:280px}
+.raci-table td{padding:9px 14px;border-bottom:1px solid var(--border);text-align:center;font-size:11px;font-weight:600}
+.raci-table td:first-child{text-align:left;font-weight:500;color:var(--ink)}
+.raci-table tr:last-child td{border-bottom:none}
+.raci-table tbody tr:hover td{background:var(--coral-lt)}
+.raci-r{color:var(--coral-dk);background:var(--coral-lt);border-radius:6px;padding:2px 8px}
+.raci-a{color:var(--purple-dk);background:var(--purple-lt);border-radius:6px;padding:2px 8px}
+.raci-c{color:var(--teal-dk);background:var(--teal-lt);border-radius:6px;padding:2px 8px}
+.raci-i{color:var(--muted);background:var(--bg);border-radius:6px;padding:2px 8px}
+.raci-legend{display:flex;gap:16px;margin-top:16px;flex-wrap:wrap}
+.raci-key{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+
+/* ── PROCESS DETAIL PAGE ── */
+.proc-intro{padding:40px 0 28px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.proc-filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+
+.proc-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:24px;scroll-margin-top:80px}
+.proc-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap}
+.proc-id{font-family:'Syne',sans-serif;font-size:11px;font-weight:800;padding:5px 10px;border-radius:8px;white-space:nowrap}
+.proc-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--ink);margin-top:4px;line-height:1.2}
+.proc-meta-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.proc-why{font-size:13px;color:var(--muted);line-height:1.6;padding:12px 16px;background:var(--bg);border-radius:8px;border-left:3px solid var(--coral);margin-bottom:20px}
+.proc-why strong{color:var(--ink)}
+
+/* ── KPI ROW ── */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:20px}
+.kpi-box{text-align:center;padding:14px 10px;background:var(--bg);border-radius:10px;border:1px solid var(--border)}
+.kpi-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--coral)}
+.kpi-lbl{font-size:10px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+/* ── STEPS ── */
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:20px}
+.step-card{padding:14px;border-radius:10px;border:1px solid var(--border);background:var(--white);position:relative}
+.step-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;opacity:.15;line-height:1;position:absolute;top:10px;right:12px}
+.step-title{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.step-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.step-owner{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-top:8px;padding:2px 6px;border-radius:4px;display:inline-block}
+
+/* ── DECISION & SLA ── */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:0}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+.panel{background:var(--bg);border-radius:10px;padding:16px;border:1px solid var(--border)}
+.panel-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.decision-row{margin-bottom:10px;padding-bottom:10px;border-bottom:1px solid var(--border);font-size:12px}
+.decision-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.dq{font-weight:600;color:var(--ink);margin-bottom:4px}
+.dy{color:var(--teal-dk);font-size:11px}
+.dn{color:var(--muted);font-size:11px}
+.sla-row{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:12px}
+.sla-row:last-child{border-bottom:none}
+.sla-trigger{color:var(--muted);font-size:11px;flex:1}
+.sla-val{font-weight:600;color:var(--ink);font-size:11px;text-align:right}
+
+/* ── CROSS PILLAR ── */
+.cross-ref{background:var(--blue-lt);border:1px solid var(--blue-md);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:12px;color:var(--blue-dk)}
+.cross-ref strong{display:block;font-size:10px;font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+
+/* ── REVENUE TARGET PAGE ── */
+.rtarget-intro{padding:40px 0 28px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.rtarget-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-bottom:40px}
+.rt-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:24px}
+.rt-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.rt-value{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--coral);line-height:1}
+.rt-desc{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+.pipeline-flow{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:28px}
+.pf-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:20px}
+.funnel-row{display:flex;align-items:center;gap:0;overflow-x:auto}
+.funnel-stage{flex:1;min-width:120px;padding:16px;text-align:center;background:var(--bg);border-radius:10px;border:1px solid var(--border);position:relative}
+.funnel-stage+.funnel-stage{margin-left:0}
+.funnel-arrow{padding:0 8px;color:var(--muted);font-size:18px;flex-shrink:0}
+.fs-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.fs-num{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--ink)}
+.fs-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.fs-rate{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--coral);white-space:nowrap;font-weight:600}
+
+/* ── MOTION CARDS ── */
+.motion-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-bottom:32px}
+.motion-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:20px}
+.motion-num{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--coral-lt);line-height:1;margin-bottom:4px}
+.motion-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--ink);margin-bottom:8px}
+.motion-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.motion-kpis{display:flex;gap:8px;flex-wrap:wrap}
+.motion-kpi{font-size:10px;padding:2px 8px;border-radius:6px;background:var(--coral-lt);color:var(--coral-dk);font-weight:600}
+
+/* ── CADENCE OVERVIEW ── */
+.cadence-intro{padding:40px 0 28px;border-bottom:1px solid var(--border);margin-bottom:32px}
+.cadence-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+@media(max-width:900px){.cadence-grid{grid-template-columns:1fr}}
+.cadence-col{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.cadence-col-head{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cadence-col-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:var(--ink)}
+.cadence-freq{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;background:var(--coral);color:#fff}
+.cadence-body{padding:0 18px 8px}
+.ctask{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.ctask:last-child{border-bottom:none}
+.ctask-check{width:16px;height:16px;border-radius:4px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;cursor:pointer;transition:.15s}
+.ctask-check.done{background:var(--coral);border-color:var(--coral)}
+.ctask-body{flex:1}
+.ctask-title{font-size:12px;font-weight:500;color:var(--ink);line-height:1.4}
+.ctask-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.ctask-tool{font-size:10px;color:var(--muted);margin-top:3px;font-style:italic}
+.ctask-tag{margin-left:auto;flex-shrink:0}
+.ttag{font-size:9px;padding:2px 7px;border-radius:6px;font-weight:700;letter-spacing:.04em}
+.t-must{background:#FEF2F2;color:#991B1B}
+.t-good{background:#FFFBEB;color:#92400E}
+.t-nice{background:#EFF6FF;color:#1E3A8A}
+.t-self{background:#F0FDF4;color:#14532D}
+.t-brand{background:var(--purple-lt);color:var(--purple-dk)}
+
+/* ── SECTION HEADER ── */
+.sec-hd{padding:40px 0 20px}
+.sec-hd-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:6px}
+.sec-hd-title{font-family:'Syne',sans-serif;font-size:clamp(20px,2.5vw,30px);font-weight:800;color:var(--ink);margin-bottom:6px}
+.sec-hd-sub{font-size:13px;color:var(--muted);max-width:680px;line-height:1.6}
+hr.sec-divider{border:none;border-top:1px solid var(--border);margin:32px 0}
+
+@media(max-width:900px){
+  header,main{padding-left:24px;padding-right:24px}
+  .top-nav{padding:0 24px}
+  .two-col{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DataSkate · 2026</div>
+  <h1>Pillar 1 ·<br/><span>Partner Alliance & GTM</span></h1>
+  <p class="header-sub">The revenue engine. Partner referrals, AE acquisition, outbound pipeline, brand, and revenue operations. Every deal DataSkate closes starts here.</p>
+  <div class="header-pills">
+    <span class="hpill accent">48 Processes</span>
+    <span class="hpill">4 Roles</span>
+    <span class="hpill">5 Partner Channels</span>
+    <span class="hpill">3 Revenue Motions</span>
+    <span class="hpill">Target: ≥60% ARR from partner referral</span>
+  </div>
+</header>
+
+<nav class="top-nav">
+  <button class="tnav-btn active" onclick="tab('register',this)">Process Register</button>
+  <button class="tnav-btn" onclick="tab('raci',this)">RACI</button>
+  <button class="tnav-btn" onclick="tab('revenue',this)">Revenue Targets</button>
+  <button class="tnav-btn" onclick="tab('motions',this)">GTM Motions</button>
+  <button class="tnav-btn" onclick="tab('processes',this)">All Processes</button>
+  <button class="tnav-btn" onclick="tab('cadence',this)">Cadence Overview</button>
+</nav>
+
+<main>
+
+<!-- ══════════════════════════════════════
+  TAB: REGISTER
+══════════════════════════════════════ -->
+<section class="page-section active" id="tab-register">
+  <div class="register-intro">
+    <div class="reg-title">Process Register</div>
+    <div class="reg-sub">Every process in Pillar 1 — categorised, owned, and measurable. Click any row to jump to full detail.</div>
+    <div class="reg-stats">
+      <div class="stat"><div class="stat-n">21</div><div class="stat-l">Revenue generation</div></div>
+      <div class="stat"><div class="stat-n">14</div><div class="stat-l">Brand & presence</div></div>
+      <div class="stat"><div class="stat-n">13</div><div class="stat-l">Enablement & intel</div></div>
+      <div class="stat"><div class="stat-n">4</div><div class="stat-l">Roles accountable</div></div>
+    </div>
+  </div>
+
+  <div class="filters-bar">
+    <span class="filter-label">Category:</span>
+    <button class="filter-btn on" onclick="regFilt('cat','all',this)">All</button>
+    <button class="filter-btn" onclick="regFilt('cat','rev',this)">Revenue</button>
+    <button class="filter-btn" onclick="regFilt('cat','brand',this)">Brand</button>
+    <button class="filter-btn" onclick="regFilt('cat','enable',this)">Enablement</button>
+    <div class="filter-sep"></div>
+    <span class="filter-label">Role:</span>
+    <button class="filter-btn" onclick="regFilt('role','vp',this)">VP Alliances</button>
+    <button class="filter-btn" onclick="regFilt('role','gtm',this)">Head of GTM</button>
+    <button class="filter-btn" onclick="regFilt('role','ae',this)">Alliance Mgr/AE</button>
+    <button class="filter-btn" onclick="regFilt('role','sdr',this)">SDR/BDR</button>
+    <div class="filter-sep"></div>
+    <input class="search-box" placeholder="Search processes…" oninput="regSearch(this.value)"/>
+  </div>
+
+  <div class="reg-table-wrap">
+    <table class="reg-table" id="reg-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Process Name</th><th>Category</th><th>Responsible</th><th>Freq</th><th>Key Target</th>
+        </tr>
+      </thead>
+      <tbody id="reg-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+  TAB: RACI
+══════════════════════════════════════ -->
+<section class="page-section" id="tab-raci">
+  <div class="raci-intro">
+    <div class="reg-title">RACI Matrix — Pillar 1</div>
+    <div class="reg-sub">Who is Responsible, Accountable, Consulted, and Informed for every key process area. Read left to right per row.</div>
+    <div class="raci-legend">
+      <div class="raci-key"><span class="raci-r">R</span> Responsible — does the work</div>
+      <div class="raci-key"><span class="raci-a">A</span> Accountable — owns the outcome, signs off</div>
+      <div class="raci-key"><span class="raci-c">C</span> Consulted — input required before action</div>
+      <div class="raci-key"><span class="raci-i">I</span> Informed — kept in the loop, no action needed</div>
+    </div>
+  </div>
+  <div class="raci-wrap">
+    <table class="raci-table">
+      <thead>
+        <tr>
+          <th style="text-align:left">Process Area</th>
+          <th>CEO</th>
+          <th>VP Alliances</th>
+          <th>Alliance Mgr/AE</th>
+          <th>Head of GTM</th>
+          <th>SDR/BDR</th>
+          <th>Delivery Head</th>
+        </tr>
+      </thead>
+      <tbody id="raci-body"></tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+  TAB: REVENUE TARGETS
+══════════════════════════════════════ -->
+<section class="page-section" id="tab-revenue">
+  <div class="rtarget-intro">
+    <div class="reg-title">Revenue Targets & Pipeline Model</div>
+    <div class="reg-sub">How DataSkate hits its revenue targets. This is the math behind every process — work backwards from ARR goal to daily activity.</div>
+  </div>
+
+  <div class="rtarget-grid">
+    <div class="rt-card">
+      <div class="rt-label">Annual ARR Target</div>
+      <div class="rt-value">$2M+</div>
+      <div class="rt-desc">Phase 1 target. Review model at $8M ARR. 3 pillars report to CEO.</div>
+    </div>
+    <div class="rt-card">
+      <div class="rt-label">Partner-Sourced Target</div>
+      <div class="rt-value">≥60%</div>
+      <div class="rt-desc">≥$1.2M of new ARR must originate from partner referral. Non-negotiable.</div>
+    </div>
+    <div class="rt-card">
+      <div class="rt-label">Outbound Target</div>
+      <div class="rt-value">~25%</div>
+      <div class="rt-desc">SDR/BDR outbound contributes ~$500K. Ramp to steady state in Month 3.</div>
+    </div>
+    <div class="rt-card">
+      <div class="rt-label">Inbound Target</div>
+      <div class="rt-value">~15%</div>
+      <div class="rt-desc">Content, events, webinars, AppExchange. Grows as brand compounds.</div>
+    </div>
+    <div class="rt-card">
+      <div class="rt-label">SMB Deal Floor</div>
+      <div class="rt-value">$5K</div>
+      <div class="rt-desc">No deal below $5K. Zero exceptions. Every exception signals floor is negotiable.</div>
+    </div>
+    <div class="rt-card">
+      <div class="rt-label">MM Deal Floor</div>
+      <div class="rt-value">$25K</div>
+      <div class="rt-desc">Mid-market minimum. >$50K requires CEO on the call. CEO signs SOW.</div>
+    </div>
+  </div>
+
+  <div class="pipeline-flow">
+    <div class="pf-title">Pipeline Math — Partner Motion (Primary)</div>
+    <div style="overflow-x:auto">
+    <div class="funnel-row" style="min-width:700px;padding-bottom:24px">
+      <div class="funnel-stage">
+        <div class="fs-label">Active AEs</div>
+        <div class="fs-num">50</div>
+        <div class="fs-sub">across 5 partners</div>
+        <div class="fs-rate">20% refer monthly</div>
+      </div>
+      <div class="funnel-arrow">→</div>
+      <div class="funnel-stage">
+        <div class="fs-label">Monthly Referrals</div>
+        <div class="fs-num">10</div>
+        <div class="fs-sub">qualified intros</div>
+        <div class="fs-rate">60% qualify</div>
+      </div>
+      <div class="funnel-arrow">→</div>
+      <div class="funnel-stage">
+        <div class="fs-label">Discovery Calls</div>
+        <div class="fs-num">6</div>
+        <div class="fs-sub">per month</div>
+        <div class="fs-rate">50% advance</div>
+      </div>
+      <div class="funnel-arrow">→</div>
+      <div class="funnel-stage">
+        <div class="fs-label">SOW Stage</div>
+        <div class="fs-num">3</div>
+        <div class="fs-sub">proposals sent</div>
+        <div class="fs-rate">67% close</div>
+      </div>
+      <div class="funnel-arrow">→</div>
+      <div class="funnel-stage">
+        <div class="fs-label">Closed Won</div>
+        <div class="fs-num">2</div>
+        <div class="fs-sub">avg $40K</div>
+        <div class="fs-rate">$80K/mo</div>
+      </div>
+    </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:8px">Target: $80K/mo from partner motion alone = $960K/year. Combined with outbound ($500K) + inbound ($300K) = $1.76M ARR. Pipeline coverage ratio must be ≥3×.</p>
+  </div>
+
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px;margin-bottom:28px">
+    <div class="pf-title">Meeting Revenue Targets — The Operating Rules</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px">
+      <div style="padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);margin-bottom:8px">Weekly</div>
+        <div style="font-size:12px;color:var(--ink);line-height:1.7">VP Alliances delivers revenue forecast every Friday 5pm without CEO asking. ±10% accuracy required. Any deal at risk flagged proactively. No surprises at month-end.</div>
+      </div>
+      <div style="padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);margin-bottom:8px">Monthly</div>
+        <div style="font-size:12px;color:var(--ink);line-height:1.7">Pipeline coverage ≥3× monthly target maintained at all times. If coverage drops below 2×, VP Alliances triggers emergency AE activation campaign. Head of GTM delivers attribution report within 3 days of month close.</div>
+      </div>
+      <div style="padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);margin-bottom:8px">Quarterly</div>
+        <div style="font-size:12px;color:var(--ink);line-height:1.7">5 partner QBRs complete before Month 1 of new quarter. Referral targets set per partner. MDF fully allocated. Win/loss analysis complete within 10 days. ICP updated. GTM strategy review CEO-attended once per year.</div>
+      </div>
+      <div style="padding:16px;background:var(--bg);border-radius:10px;border:1px solid var(--border)">
+        <div style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--coral);margin-bottom:8px">Deal Escalation Rules</div>
+        <div style="font-size:12px;color:var(--ink);line-height:1.7">$25K+ → VP Alliances briefed same day. $50K+ → CEO joins discovery call. CEO signs all SOWs above $50K. No exceptions. One below-minimum deal signals the floor is negotiable — it never is.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+  TAB: GTM MOTIONS
+══════════════════════════════════════ -->
+<section class="page-section" id="tab-motions">
+  <div class="sec-hd">
+    <div class="sec-hd-label">GTM Strategy</div>
+    <div class="sec-hd-title">5 Revenue Motions</div>
+    <div class="sec-hd-sub">DataSkate generates pipeline through 5 distinct motions. Each motion has a process owner, a KPI, and a defined set of processes.</div>
+  </div>
+
+  <div class="motion-grid">
+    <div class="motion-card">
+      <div class="motion-num">01</div>
+      <div class="motion-title">Partner AE Co-sell</div>
+      <div class="motion-desc">The primary engine. Partner AEs refer clients who need integration or data work. DataSkate activates, nurtures, and converts these relationships into referral pipelines. 50 active AEs across 5 partners is the steady-state target.</div>
+      <div class="motion-kpis"><span class="motion-kpi">10 referrals/mo</span><span class="motion-kpi">≥60% of ARR</span><span class="motion-kpi">2 new AEs/mo/partner</span></div>
+    </div>
+    <div class="motion-card">
+      <div class="motion-num">02</div>
+      <div class="motion-title">SDR/BDR Outbound</div>
+      <div class="motion-desc">Structured cold outbound into named accounts. SDR sources accounts from active AEs, works sequences via Instantly, books 3-way calls. Head of GTM owns the system. SDR executes it.</div>
+      <div class="motion-kpis"><span class="motion-kpi">60 prospects/wk</span><span class="motion-kpi">4 meetings/wk</span><span class="motion-kpi">25% of pipeline</span></div>
+    </div>
+    <div class="motion-card">
+      <div class="motion-num">03</div>
+      <div class="motion-title">Named Account Targeting</div>
+      <div class="motion-desc">AE-sourced named account lists from partner portals. SDR researches, personalises, and sequences into these accounts. The AE intro makes the outreach 3× more likely to convert.</div>
+      <div class="motion-kpis"><span class="motion-kpi">10 accounts/AE</span><span class="motion-kpi">2 meetings/10 accounts</span></div>
+    </div>
+    <div class="motion-card">
+      <div class="motion-num">04</div>
+      <div class="motion-title">Inbound Content & Events</div>
+      <div class="motion-desc">Webinars, case studies, LinkedIn content, AppExchange, events. Creates inbound pipeline that grows passively as brand compounds. Head of GTM owns; VP Alliances approves all spend and content direction.</div>
+      <div class="motion-kpis"><span class="motion-kpi">2 events/mo</span><span class="motion-kpi">1 webinar/2wk</span><span class="motion-kpi">15% of pipeline</span></div>
+    </div>
+    <div class="motion-card">
+      <div class="motion-num">05</div>
+      <div class="motion-title">Existing Client Expansion</div>
+      <div class="motion-desc">Delivery team identifies expansion signals. PM flags to Alliance Mgr/AE. VP Alliances or CEO reaches back in. The cheapest deal to close — 5× cheaper than new logo acquisition.</div>
+      <div class="motion-kpis"><span class="motion-kpi">Expansion on every project ≥$25K</span><span class="motion-kpi">PM flags at 60% delivery</span></div>
+    </div>
+  </div>
+
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:16px;padding:28px">
+    <div class="pf-title">Lead Generation → Closed Deal: End-to-End Flow</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:16px">
+      <div style="background:var(--coral-lt);border-radius:10px;padding:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral-dk);margin-bottom:6px">1. Lead In</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.6">Partner intro OR SDR reply OR inbound form. Logged in CRM same day. Source tagged.</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Owner: Alliance Mgr/AE</div>
+      </div>
+      <div style="background:var(--amber-lt);border-radius:10px;padding:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber-dk);margin-bottom:6px">2. Qualify</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.6">BANT qual in ≤24hr. Is this ICP? Does pain match? Budget? Timeline? Stakeholder access?</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Owner: Alliance Mgr/AE</div>
+      </div>
+      <div style="background:var(--teal-lt);border-radius:10px;padding:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-dk);margin-bottom:6px">3. Discovery</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.6">45-min discovery call. Map pain to DataSkate solution. Involve Delivery Head for complex scope. VP if $25K+.</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Owner: Alliance Mgr/AE + VP</div>
+      </div>
+      <div style="background:var(--purple-lt);border-radius:10px;padding:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--purple-dk);margin-bottom:6px">4. Scope & SOW</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.6">VP + Delivery Head scope. SOW in PandaDoc within 48hr. Floor enforced. Register deal same day.</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Owner: VP Alliances</div>
+      </div>
+      <div style="background:var(--blue-lt);border-radius:10px;padding:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-dk);margin-bottom:6px">5. Close</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.6">Follow up in 48hr. Handle objections. If 5 days no signature → VP escalates. CEO involved if $50K+.</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Owner: Alliance Mgr/AE + VP</div>
+      </div>
+      <div style="background:var(--green-lt);border-radius:10px;padding:14px">
+        <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green-dk);margin-bottom:6px">6. Handoff</div>
+        <div style="font-size:11px;color:var(--ink);line-height:1.6">Signed SOW → Delivery Head briefed same day. Kickoff scheduled within 5 days. Partner AE notified of win.</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:4px">Owner: VP Alliances → Delivery Head</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════
+  TAB: ALL PROCESSES
+══════════════════════════════════════ -->
+<section class="page-section" id="tab-processes">
+  <div class="proc-intro">
+    <div class="reg-title">All 48 Processes — Full Detail</div>
+    <div class="reg-sub">Complete process documentation with steps, KPIs, decision gates, SLAs, and cross-pillar references.</div>
+  </div>
+  <div class="proc-filters" id="proc-filters-bar"></div>
+  <div id="proc-detail-body"></div>
+</section>
+
+<!-- ══════════════════════════════════════
+  TAB: CADENCE OVERVIEW
+══════════════════════════════════════ -->
+<section class="page-section" id="tab-cadence">
+  <div class="cadence-intro">
+    <div class="reg-title">Pillar 1 Cadence Overview</div>
+    <div class="reg-sub">What every Pillar 1 role must do — daily, weekly, monthly, quarterly. Must = non-negotiable. Good = target. Nice = when bandwidth allows. Self = personal growth.</div>
+  </div>
+  <div id="cadence-body"></div>
+</section>
+
+</main>
+
+<script>
+/* ══════════════════════════════════════
+   DATA
+══════════════════════════════════════ */
+const PROCS = [
+  /* ── CAT 1: REVENUE ── */
+  /* 1A Pipeline Creation */
+  {id:'P01',cat:'rev',sub:'1A · Pipeline creation',name:'Partner AE Acquisition',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Monthly',target:'2 net-new active AEs/month per partner · 50 active referrers at steady state',
+   sla:'AE identified → first contact within 5 business days',
+   why:'Inactive AEs never refer. This process turns cold AE names into active referral sources. Without it, the referral engine starves.',
+   kpis:[{v:'2/mo',l:'Net-new AEs per partner'},{v:'50',l:'Active referrers steady state'},{v:'<5d',l:'Identify → first contact'},{v:'30d',l:'First referral target after activation'}],
+   steps:[
+     {n:1,t:'AE Mapping',s:'Apollo / LinkedIn Sales Nav — filter by partner + territory + role',o:'vp'},
+     {n:2,t:'Tier Assignment',s:'A = active referrer · B = know but cold · C = unknown. Never cold-pitch Tier A for referrals.',o:'vp'},
+     {n:3,t:'Warm Connect',s:'LinkedIn comment → connect → value-first DM. No pitch. Lead with a relevant win.',o:'vp'},
+     {n:4,t:'Intro Coffee',s:'30-min Zoom. Share DataSkate wins in their exact territory. Make it about them.',o:'vp'},
+     {n:5,t:'First Referral',s:'Fast response. Make AE look good immediately on first intro. Speed is the product.',o:'ae'},
+     {n:6,t:'Nurture Loop',s:'Monthly touch. Tag in content. Share wins. Never just ask for referrals.',o:'ae'},
+     {n:7,t:'CRM Tag',s:'All AEs logged with tier, last contact, referral count. Never rely on memory.',o:'ae'},
+   ],
+   decisions:[
+     {q:'AE goes silent after intro coffee?',y:'One follow-up at 2 weeks with a relevant win story. Then move to lower cadence.',n:'Monthly nurture loop'},
+     {q:'AE makes first referral?',y:'Respond within 4 hours. Make them look like a hero to their client.',n:''}
+   ],
+   slas:[{t:'AE identified',v:'First contact within 5 business days'},{t:'First intro',v:'Follow-up within 48hr'},{t:'First referral made',v:'Response within 4 hours'}],
+   cross:[]},
+
+  {id:'P02',cat:'rev',sub:'1A · Pipeline creation',name:'AE Enablement Kit Delivery',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','gtm'],
+   freq:'Per new AE activated · quarterly refresh for existing',
+   target:'100% active AEs have current kit · kit used in ≥50% of co-sell conversations',
+   sla:'New AE activated → kit delivered within 3 business days',
+   why:'AEs who don\'t know how to position DataSkate won\'t refer. The kit is the referral engine at scale.',
+   kpis:[{v:'100%',l:'Active AEs with current kit'},{v:'<3d',l:'Activation → kit delivered'},{v:'Quarterly',l:'Kit refresh cadence'},{v:'≥50%',l:'Kit used in co-sell convos'}],
+   steps:[
+     {n:1,t:'Kit Contents',s:'1-pager, 2-min pitch video, 3 case studies (by partner vertical), objection guide, how to refer',o:'gtm'},
+     {n:2,t:'Personalise',s:'Alliance Mgr customises: mention AE\'s territory wins, their specific ICP',o:'ae'},
+     {n:3,t:'Deliver',s:'Email + follow-up Zoom walkthrough. Not a dump — a 20-min walk-through call.',o:'ae'},
+     {n:4,t:'Track',s:'Log: AE name, kit version, delivered date, follow-up date',o:'ae'},
+     {n:5,t:'Quarterly Refresh',s:'Head of GTM updates kit with new case studies, updated messaging, new partner wins',o:'gtm'},
+   ],
+   decisions:[
+     {q:'AE hasn\'t opened kit after 1 week?',y:'Follow-up call. Offer to walk them through it personally.',n:''},
+   ],
+   slas:[{t:'AE activated',v:'Kit delivered within 3 business days'},{t:'Quarter close',v:'Kit refreshed within first 2 weeks of new quarter'}],
+   cross:['P2: Pillar 2 Delivery team supplies case study content']},
+
+  {id:'P03',cat:'rev',sub:'1A · Pipeline creation',name:'Inbound Lead Response',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae'],
+   freq:'Per inbound lead · daily monitoring',
+   target:'100% inbound leads responded to within 4 hours · 0 leads missed',
+   sla:'Lead arrives → response within 4 hours. Always.',
+   why:'Speed is trust. AEs judge DataSkate by response time on the first intro. Slow = unreliable partner.',
+   kpis:[{v:'<4hr',l:'Response time SLA'},{v:'100%',l:'Response rate'},{v:'0',l:'Leads missed or orphaned'},{v:'Same day',l:'CRM log'}],
+   steps:[
+     {n:1,t:'Lead Arrives',s:'Partner email, Slack intro, portal alert, or inbound form',o:'ae'},
+     {n:2,t:'Log in CRM',s:'Same day. Source = partner name. Stage = Lead. Contact details captured.',o:'ae'},
+     {n:3,t:'Respond',s:'Reply within 4 hours. Even if just to acknowledge and set a call time.',o:'ae'},
+     {n:4,t:'Qualify',s:'5-question BANT over email or call. Is this a real opportunity?',o:'ae'},
+     {n:5,t:'Advance or Disqualify',s:'ICP? → P06 Discovery. Not ICP? → log reason, notify partner AE politely.',o:'ae'},
+   ],
+   decisions:[
+     {q:'Lead is not ICP?',y:'Politely decline. Log. Notify partner AE immediately with reason. Keep relationship warm.',n:'Advance to P06'},
+     {q:'Lead is VP Alliances relationship?',y:'Notify VP Alliances before responding. They may want to handle directly.',n:'AE handles'}
+   ],
+   slas:[{t:'Lead arrives',v:'Response within 4 hours'},{t:'Response sent',v:'Qualify within 24hr'},{t:'Qualified',v:'Discovery call booked within 3 days'}],
+   cross:[]},
+
+  {id:'P04',cat:'rev',sub:'1A · Pipeline creation',name:'SDR Outbound Sequence Launch',r:'Head of GTM',a:'VP Alliances',roles:['gtm','sdr'],
+   freq:'Weekly — new sequence live each Monday',
+   target:'60 prospects/week enrolled · 4 meetings/week booked · sequence live by Monday 9am',
+   sla:'Sequence approved Friday → live Monday 9am',
+   why:'Outbound without a system is just cold calling. Sequences create consistency, track what works, and compound over time.',
+   kpis:[{v:'60/wk',l:'Prospects enrolled'},{v:'4/wk',l:'Meetings booked'},{v:'≥3%',l:'Reply-to-meeting rate'},{v:'Monday 9am',l:'New sequence live'}],
+   steps:[
+     {n:1,t:'ICP Pull',s:'Apollo filtered: MuleSoft/Informatica users in SFDC orgs with >500 employees',o:'gtm'},
+     {n:2,t:'Enrich',s:'Clay: verify role, company fit, recent trigger event',o:'gtm'},
+     {n:3,t:'Sequence Write',s:'Head of GTM writes or approves sequence: Day 1 email, Day 3 follow-up, Day 7 bump, Day 14 breakup',o:'gtm'},
+     {n:4,t:'SDR Reviews',s:'SDR personalises first 5 lines of each email before launch. No generic blasts.',o:'sdr'},
+     {n:5,t:'Launch',s:'Instantly or Apollo sequence goes live Monday 9am. SDR monitors replies same day.',o:'sdr'},
+     {n:6,t:'Qualify Reply',s:'Any positive reply → SDR qualifies within 2 hours. Book 3-way call.',o:'sdr'},
+   ],
+   decisions:[
+     {q:'Reply rate <1% after 100 sent?',y:'Pause sequence. Head of GTM reviews messaging. Rewrite before continuing.',n:'Continue. Monitor weekly.'},
+   ],
+   slas:[{t:'Sequence approved',v:'Live by Monday 9am'},{t:'Positive reply',v:'SDR responds within 2 hours'},{t:'Qualified',v:'3-way call booked within 3 days'}],
+   cross:['P3: Admin/Finance tracks SDR tooling costs (Instantly, Clay, Apollo)']},
+
+  {id:'P05',cat:'rev',sub:'1A · Pipeline creation',name:'Named Account Outbound',r:'SDR/BDR',a:'Head of GTM',roles:['sdr','ae'],
+   freq:'Per active AE — monthly account list request',
+   target:'10 named accounts per active AE per month · 2 meetings per 10 accounts',
+   sla:'Account list received → outreach live within 3 business days',
+   why:'AE-sourced named accounts convert 3× better than cold Apollo pulls. The AE relationship warms the door before SDR knocks.',
+   kpis:[{v:'10/mo',l:'Accounts per AE'},{v:'2',l:'Meetings per 10 accounts'},{v:'3× better',l:'Conversion vs pure cold'},{v:'<3d',l:'List → outreach live'}],
+   steps:[
+     {n:1,t:'Account List Request',s:'Alliance Mgr/AE requests named account list from AE via partner portal or email',o:'ae'},
+     {n:2,t:'Research',s:'SDR profiles each account: company size, stack, current pain signals, recent news',o:'sdr'},
+     {n:3,t:'Personalise',s:'First-line personalisation references: partner name, specific pain, trigger event',o:'sdr'},
+     {n:4,t:'Sequence',s:'Shorter sequence — 3 touches. AE mentioned by name in email 1.',o:'sdr'},
+     {n:5,t:'3-way Call',s:'On booking: Alliance Mgr/AE joins call with SDR. Warms the room.',o:'ae'},
+   ],
+   decisions:[
+     {q:'Account list >30 days old?',y:'Request fresh list. Old lists signal AE has moved on.',n:'Use list'},
+   ],
+   slas:[{t:'List received',v:'Outreach live within 3 business days'},{t:'Meeting booked',v:'Alliance Mgr/AE briefed 24hr before call'}],
+   cross:[]},
+
+  /* 1B Deal Progression */
+  {id:'P06',cat:'rev',sub:'1B · Deal progression',name:'Discovery Call',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per qualified opportunity',
+   target:'BANT complete · pain documented · deal size estimated · next step agreed on the call',
+   sla:'Qualified lead → discovery booked within 3 business days',
+   why:'A discovery call done well closes the deal 60 days later. A rushed one creates proposal-on-arrival that never converts.',
+   kpis:[{v:'<3d',l:'Qualify → discovery booked'},{v:'45min',l:'Target call duration'},{v:'100%',l:'BANT logged post-call'},{v:'>$5K',l:'Minimum deal to advance'}],
+   steps:[
+     {n:1,t:'Pre-Call Prep',s:'Research: company, stack, partner context. Brief if VP attending. Agenda sent 24hr before.',o:'ae'},
+     {n:2,t:'Open',s:'Thank partner AE intro. Confirm agenda. Set context: "We have 45 min, here\'s what I\'d like to cover."',o:'ae'},
+     {n:3,t:'Pain Discovery',s:'SPIN questions: Situation → Problem → Implication → Need-payoff. Never pitch before pain is clear.',o:'ae'},
+     {n:4,t:'BANT Qualify',s:'Budget? Authority? Need confirmed? Timeline? Do not skip. Log answers.',o:'ae'},
+     {n:5,t:'Map to Solution',s:'Connect pain to DataSkate capability. Reference specific case study. No feature dump.',o:'ae'},
+     {n:6,t:'Next Step',s:'Agree on next step before hanging up. SOW? Technical call? Stakeholder intro?',o:'ae'},
+     {n:7,t:'Log & Advance',s:'CRM updated within 1hr of call. Debrief VP if $25K+.',o:'ae'},
+   ],
+   decisions:[
+     {q:'Deal appears >$25K?',y:'Brief VP Alliances same day. VP may join next call.',n:'AE continues'},
+     {q:'Not ICP or below floor?',y:'Gracefully decline. Notify partner AE. Log reason.',n:'Advance to scoping/SOW'}
+   ],
+   slas:[{t:'Qualified lead',v:'Discovery booked within 3 business days'},{t:'Call ends',v:'CRM updated within 1 hour'},{t:'>$25K identified',v:'VP briefed same day'}],
+   cross:['P2: Delivery Head joins discovery for complex technical scope (>$50K)']},
+
+  {id:'P07',cat:'rev',sub:'1B · Deal progression',name:'Co-sell Call Execution',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per co-sell opportunity with partner AE',
+   target:'Partner AE attends · DataSkate positioned as extension of partner solution · next step agreed',
+   sla:'Co-sell call requested by AE → confirmed within 24 hours',
+   why:'Co-sell calls with the AE present close 2× faster. The AE\'s presence signals to the prospect that this is a vetted recommendation.',
+   kpis:[{v:'<24hr',l:'AE request → confirm'},{v:'2×',l:'Faster close vs solo'},{v:'100%',l:'Co-sell calls logged'},{v:'Same day',l:'Post-call debrief to VP'}],
+   steps:[
+     {n:1,t:'Brief AE',s:'Before call: DataSkate role, what to expect, how to introduce us, key pain point to emphasise',o:'ae'},
+     {n:2,t:'Run Call',s:'AE introduces DataSkate. Alliance Mgr leads. AE supports with endorsement.',o:'ae'},
+     {n:3,t:'Debrief AE',s:'After call: thank them. Share outcome. Next step. Reinforce: "You helped them."',o:'ae'},
+     {n:4,t:'Log',s:'CRM: AE name, outcome, next step, deal size estimate',o:'ae'},
+     {n:5,t:'VP Brief',s:'If >$25K: VP briefed same day via Slack',o:'ae'},
+   ],
+   decisions:[
+     {q:'AE pulls out at last minute?',y:'Run the call solo. Debrief AE after. Do not cancel.',n:'Standard co-sell format'},
+   ],
+   slas:[{t:'AE requests co-sell',v:'Confirmed within 24 hours'},{t:'Call ends',v:'CRM updated within 1 hour'}],
+   cross:[]},
+
+  {id:'P08',cat:'rev',sub:'1B · Deal progression',name:'SOW Scoping & Pricing',r:'VP Alliances',a:'VP Alliances',roles:['vp','ae'],
+   freq:'Per advancing deal · post-discovery',
+   target:'SOW delivered within 48hr of scoping sign-off · 0 deals below minimum',
+   sla:'Discovery complete → SOW delivered within 48 hours',
+   why:'Slow SOW delivery kills warm deals. Every day of delay is a day the prospect cools off or a competitor gets in.',
+   kpis:[{v:'<48hr',l:'Scoping → SOW delivered'},{v:'$5K',l:'SMB floor — absolute minimum'},{v:'$25K',l:'MM floor — no exceptions'},{v:'0',l:'Below-minimum deals ever'}],
+   steps:[
+     {n:1,t:'Scoping Call',s:'VP Alliances + Delivery Head. Client present. Define: scope, integrations, timeline, deliverables.',o:'vp'},
+     {n:2,t:'Floor Check',s:'VP Alliances checks deal size before drafting. Below $5K? Reprice or kill.',o:'vp'},
+     {n:3,t:'Draft SOW',s:'Standard template in PandaDoc. Clear deliverables, milestones, payment terms.',o:'vp'},
+     {n:4,t:'Delivery Review',s:'Delivery Head reviews technical scope. Confirms delivery is feasible at price.',o:'vp'},
+     {n:5,t:'CEO Review',s:'>$50K only. CEO reviews and approves before sending.',o:'vp'},
+     {n:6,t:'Send',s:'Alliance Mgr/AE sends to client. CC VP Alliances. CRM stage = Proposal Sent.',o:'ae'},
+   ],
+   decisions:[
+     {q:'Deal size below minimum?',y:'Do not draft SOW. Flag to CEO same day. Reprice or walk away.',n:'Proceed'},
+     {q:'Deal >$50K?',y:'CEO must review SOW before sending. No exceptions.',n:'VP Alliances authority sufficient'}
+   ],
+   slas:[{t:'Discovery complete',v:'SOW delivered within 48 hours'},{t:'Below minimum identified',v:'CEO flagged same business day'}],
+   cross:['P2: Delivery Head scopes technical delivery component of all SOWs']},
+
+  {id:'P09',cat:'rev',sub:'1B · Deal progression',name:'SOW Negotiation & Close',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per SOW sent',
+   target:'0 deals started before SOW signed · follow-up within 48hr of sending',
+   sla:'SOW sent → follow-up within 48hr · no response at 5 days → VP escalation',
+   why:'Unsigned SOWs are not revenue. Following up structured is the difference between 40% and 70% close rate.',
+   kpis:[{v:'0',l:'Deliveries started without signed SOW'},{v:'<48hr',l:'SOW sent → first follow-up'},{v:'5d',l:'No response → VP escalation'},{v:'>70%',l:'Target SOW-to-close rate'}],
+   steps:[
+     {n:1,t:'SOW Sent',s:'CRM stage = Proposal Sent. Task created: follow up in 48hr.',o:'ae'},
+     {n:2,t:'48hr Follow-up',s:'Check in: any questions? Any blockers? Never pushy. Be helpful.',o:'ae'},
+     {n:3,t:'Objection Handling',s:'Scope, price, timeline? Loop in VP Alliances. CEO if >$50K.',o:'ae'},
+     {n:4,t:'Signature',s:'Countersigned SOW. Stage = Closed Won. Register deal in partner portal.',o:'ae'},
+     {n:5,t:'Handoff',s:'Delivery Head briefed. Kickoff scheduled within 5 days. VP Alliances confirmed.',o:'vp'},
+   ],
+   decisions:[
+     {q:'5 days no signature?',y:'VP Alliances escalates. May need exec-to-exec call.',n:'Continue 48hr follow-up'},
+     {q:'Client asks to start before signing?',y:'"We need the countersigned SOW first." No exceptions. Ever.',n:''}
+   ],
+   slas:[{t:'SOW sent',v:'Follow-up within 48hr'},{t:'No response at 5 days',v:'VP Alliances escalation'},{t:'Signed',v:'Deal registered + Delivery briefed same day'}],
+   cross:['P2: Delivery Head must be briefed same day as signature — see P2 Kickoff process']},
+
+  {id:'P10',cat:'rev',sub:'1B · Deal progression',name:'Deal Escalation',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per threshold trigger',
+   target:'100% of deals >$25K VP-briefed · 100% of deals >$50K CEO on call',
+   sla:'Threshold identified → VP/CEO briefed same business day',
+   why:'Large deals need senior presence. AEs trust DataSkate more when they see executive engagement. Missing this loses deals.',
+   kpis:[{v:'100%',l:'>$25K VP-briefed'},{v:'100%',l:'>$50K CEO on call'},{v:'Same day',l:'Escalation trigger → senior notified'}],
+   steps:[
+     {n:1,t:'Threshold Hit',s:'Deal signals >$25K at any point. Not just at close — at first signal.',o:'ae'},
+     {n:2,t:'Slack VP',s:'Message: company, size, pain, stage, partner AE. VP responds same day.',o:'ae'},
+     {n:3,t:'CEO Brief',s:'>$50K: VP briefs CEO. CEO joins discovery or first exec call.',o:'vp'},
+     {n:4,t:'Exec Call',s:'CEO + client exec. VP runs. AE takes notes. AE does NOT lead this call.',o:'vp'},
+     {n:5,t:'SOW Authority',s:'CEO countersigns all >$50K SOWs personally.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Deal crosses $50K during scoping?',y:'Stop all progress. Brief CEO before next contact with client.',n:'VP Alliances authority'},
+   ],
+   slas:[{t:'Threshold identified',v:'VP briefed same business day'},{t:'CEO needed',v:'VP briefs CEO within 4 hours'}],
+   cross:[]},
+
+  {id:'P11',cat:'rev',sub:'1B · Deal progression',name:'Lost Deal Debrief',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per closed-lost deal',
+   target:'100% lost deals debriefed within 5 days · patterns inform quarterly ICP update',
+   sla:'Deal marked lost → debrief logged within 5 business days',
+   why:'Lost deals are the highest-quality learning in the company. Not debriefing them means repeating losses forever.',
+   kpis:[{v:'100%',l:'Lost deals debriefed'},{v:'<5d',l:'Debrief logged after loss'},{v:'Quarterly',l:'Pattern → ICP update'}],
+   steps:[
+     {n:1,t:'Mark Lost',s:'HubSpot stage = Closed Lost. Reason field required — cannot leave blank.',o:'ae'},
+     {n:2,t:'Debrief Log',s:'5 fields: Why lost · Who decided · What we could have done differently · Competitor intel · ICP signal',o:'ae'},
+     {n:3,t:'VP Review',s:'VP Alliances reviews all losses in weekly pipeline review.',o:'vp'},
+     {n:4,t:'Pattern Analysis',s:'Quarterly: Head of GTM + VP analyse patterns across all losses.',o:'gtm'},
+     {n:5,t:'ICP Update',s:'Pattern = ICP issue → update targeting. Pattern = pitch issue → update objection guide.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Lost to competitor?',y:'Log competitor name + reason. Feed into competitive intelligence process.',n:'Log as no-decision or budget. Nurture candidate.'},
+   ],
+   slas:[{t:'Deal marked lost',v:'Debrief within 5 business days'},{t:'Monthly close',v:'Pattern summary in GTM review'}],
+   cross:[]},
+
+  {id:'P12',cat:'rev',sub:'1B · Deal progression',name:'Existing Client Expansion',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per project — expansion flagged at 60% delivery mark',
+   target:'Expansion conversation on every project ≥$25K · 30% of projects produce Phase 2',
+   sla:'PM expansion flag → AE follow-up within 5 business days',
+   why:'Expansion is the cheapest ARR to generate — 5× cheaper than new logo. Every project should seed the next one.',
+   kpis:[{v:'5×',l:'Cheaper than new logo'},{v:'30%',l:'Target expansion rate per project'},{v:'60%',l:'Delivery mark triggers expansion flag'},{v:'<5d',l:'Flag → AE follow-up'}],
+   steps:[
+     {n:1,t:'PM Flag',s:'PM flags at 60% delivery: client engaged, results visible, expansion opportunity identified',o:'ae'},
+     {n:2,t:'AE Scopes',s:'Alliance Mgr/AE calls client stakeholder: "What\'s next after this?" Surface Phase 2.',o:'ae'},
+     {n:3,t:'VP Involvement',s:'If >$25K expansion: VP joins call. Exec-to-exec if >$50K.',o:'vp'},
+     {n:4,t:'Fast SOW',s:'Expansion SOW drafted before current project closes. Momentum is highest here.',o:'vp'},
+     {n:5,t:'Case Study Trigger',s:'On expansion sign: trigger P27 case study process. Document the before/after.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Client unresponsive to expansion conversation?',y:'Post-delivery satisfaction call. Surface expansion naturally.',n:'Standard expansion track'},
+   ],
+   slas:[{t:'PM flags expansion',v:'AE follow-up within 5 business days'},{t:'Expansion >$25K',v:'VP joins next call'}],
+   cross:['P2: PM owns the expansion flag at 60% delivery mark — see P2 PM processes']},
+
+  /* 1C Partner Governance */
+  {id:'P13',cat:'rev',sub:'1C · Partner governance',name:'Quarterly Business Review (QBR)',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Quarterly · 5 partners = 5 QBRs/quarter',
+   target:'All 5 QBRs complete before Month 1 of new quarter · commitments logged within 48hr',
+   sla:'QBR deck ready 5 days before · follow-up actions within 48hr',
+   why:'QBRs are the formal governance moment where referral commitments are made. Without them, partner relationships drift and referrals dry up.',
+   kpis:[{v:'5/qtr',l:'QBRs completed'},{v:'<5d',l:'Deck ready before'},{v:'<48hr',l:'Actions logged after'},{v:'100%',l:'Referral targets set per partner'}],
+   steps:[
+     {n:1,t:'Data Prep',s:'Alliance Mgr/AE pulls: co-sell wins, pipeline by source, lead volume per partner',o:'ae'},
+     {n:2,t:'Deck Build',s:'VP Alliances + Head of GTM: DS performance, wins, next quarter commitments ask',o:'vp'},
+     {n:3,t:'QBR Meeting',s:'VP Alliances runs. CEO attends Salesforce + MuleSoft QBRs only.',o:'vp'},
+     {n:4,t:'Commitments',s:'Formal referral target agreed. MDF confirmed. Next quarter events. In writing.',o:'vp'},
+     {n:5,t:'Follow-up',s:'Actions logged in Notion within 48hr. Partner confirmation email sent same day.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Partner below referral target?',y:'Root cause in QBR — enablement issue or relationship issue?',n:'Affirm and stretch target'},
+   ],
+   slas:[{t:'QBR date set',v:'Deck ready 5 days before'},{t:'QBR complete',v:'Actions logged within 48hr'},{t:'Quarter end',v:'All 5 QBRs complete before new quarter Month 1'}],
+   cross:[]},
+
+  {id:'P14',cat:'rev',sub:'1C · Partner governance',name:'Partner Health Review',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Monthly',
+   target:'Scorecard updated all 5 partners · under-performers have action plan within 3 days',
+   sla:'Month close → scorecard published within 3 business days',
+   why:'Without monthly health checks, weak partner relationships go unnoticed until they stop referring entirely. Catch early.',
+   kpis:[{v:'5/mo',l:'Partners scored'},{v:'<3d',l:'Month close → scorecard'},{v:'100%',l:'Under-performers with action plan'}],
+   steps:[
+     {n:1,t:'Pull Data',s:'HubSpot: referral count, conversion rate, avg deal size, pipeline velocity per partner',o:'vp'},
+     {n:2,t:'Score',s:'4 metrics: lead volume, conversion %, avg deal size, AE responsiveness proxy',o:'vp'},
+     {n:3,t:'Flag',s:'Any partner below target flagged red with root cause hypothesis',o:'vp'},
+     {n:4,t:'Action Plan',s:'Under-performing: specific actions — more AE touches, new enablement, exec call',o:'vp'},
+     {n:5,t:'Report to CEO',s:'Published to CEO. Shared with Head of GTM for content/MDF alignment.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Partner below 50% of target?',y:'Emergency. VP calls PDM/CAM this week. Do not wait.',n:'Standard action plan + nurture'},
+   ],
+   slas:[{t:'Month close',v:'Scorecard published within 3 business days'}],
+   cross:[]},
+
+  {id:'P15',cat:'rev',sub:'1C · Partner governance',name:'MDF Planning & Utilisation',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Quarterly plan · monthly tracking',
+   target:'100% MDF utilised · ≥3× pipeline return on spend · 0 forfeited funds',
+   sla:'MDF deadline → claim submitted ≥5 days before · no exceptions',
+   why:'MDF is free co-marketing budget. Forfeiting it is leaving money on the table. Every dollar must be claimed and turned into pipeline.',
+   kpis:[{v:'100%',l:'MDF utilised'},{v:'≥3×',l:'Pipeline return on spend'},{v:'0',l:'Forfeited funds'},{v:'≥5d',l:'Before deadline'}],
+   steps:[
+     {n:1,t:'Budget Mapping',s:'Head of GTM maps available MDF per partner at quarter start',o:'gtm'},
+     {n:2,t:'Activity Plan',s:'Propose campaigns: events, webinars, content. VP Alliances approves.',o:'gtm'},
+     {n:3,t:'Submit Request',s:'Head of GTM submits MDF request in partner portal before campaign starts',o:'gtm'},
+     {n:4,t:'Execute',s:'Campaign runs. All leads tagged MDF source in CRM.',o:'gtm'},
+     {n:5,t:'Claim',s:'Reimbursement claim submitted ≥5 days before partner deadline.',o:'gtm'},
+     {n:6,t:'ROI Report',s:'Pipeline generated per MDF campaign reported to VP within 30 days of campaign end',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Deadline approaching with unused funds?',y:'Fast-track low-risk activity: webinar, content boost, event sponsorship',n:'Normal campaign'},
+   ],
+   slas:[{t:'Quarter start',v:'MDF plan submitted within 2 weeks'},{t:'Claim deadline',v:'Submitted ≥5 days before'}],
+   cross:['P3: Finance tracks MDF reimbursement cash flow — brief Finance on timeline']},
+
+  {id:'P16',cat:'rev',sub:'1C · Partner governance',name:'Partner Tier Compliance',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Quarterly review · ongoing monitoring',
+   target:'All 5 partners at or above target tier · cert gaps identified 60 days before deadline',
+   sla:'Tier risk identified → remediation plan within 10 business days',
+   why:'Partner tier controls deal registration access, MDF budgets, and co-sell visibility. Dropping tier costs money and referrals.',
+   kpis:[{v:'All 5',l:'Partners at or above tier'},{v:'60d',l:'Advance warning on gaps'},{v:'<10d',l:'Remediation plan after risk'}],
+   steps:[
+     {n:1,t:'Requirements Audit',s:'Pull tier requirements from each of 5 partner portals. Quarterly.',o:'vp'},
+     {n:2,t:'Gap Analysis',s:'Certs missing? Revenue thresholds? Active deal counts? Customer references?',o:'vp'},
+     {n:3,t:'Remediation Brief',s:'Gaps to relevant owners: cert gaps → HR/Delivery. Revenue → Alliance Mgr.',o:'vp'},
+     {n:4,t:'Track',s:'Monthly check. Escalate if 30 days from deadline with gap unresolved.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Tier drop risk in <30 days?',y:'Escalate to CEO. Emergency cert push or revenue sprint.',n:'Standard monitoring'},
+   ],
+   slas:[{t:'Tier risk identified',v:'Remediation plan within 10 business days'},{t:'30 days to deadline',v:'CEO escalation if unresolved'}],
+   cross:['P2: Delivery Head coordinates cert completion for technical partner tier requirements','P3: HR tracks cert completions relevant to partner tier']},
+
+  {id:'P17',cat:'rev',sub:'1C · Partner governance',name:'New Partner Onboarding',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'As needed · CEO approved only',
+   target:'Partner live within 60 days · 3 AE relationships initiated within 30 days',
+   sla:'CEO approval → portal active within 30 days',
+   why:'Adding a partner without structured activation creates a dormant relationship. The 60-day clock starts the day CEO approves.',
+   kpis:[{v:'<60d',l:'Decision → partner live'},{v:'3',l:'AE relationships in 30 days'},{v:'<30d',l:'Portal profile active'},{v:'90d',l:'First pipeline review'}],
+   steps:[
+     {n:1,t:'Evaluation',s:'VP Alliances presents to CEO: market fit, tier potential, AE density, competitive reason',o:'vp'},
+     {n:2,t:'CEO Approval',s:'CEO signs off. No new partner without CEO approval. Written record.',o:'vp'},
+     {n:3,t:'Portal Registration',s:'DataSkate registered. Profile complete. Deal registration configured.',o:'vp'},
+     {n:4,t:'AE Mapping',s:'VP runs P01 for new partner immediately. Target 3 AEs in first 30 days.',o:'vp'},
+     {n:5,t:'Events',s:'Head of GTM adds partner events to calendar. Webinar topics aligned.',o:'gtm'},
+     {n:6,t:'90-day Review',s:'Pipeline from this partner? Keep or pause investment.',o:'vp'},
+   ],
+   decisions:[
+     {q:'CEO approved?',y:'Begin registration and AE mapping within 48 hours',n:'Do not proceed'},
+     {q:'90 days, no referrals?',y:'Pause investment. Reassess strategy. CEO informed.',n:'Accelerate AE activation'},
+   ],
+   slas:[{t:'CEO approval',v:'Portal active within 30 days'},{t:'Portal active',v:'3 AE relationships initiated within 30 days'}],
+   cross:[]},
+
+  /* 1D Revenue Operations */
+  {id:'P18',cat:'rev',sub:'1D · Revenue operations',name:'Weekly Revenue Forecast',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Weekly · every Friday by 5pm',
+   target:'Forecast accuracy ±10% · delivered without CEO ever having to ask',
+   sla:'Friday 5pm hard deadline. Non-negotiable.',
+   why:'The CEO needs a reliable weekly number. If the forecast process is broken, every strategic decision downstream is wrong.',
+   kpis:[{v:'±10%',l:'Forecast accuracy'},{v:'Every Friday',l:'Delivery deadline'},{v:'0',l:'Times CEO asked for it'}],
+   steps:[
+     {n:1,t:'Pull Pipeline',s:'HubSpot: all open deals, stage, close date, size, probability',o:'vp'},
+     {n:2,t:'Weighted Forecast',s:'Stage × probability. Flag deals at risk. Flag deals likely to close this week.',o:'vp'},
+     {n:3,t:'Sanity Check',s:'Does this match what you know from real conversations? Adjust if needed.',o:'vp'},
+     {n:4,t:'CEO Report',s:'Format: this week, MTD, QTD, risks, opportunities. Sent by 5pm Friday.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Forecast tracking <80% of weekly target?',y:'Flag risks to CEO proactively with proposed mitigation. No surprises.',n:'Standard report'},
+   ],
+   slas:[{t:'Friday',v:'Report sent by 5pm — without CEO asking'}],
+   cross:[]},
+
+  {id:'P19',cat:'rev',sub:'1D · Revenue operations',name:'CRM Hygiene & Audit',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Monthly — first week',
+   target:'0 deals without next action · 0 deals stale >14 days · 100% activities source-tagged',
+   sla:'Audit complete by end of first week each month',
+   why:'A dirty CRM means a wrong forecast and broken attribution. Everything downstream depends on clean data.',
+   kpis:[{v:'0',l:'Deals without next action'},{v:'0',l:'Deals stale >14 days'},{v:'100%',l:'Activities source-tagged'}],
+   steps:[
+     {n:1,t:'Stale Report',s:'HubSpot filter: no activity >14 days. List all affected.',o:'ae'},
+     {n:2,t:'Update or Close',s:'Each stale deal: real next action or mark closed-lost with reason. No exceptions.',o:'ae'},
+     {n:3,t:'Source Audit',s:'All deals tagged: partner name, outbound, inbound-content, event, etc.',o:'ae'},
+     {n:4,t:'Owner Audit',s:'All deals have single owner. No orphan deals.',o:'ae'},
+     {n:5,t:'Report',s:'Summary to VP: deals cleaned, stale removed, source coverage %',o:'ae'},
+   ],
+   decisions:[
+     {q:'Deal stale >30 days with no context?',y:'Mark closed-lost. Cannot forecast a ghost deal.',n:'Update with next action and date'},
+   ],
+   slas:[{t:'Month close',v:'Audit complete in first week of new month'}],
+   cross:[]},
+
+  {id:'P20',cat:'rev',sub:'1D · Revenue operations',name:'SOW Minimum Enforcement',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Per deal · monthly audit',
+   target:'Zero deals below $5K SMB or $25K MM ever progress past discovery',
+   sla:'Below-minimum identified → CEO flagged same business day',
+   why:'Below-minimum deals destroy margin and signal to partners that the floor is negotiable. It never is.',
+   kpis:[{v:'$5K',l:'SMB floor'},{v:'$25K',l:'MM floor'},{v:'0',l:'Exceptions in history'},{v:'Same day',l:'Flag to CEO if breached'}],
+   steps:[
+     {n:1,t:'Discovery Complete',s:'Deal size estimated in discovery call',o:'ae'},
+     {n:2,t:'Size Check',s:'VP reviews every deal before SOW drafted',o:'vp'},
+     {n:3,t:'Below Minimum?',s:'Yes: do not draft SOW. Flag CEO same day.',o:'vp'},
+     {n:4,t:'Reprice or Kill',s:'CEO decides: reprice to minimum or walk away. Client refuses minimum → walk.',o:'vp'},
+     {n:5,t:'Monthly Audit',s:'Head of GTM reviews all closed deals for minimum compliance',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Deal below minimum?',y:'Flag CEO same day. Do not draft SOW.',n:'Proceed normally'},
+     {q:'Client refuses minimum?',y:'Walk away. Log as lost. No exceptions. Ever.',n:''},
+   ],
+   slas:[{t:'Below minimum identified',v:'CEO flagged same business day'}],
+   cross:[]},
+
+  {id:'P21',cat:'rev',sub:'1D · Revenue operations',name:'Pipeline Attribution Review',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Monthly',
+   target:'100% pipeline attributed by source · motion-by-motion split accurate',
+   sla:'Month close → attribution report within 3 business days',
+   why:'Without attribution you cannot know which motion is working. You will misallocate budget and effort.',
+   kpis:[{v:'100%',l:'Pipeline attributed'},{v:'3 sources',l:'Partner / Outbound / Inbound'},{v:'<3d',l:'Month close → report'}],
+   steps:[
+     {n:1,t:'Pull Pipeline',s:'HubSpot: all deals created this month by source tag',o:'gtm'},
+     {n:2,t:'Attribution Check',s:'% partner referral · % outbound SDR · % inbound content/events/webinar',o:'gtm'},
+     {n:3,t:'Trend',s:'vs prior month and quarter. What moved? Why?',o:'gtm'},
+     {n:4,t:'Recommendation',s:'Which motion to invest more in? Which to deprioritise?',o:'gtm'},
+     {n:5,t:'Report',s:'1-page to VP. Input to monthly GTM review.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Outbound <30% of pipeline?',y:'Flag to VP — SDR ramp or sequence issue',n:'Normal reporting'},
+     {q:'Partner referral <50%?',y:'Flag — AE activation may be slowing',n:''},
+   ],
+   slas:[{t:'Month close',v:'Attribution report within 3 business days'}],
+   cross:[]},
+
+  /* ── CAT 2: BRAND ── */
+  {id:'P22',cat:'brand',sub:'2A · Personal brand',name:'Executive LinkedIn Content Operation',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Daily drafting · 3–5 posts/week across 3 execs',
+   target:'CEO 5K followers EOY · avg engagement ≥3% · all posts approved within 24hr',
+   sla:'Draft submitted → approved or returned within 24hr',
+   why:'Executive LinkedIn is warm outbound. AEs check profiles before deciding to refer. Posts build trust before anyone takes a call.',
+   kpis:[{v:'5K',l:'CEO followers by EOY'},{v:'≥3%',l:'Avg engagement rate'},{v:'<24hr',l:'Draft → approved'},{v:'3–5/wk',l:'Posts across 3 execs'}],
+   steps:[
+     {n:1,t:'Ideation',s:'CEO voice notes, wins, ecosystem news, partner updates → Head of GTM sources daily',o:'gtm'},
+     {n:2,t:'Draft',s:'Head of GTM writes in exec\'s voice. 1 topic, 1 angle, 1 CTA or no CTA.',o:'gtm'},
+     {n:3,t:'Submit',s:'Slack DM to exec: "approve, edit, or give me a direction change". Never email.',o:'gtm'},
+     {n:4,t:'Exec Approves',s:'10-min review. Light edits only. Within 24hr — no exceptions.',o:'vp'},
+     {n:5,t:'Schedule',s:'Buffer at optimal time: Tue–Thu 7–9am. Head of GTM schedules.',o:'gtm'},
+     {n:6,t:'Engage',s:'Exec engages with comments for 1hr post-publish.',o:'vp'},
+     {n:7,t:'Track',s:'Head of GTM logs: impressions, engagements, followers gained per post',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Exec doesn\'t respond within 24hr?',y:'Head of GTM chases. Post held — never published without approval.',n:'Schedule normally'},
+     {q:'Post underperforms <1% engagement?',y:'Analyse topic/format/timing. Adjust next week.',n:''},
+   ],
+   slas:[{t:'Draft submitted',v:'Approved or returned within 24hr'},{t:'Post published',v:'Exec engages within 1hr'}],
+   cross:[]},
+
+  {id:'P23',cat:'brand',sub:'2A · Personal brand',name:'Executive LinkedIn Profile Governance',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Quarterly + on any role/positioning change',
+   target:'All 3 profiles optimised · consistent positioning · updated within 5 days of change',
+   sla:'Profile review → changes live within 5 business days',
+   why:'Weak profiles undermine all content work. AEs check profiles before they decide to refer. The profile is the first handshake.',
+   kpis:[{v:'3',l:'Profiles maintained'},{v:'Quarterly',l:'Review cadence'},{v:'<5d',l:'Review → changes live'}],
+   steps:[
+     {n:1,t:'Audit',s:'Head of GTM: headline, about, experience, featured posts, banner. All 3 profiles.',o:'gtm'},
+     {n:2,t:'Gap Brief',s:'Specific changes needed per profile. Sent to exec for review.',o:'gtm'},
+     {n:3,t:'Update',s:'Head of GTM makes changes. Exec approves.',o:'gtm'},
+     {n:4,t:'Consistency Check',s:'All 3 aligned on DataSkate positioning and messaging.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Exec role or positioning changes?',y:'Profile update triggered immediately. Do not wait for quarterly.',n:'Quarterly cadence'},
+   ],
+   slas:[{t:'Profile review',v:'Changes live within 5 business days'}],
+   cross:[]},
+
+  {id:'P24',cat:'brand',sub:'2A · Personal brand',name:'Partner Community Presence',r:'VP Alliances',a:'VP Alliances',roles:['vp','gtm'],
+   freq:'Monthly thread · daily comments',
+   target:'1 thread/month · ≥3 AE post comments/week · top 5% engagement',
+   sla:'Monthly thread posted by end of first week',
+   why:'Salesforce Partner Community is where AEs discover SIs. Being a visible voice there accelerates inbound AE relationships by 2×.',
+   kpis:[{v:'1/mo',l:'Community threads'},{v:'≥3/wk',l:'AE post comments'},{v:'Top 5%',l:'Engagement ranking target'}],
+   steps:[
+     {n:1,t:'Thread Topic',s:'Head of GTM proposes based on ecosystem news. VP approves.',o:'gtm'},
+     {n:2,t:'Write',s:'Head of GTM drafts. VP Alliances edits and posts in own name.',o:'vp'},
+     {n:3,t:'Daily Comments',s:'VP comments on 1–2 AE posts daily. Substantive. Not just "great post".',o:'vp'},
+     {n:4,t:'Track',s:'Monthly: reach, responses, new AE connections from community activity',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Breaking ecosystem news?',y:'Fast-track a reaction thread this week',n:'Monthly cadence'},
+   ],
+   slas:[{t:'Month start',v:'Thread posted by end of first week'}],
+   cross:[]},
+
+  {id:'P25',cat:'brand',sub:'2B · Content',name:'Content Calendar Management',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Monthly planning · weekly execution',
+   target:'30-day calendar approved · 100% posts scheduled 5 days ahead',
+   sla:'Calendar submitted → VP approval within 3 days · published by 25th for following month',
+   why:'Reactive content is low-quality content. A pre-approved calendar means no scrambling, consistent publishing, and strategic alignment.',
+   kpis:[{v:'30d',l:'Calendar look-ahead'},{v:'100%',l:'Posts scheduled ≥5 days ahead'},{v:'25th',l:'Calendar approved for next month'}],
+   steps:[
+     {n:1,t:'Ideation',s:'Ecosystem news, partner releases, case studies, AE enablement topics, CEO themes',o:'gtm'},
+     {n:2,t:'Draft Calendar',s:'30-day grid: topic, exec, format (text/image/article), date, CTA',o:'gtm'},
+     {n:3,t:'VP Approval',s:'VP reviews. Approves or changes within 3 days.',o:'vp'},
+     {n:4,t:'Production',s:'Head of GTM drafts all month\'s content. Schedules via Buffer.',o:'gtm'},
+     {n:5,t:'Monitor',s:'Head of GTM monitors performance daily. Flags anomalies to VP.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Partner releases major update mid-month?',y:'Fast-track reactive post. Adjust calendar.',n:'Follow approved calendar'},
+   ],
+   slas:[{t:'Month start',v:'Calendar submitted to VP within first week'},{t:'Submission',v:'VP approval within 3 days'}],
+   cross:[]},
+
+  {id:'P26',cat:'brand',sub:'2B · Content',name:'Case Study Production',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Per qualifying project close · target 1/month',
+   target:'1 published case study/month · 100% client approved before publish · <30 days project-to-published',
+   sla:'Project closes → intake initiated within 5 days',
+   why:'Case studies close deals that decks cannot. AEs use them to validate DataSkate to their clients. Every delivered project should produce one.',
+   kpis:[{v:'1/mo',l:'Published case studies'},{v:'≥3',l:'AE uses per case study'},{v:'<30d',l:'Project close → published'},{v:'100%',l:'Client approved'}],
+   steps:[
+     {n:1,t:'Trigger',s:'PM flags: project closed, CSAT ≥4.2, client willing to be featured',o:'gtm'},
+     {n:2,t:'Intake Call',s:'20-min call with client. Capture: before/after, metrics, quote.',o:'gtm'},
+     {n:3,t:'Draft',s:'Standard template: challenge, solution, result, quote. Max 1 page.',o:'gtm'},
+     {n:4,t:'Client Approval',s:'Send to client. Wait for approval. Never publish without it.',o:'gtm'},
+     {n:5,t:'Design',s:'Brand template. PDF for sales. Web version for site.',o:'gtm'},
+     {n:6,t:'Distribute',s:'AE kit, AppExchange, LinkedIn, website, email sequence library',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Client refuses to be named?',y:'Anonymised version — industry + result only. Still valuable.',n:'Full named case study'},
+   ],
+   slas:[{t:'Project closes',v:'Intake initiated within 5 days'},{t:'Draft complete',v:'Client approval within 10 days'},{t:'Approved',v:'Published within 5 days'}],
+   cross:['P2: PM triggers case study process at project close — see P2 PM processes']},
+
+  {id:'P27',cat:'brand',sub:'2B · Content',name:'Thought Leadership Placement',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Quarterly',
+   target:'1 placed article/quarter · 1 podcast appearance/quarter',
+   sla:'Pitch submitted → follow up within 2 weeks if no response',
+   why:'Third-party placements carry more credibility than owned content. One industry byline outperforms 20 LinkedIn posts.',
+   kpis:[{v:'1/qtr',l:'External article placed'},{v:'1/qtr',l:'Podcast appearance'},{v:'2wk',l:'Pitch follow-up SLA'}],
+   steps:[
+     {n:1,t:'Target List',s:'5 publications or podcasts per quarter. Ecosystem-relevant.',o:'gtm'},
+     {n:2,t:'Pitch Brief',s:'1-paragraph pitch per outlet. Topic tied to real client result or ecosystem trend.',o:'gtm'},
+     {n:3,t:'Submit',s:'Email pitch to editor/host. CC VP Alliances if high-profile.',o:'gtm'},
+     {n:4,t:'Follow Up',s:'No response in 2 weeks → follow up once. Then move to next outlet.',o:'gtm'},
+     {n:5,t:'Write/Record',s:'Accepted: article/episode produced. CEO/VP is the face. GTM ghosts.',o:'gtm'},
+     {n:6,t:'Amplify',s:'LinkedIn on publish. Share with AEs. Add to collateral kit.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Accepted?',y:'Write within deadline. CEO/VP approves final.',n:'Try next outlet on list'},
+   ],
+   slas:[{t:'Pitch submitted',v:'Follow up in 2 weeks if no response'}],
+   cross:[]},
+
+  {id:'P28',cat:'brand',sub:'2B · Content',name:'Content Performance Review',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Monthly · first 3 days of month',
+   target:'Bottom 20% flagged for retirement · content-to-pipeline attribution updated',
+   sla:'Month close → review complete within 3 business days',
+   why:'Content that doesn\'t generate engagement or pipeline should be retired or rebuilt. This prevents content debt.',
+   kpis:[{v:'Monthly',l:'Review cadence'},{v:'Bottom 20%',l:'Flagged each cycle'},{v:'<3d',l:'Month close → complete'}],
+   steps:[
+     {n:1,t:'Pull Metrics',s:'Views, time on page, CTA clicks, email captures, cited in sales conversations',o:'gtm'},
+     {n:2,t:'Attribution',s:'Which assets are AEs actually using? Which drove pipeline this month?',o:'gtm'},
+     {n:3,t:'Rank',s:'Composite score: traffic × conversion × sales use',o:'gtm'},
+     {n:4,t:'Flag Bottom 20%',s:'Retire, refresh, or repromote',o:'gtm'},
+     {n:5,t:'Report',s:'1-page to VP: what\'s working, what\'s not, next month investment recommendation',o:'gtm'},
+   ],
+   decisions:[
+     {q:'High traffic but zero pipeline?',y:'Check CTA — rework call to action or gating',n:'Retire if both traffic AND pipeline are low'},
+   ],
+   slas:[{t:'Month close',v:'Review complete within 3 business days'}],
+   cross:[]},
+
+  {id:'P29',cat:'brand',sub:'2C · Events & webinars',name:'Event Selection & Calendar',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Quarterly planning',
+   target:'2 events/month · speaker slot ≥1/quarter · applications 6 weeks ahead',
+   sla:'Quarter starts → event calendar locked within first 2 weeks',
+   why:'Events without a pipeline target are expensive networking lunches. This ensures every event has a clear ROI expectation.',
+   kpis:[{v:'2/mo',l:'Events attended'},{v:'1/qtr',l:'Speaker slot'},{v:'6wk',l:'Application lead time'}],
+   steps:[
+     {n:1,t:'Event Scan',s:'Dreamforce, World Tours, MuleSoft CONNECT, Informatica World, regional user groups',o:'gtm'},
+     {n:2,t:'Score',s:'ICP audience match, AE attendance expected, speaker opportunity, cost',o:'gtm'},
+     {n:3,t:'VP Approval',s:'Final calendar approved by VP. CEO attends Salesforce + MuleSoft only.',o:'vp'},
+     {n:4,t:'Speaker Apply',s:'Head of GTM submits applications 6 weeks ahead. Topic tied to client result.',o:'gtm'},
+     {n:5,t:'Pre-Event Promo',s:'LinkedIn posts, email to warm contacts, AE advance notice',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Speaker application accepted?',y:'Promote heavily. CEO/VP presents.',n:'Attend as attendee. AE relationship focus.'},
+   ],
+   slas:[{t:'Quarter starts',v:'Event calendar locked within 2 weeks'},{t:'Speaker deadline',v:'Application submitted 6 weeks ahead'}],
+   cross:[]},
+
+  {id:'P30',cat:'brand',sub:'2C · Events & webinars',name:'Event Execution & Follow-up',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per event attended',
+   target:'≥5 warm contacts per event · ≥2 discovery calls within 30 days · follow-up live within 24hr',
+   sla:'Event ends → follow-up sequence live within 24hr',
+   why:'Event warm signals expire within 72 hours. Structured follow-up converts them. Ad hoc doesn\'t.',
+   kpis:[{v:'≥5',l:'Warm contacts per event'},{v:'≥2',l:'Discovery calls within 30 days'},{v:'<24hr',l:'Follow-up live'}],
+   steps:[
+     {n:1,t:'During Event',s:'Capture: name, company, pain, LinkedIn connect on spot',o:'ae'},
+     {n:2,t:'Same Day CRM',s:'All contacts in HubSpot. Tag source = event name. Note exact context.',o:'ae'},
+     {n:3,t:'<24hr Follow-up',s:'Personalised email referencing exact conversation. Not a template.',o:'ae'},
+     {n:4,t:'Day 3',s:'Relevant case study or webinar shared',o:'ae'},
+     {n:5,t:'Day 7',s:'20-min call request with specific agenda',o:'ae'},
+     {n:6,t:'Report',s:'Contacts made, meetings booked, pipeline estimate → VP within 24hr',o:'ae'},
+   ],
+   decisions:[
+     {q:'Strong pain signal at event?',y:'Skip 3-touch nurture. Direct to discovery call booking.',n:'Standard 3-touch sequence'},
+   ],
+   slas:[{t:'Event ends',v:'All contacts in CRM same day + follow-up live within 24hr'}],
+   cross:[]},
+
+  {id:'P31',cat:'brand',sub:'2C · Events & webinars',name:'Webinar Production & Publishing',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Bi-weekly · 1 new video every 2 weeks',
+   target:'1 gated webinar/2 weeks · ≥50 views in 30 days · distributed to all active AEs',
+   sla:'Topic approved → live within 5 business days',
+   why:'AEs share these videos with prospects as credibility tools. The library is a passive lead generation machine that runs 24/7.',
+   kpis:[{v:'1/2wk',l:'New video published'},{v:'≥50',l:'Views in 30 days'},{v:'<5d',l:'Topic → live'},{v:'All AEs',l:'Notified on publish'}],
+   steps:[
+     {n:1,t:'Topic',s:'VP Alliances picks topic: tied to specific AE pain or integration use case',o:'vp'},
+     {n:2,t:'Brief',s:'Head of GTM briefs Practice Lead: topic, audience, what to demo, 12-min target',o:'gtm'},
+     {n:3,t:'Record',s:'Practice Lead records Loom/Zoom screen share. Raw is fine. No studio needed.',o:'gtm'},
+     {n:4,t:'Edit',s:'Head of GTM: intro slide, CTA slide, chapters, thumbnail',o:'gtm'},
+     {n:5,t:'Gate',s:'Gated landing page. Email capture required. HubSpot form.',o:'gtm'},
+     {n:6,t:'Distribute',s:'Email to all active AEs: "New video — forward to prospects asking about [topic]"',o:'gtm'},
+   ],
+   decisions:[
+     {q:'<10 views in first 2 weeks?',y:'Re-distribute to AEs. Post on CEO LinkedIn. Check topic resonance.',n:'Normal distribution'},
+   ],
+   slas:[{t:'Topic approved',v:'Live within 5 business days'}],
+   cross:['P2: Practice Lead records the technical content — see P2 Practice Lead processes']},
+
+  {id:'P32',cat:'brand',sub:'2C · Events & webinars',name:'Webinar Performance Tracking',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Monthly',
+   target:'Views, captures, conversion tracked per video · under-performers retired at 60 days',
+   sla:'Monthly report to VP by end of first week',
+   why:'Without tracking the webinar library fills with dead content. Only videos AEs use should be maintained.',
+   kpis:[{v:'Monthly',l:'Tracking'},{v:'60d',l:'Retirement threshold'},{v:'≥20%',l:'Capture → call conversion'}],
+   steps:[
+     {n:1,t:'Pull Data',s:'Views, email captures, source (which AE shared it), conversion to calls',o:'gtm'},
+     {n:2,t:'Rank',s:'By conversion rate — not just views',o:'gtm'},
+     {n:3,t:'Flag',s:'0 captures in 60 days → retire or re-topic',o:'gtm'},
+     {n:4,t:'Report',s:'Top 3 and worst 3. Recommended topics for next month.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'High views, zero captures?',y:'Check gate — is email required? Fix the form.',n:''},
+   ],
+   slas:[{t:'Month close',v:'Report to VP in first week of new month'}],
+   cross:[]},
+
+  {id:'P33',cat:'brand',sub:'2D · Ecosystem presence',name:'AppExchange Listing Management',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Quarterly refresh · review request per project',
+   target:'≥10 reviews · rating ≥4.0 · listing updated quarterly',
+   sla:'Project closes → review request sent within 5 days',
+   why:'AppExchange is often where AEs and prospects validate DataSkate before taking a call. Reviews build credibility passively.',
+   kpis:[{v:'≥10',l:'Reviews'},{v:'≥4.0',l:'Rating'},{v:'<5d',l:'Project close → request'},{v:'Quarterly',l:'Listing refresh'}],
+   steps:[
+     {n:1,t:'Review Request',s:'After every project close with CSAT ≥4.2: Head of GTM sends review request',o:'gtm'},
+     {n:2,t:'Follow Up',s:'One follow-up at 5 days if no review.',o:'gtm'},
+     {n:3,t:'Quarterly Refresh',s:'Update: new services, new case studies, certifications, partner badges',o:'gtm'},
+     {n:4,t:'Negative Review',s:'VP responds within 24hr. Never ignore.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Review requests unresponded?',y:'Escalate to Alliance Mgr/AE to ask client contact directly',n:'One follow-up email only'},
+   ],
+   slas:[{t:'Project closes',v:'Review request within 5 days'},{t:'Negative review',v:'VP response within 24hr'}],
+   cross:['P2: PM triggers review request process at project close']},
+
+  {id:'P34',cat:'brand',sub:'2D · Ecosystem presence',name:'Partner Portal Profile Maintenance',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Quarterly + on win or cert',
+   target:'All 5 partner portal profiles updated · new wins added within 10 days',
+   sla:'New win or cert → portal updated within 10 business days',
+   why:'Partner portals are where partner PDMs evaluate DataSkate as a co-sell candidate. Outdated profiles = missed referral opportunities.',
+   kpis:[{v:'5',l:'Portals maintained'},{v:'<10d',l:'Win/cert → portal update'},{v:'Quarterly',l:'Full refresh'}],
+   steps:[
+     {n:1,t:'Quarterly Audit',s:'Head of GTM reviews all 5 portals: competencies, case studies, certifications, logos',o:'gtm'},
+     {n:2,t:'Update Wins',s:'New case studies, new client logos added within 10 days of project close',o:'gtm'},
+     {n:3,t:'Cert Updates',s:'New cert? Update portal within 5 days.',o:'gtm'},
+     {n:4,t:'VP Review',s:'VP Alliances approves any messaging changes',o:'vp'},
+   ],
+   decisions:[
+     {q:'Profile out of date vs competitor?',y:'Fast-track update. Not waiting for quarterly.',n:'Quarterly cadence'},
+   ],
+   slas:[{t:'New win/cert',v:'Portal updated within 10 business days'}],
+   cross:['P2: Delivery Head notifies GTM of new cert completions for portal updates']},
+
+  {id:'P35',cat:'brand',sub:'2D · Ecosystem presence',name:'Partner Event Sponsorship',r:'VP Alliances',a:'VP Alliances',roles:['vp','gtm'],
+   freq:'Per event · quarterly plan',
+   target:'≥2 sponsored events/year · sponsorship ROI measured vs pipeline generated',
+   sla:'Event registration deadline → decision and registration 6 weeks ahead',
+   why:'Sponsorship secures speaking slots and preferred AE access. It converts vendor-attendee status to ecosystem insider.',
+   kpis:[{v:'≥2/yr',l:'Sponsored events'},{v:'6wk',l:'Registration lead time'},{v:'3×',l:'Pipeline ROI target on spend'}],
+   steps:[
+     {n:1,t:'Event Shortlist',s:'VP Alliances and Head of GTM shortlist 3–5 events per year',o:'vp'},
+     {n:2,t:'ROI Case',s:'Expected pipeline, AE access, speaking slot — presented to CEO for budget sign-off',o:'vp'},
+     {n:3,t:'Register',s:'Registration and sponsorship payment processed 6 weeks ahead',o:'gtm'},
+     {n:4,t:'Pre-Event Plan',s:'Goals: how many AE meetings, how many prospects. Prep materials.',o:'gtm'},
+     {n:5,t:'Post-Event ROI',s:'Pipeline generated within 90 days. Report to VP + CEO.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Budget exceeded?',y:'CEO approval required. No unilateral sponsorship decisions above $5K.',n:'VP authority to approve'},
+   ],
+   slas:[{t:'Decision to sponsor',v:'Registration submitted 6 weeks before event'}],
+   cross:['P3: Finance tracks event sponsorship costs and reimbursements']},
+
+  /* ── CAT 3: ENABLEMENT ── */
+  {id:'P36',cat:'enable',sub:'3A · Sales enablement',name:'Objection Handling Guide',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Quarterly update · triggered by lost deal patterns',
+   target:'All top 10 objections documented with 3 responses each · shared with every active AE',
+   sla:'New recurring objection → added to guide within 10 business days',
+   why:'Objections are predictable. Preparing for them is basic sales hygiene. Unprepared reps lose winnable deals.',
+   kpis:[{v:'Top 10',l:'Objections documented'},{v:'3',l:'Responses per objection'},{v:'Quarterly',l:'Guide updated'},{v:'100%',l:'Active AEs have current version'}],
+   steps:[
+     {n:1,t:'Source',s:'Lost deal patterns, VP debrief notes, AE feedback, win/loss analysis',o:'gtm'},
+     {n:2,t:'Draft Responses',s:'3 responses per objection: acknowledge, reframe, evidence',o:'gtm'},
+     {n:3,t:'VP Review',s:'VP Alliances validates from deal experience',o:'vp'},
+     {n:4,t:'Distribute',s:'Email to all active AEs. Included in onboarding kit.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'New objection appearing 3+ times this month?',y:'Fast-track into guide. Don\'t wait for quarterly.',n:'Quarterly update cycle'},
+   ],
+   slas:[{t:'Recurring objection identified',v:'Added to guide within 10 business days'}],
+   cross:[]},
+
+  {id:'P37',cat:'enable',sub:'3A · Sales enablement',name:'ICP Management',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Quarterly update · triggered by win/loss patterns',
+   target:'ICP document current · all active AEs and SDRs working from same version',
+   sla:'Quarter close → ICP reviewed and updated within 10 business days',
+   why:'An outdated ICP means the SDR is targeting the wrong prospects and AEs are qualifying the wrong leads. Every deal starts here.',
+   kpis:[{v:'Quarterly',l:'ICP review cadence'},{v:'100%',l:'Team on same version'},{v:'<10d',l:'Quarter close → updated'}],
+   steps:[
+     {n:1,t:'Win Analysis',s:'What do all wins have in common? Industry? Size? Stack? Entry point?',o:'gtm'},
+     {n:2,t:'Loss Analysis',s:'Were these ICP? If yes, why did we lose? If no, why were they in pipeline?',o:'gtm'},
+     {n:3,t:'ICP Draft',s:'Updated ICP: firmographic, technographic, pain profile, buying trigger',o:'gtm'},
+     {n:4,t:'VP Approval',s:'VP Alliances approves ICP. CEO informed of major changes.',o:'vp'},
+     {n:5,t:'Distribute',s:'Updated to SDR, Alliance Mgr, all active AEs. Sequences updated to match.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Win pattern showing new ICP segment?',y:'Add to ICP immediately. Brief SDR and AE same week.',n:'Quarterly review'},
+   ],
+   slas:[{t:'Quarter close',v:'ICP reviewed within 10 business days'}],
+   cross:[]},
+
+  {id:'P38',cat:'enable',sub:'3A · Sales enablement',name:'SDR Weekly Review & Coaching',r:'Head of GTM',a:'VP Alliances',roles:['gtm','sdr'],
+   freq:'Weekly · Monday fixed agenda',
+   target:'SDR KPIs reviewed · blockers resolved · sequence adjustments made same week',
+   sla:'Monday 9am standing meeting — never cancelled',
+   why:'SDRs without weekly coaching regress in quality. The weekly review is the difference between 2 meetings/week and 4.',
+   kpis:[{v:'Monday 9am',l:'Standing meeting'},{v:'4/wk',l:'Meeting booking target'},{v:'60/wk',l:'Prospects enrolled'},{v:'Weekly',l:'Sequence review'}],
+   steps:[
+     {n:1,t:'KPI Review',s:'Prospects enrolled, reply rate, meetings booked vs target. Call recordings reviewed.',o:'gtm'},
+     {n:2,t:'Blockers',s:'What\'s stopping meetings? ICP issue? Messaging issue? Tool issue? Fix this week.',o:'gtm'},
+     {n:3,t:'Sequence Review',s:'Any sequence underperforming? Pause and rewrite. Data drives this.',o:'gtm'},
+     {n:4,t:'Next Week Plan',s:'Targets, new sequences launching, accounts to prioritise',o:'sdr'},
+   ],
+   decisions:[
+     {q:'SDR below 50% of meeting target for 2+ weeks?',y:'Head of GTM shadows calls. Identify root cause. Escalate to VP if structural.',n:'Coaching adjustment'},
+   ],
+   slas:[{t:'Monday',v:'Meeting runs. Never cancelled. Max 30 minutes.'}],
+   cross:[]},
+
+  {id:'P39',cat:'enable',sub:'3B · Partner enablement',name:'AE Activation Success Process',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae','vp'],
+   freq:'Per AE — 90-day activation track',
+   target:'AE makes first referral within 30 days of activation · active referrer status within 90 days',
+   sla:'AE activated → first value delivery within 5 business days',
+   why:'An activated AE who doesn\'t refer within 90 days is not an active referrer. The 90-day track is structured to accelerate this.',
+   kpis:[{v:'30d',l:'Target: first referral'},{v:'90d',l:'Active referrer status'},{v:'5d',l:'Activation → first value'},{v:'Monthly',l:'Touch cadence'}],
+   steps:[
+     {n:1,t:'Activation',s:'AE activated from P01. Kit delivered (P02). First call complete.',o:'ae'},
+     {n:2,t:'Value Delivery',s:'Within 5 days: share a win story specific to their territory.',o:'ae'},
+     {n:3,t:'Day 14',s:'Check in. Any clients fitting the profile you described?',o:'ae'},
+     {n:4,t:'Day 30',s:'If no referral yet: offer to run a joint call on any prospect they\'re struggling to sell to.',o:'ae'},
+     {n:5,t:'Day 60',s:'Joint webinar offer. Credibility-building exercise.',o:'ae'},
+     {n:6,t:'Day 90',s:'Tier review: has this AE referred? If not, downgrade to B tier. Adjust cadence.',o:'ae'},
+   ],
+   decisions:[
+     {q:'90 days, no referral?',y:'Tier downgrade to B. Monthly nurture only. Focus on higher-yield AEs.',n:'Active referrer. Increase touch frequency.'},
+   ],
+   slas:[{t:'AE activated',v:'First value delivery within 5 business days'}],
+   cross:[]},
+
+  {id:'P40',cat:'enable',sub:'3B · Partner enablement',name:'Co-sell Win Celebration',r:'Alliance Mgr/AE',a:'VP Alliances',roles:['ae'],
+   freq:'Per co-sell win',
+   target:'AE notified of win within 24hr · personalised thank-you within 48hr',
+   sla:'Deal closes → AE notified within 24 hours',
+   why:'AEs who feel celebrated refer again. It takes 30 seconds to make an AE feel like a hero and costs nothing.',
+   kpis:[{v:'<24hr',l:'AE notified of win'},{v:'<48hr',l:'Personalised thank-you'},{v:'100%',l:'Co-sell wins celebrated'}],
+   steps:[
+     {n:1,t:'Deal Closes',s:'Signed SOW. CRM = Closed Won.',o:'ae'},
+     {n:2,t:'Notify AE',s:'Immediate message: "The deal closed. You helped a client. They\'re thrilled."',o:'ae'},
+     {n:3,t:'Thank-you',s:'Personalised: LinkedIn comment on AE\'s recent post + private message',o:'ae'},
+     {n:4,t:'VP Alliances',s:'VP sends note to AE\'s manager if >$25K win. Builds goodwill up the chain.',o:'vp'},
+     {n:5,t:'Amplify',s:'Post about the co-sell win on LinkedIn (client-anonymised if needed)',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Win >$25K?',y:'VP Alliances sends note to AE manager. CEO may send personal thank-you.',n:'Alliance Mgr/AE handles'},
+   ],
+   slas:[{t:'Deal closes',v:'AE notified within 24 hours'}],
+   cross:[]},
+
+  /* 3C Reporting & Intelligence */
+  {id:'P41',cat:'enable',sub:'3C · Reporting & intelligence',name:'Weekly GTM Performance Report',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Weekly · Friday by 5pm',
+   target:'All 5 motions tracked · delivered without VP asking',
+   sla:'Friday 5pm hard deadline. Same as revenue forecast.',
+   why:'The VP cannot manage what they can\'t see. The weekly report is the operating signal that determines next week\'s priorities.',
+   kpis:[{v:'Friday 5pm',l:'Delivery deadline'},{v:'5 motions',l:'All tracked'},{v:'0',l:'Times VP had to ask'}],
+   steps:[
+     {n:1,t:'Pull Data',s:'Pipeline by motion, SDR KPIs, content KPIs, event pipeline',o:'gtm'},
+     {n:2,t:'Compile',s:'Format: pipeline (by motion), SDR KPIs, content KPIs, what worked, what to fix',o:'gtm'},
+     {n:3,t:'Insights',s:'1 thing that worked. 1 thing to fix. 1 ask of VP if any.',o:'gtm'},
+     {n:4,t:'Send',s:'Slack + email to VP. Friday 5pm.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Any metric critically below target?',y:'Flag prominently. Suggest fix. Do not bury it.',n:'Standard format'},
+   ],
+   slas:[{t:'Friday',v:'Report sent by 5pm. Always. No exceptions.'}],
+   cross:[]},
+
+  {id:'P42',cat:'enable',sub:'3C · Reporting & intelligence',name:'Monthly GTM Performance Review',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Monthly · first week of following month',
+   target:'Motion-by-motion review · VP sign-off on next month priorities within 3 days',
+   sla:'Month close → review submitted within 3 business days',
+   why:'The monthly review is where strategy is rebalanced. Weekly tracks activity; monthly tracks trends and makes investment decisions.',
+   kpis:[{v:'<3d',l:'Month close → submitted'},{v:'5 motions',l:'All reviewed'},{v:'3d',l:'VP sign-off deadline'}],
+   steps:[
+     {n:1,t:'Compile Monthly',s:'All 5 motions: pipeline generated, conversion rates, wins, losses',o:'gtm'},
+     {n:2,t:'Trend Analysis',s:'vs prior month. What improved? Declined? Why?',o:'gtm'},
+     {n:3,t:'Recommendations',s:'Where to invest more. Where to cut. What to test.',o:'gtm'},
+     {n:4,t:'Present to VP',s:'30-min session. Head of GTM presents. VP approves priorities.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Any motion generating <10% of pipeline target?',y:'Propose: pause, pivot, or fix. CEO informed if structural.',n:'Normal rebalance'},
+   ],
+   slas:[{t:'Month close',v:'Review submitted within 3 business days'},{t:'Submitted',v:'VP sign-off within 3 days'}],
+   cross:[]},
+
+  {id:'P43',cat:'enable',sub:'3C · Reporting & intelligence',name:'Quarterly GTM Strategy Review',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Quarterly',
+   target:'Full attribution, content ROI, SDR performance · next quarter plan CEO-approved',
+   sla:'Quarter close → review presented within 10 business days',
+   why:'Quarterly reviews reset strategy. Without them, tactics are optimised while strategy drifts.',
+   kpis:[{v:'Quarterly',l:'Cadence'},{v:'<10d',l:'Quarter close → presented'},{v:'CEO',l:'Attends once/year'}],
+   steps:[
+     {n:1,t:'Full Attribution',s:'All pipeline from quarter: source, motion, conversion, revenue',o:'gtm'},
+     {n:2,t:'Content ROI',s:'Which assets drove pipeline? Cost per lead per content type?',o:'gtm'},
+     {n:3,t:'SDR Performance',s:'Meeting rate, conversion rate, CAC from outbound',o:'gtm'},
+     {n:4,t:'ICP Review',s:'Win/loss patterns (P44). ICP update validated.',o:'gtm'},
+     {n:5,t:'Next Quarter Plan',s:'Where to invest. What to test. Presented to VP + CEO.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Motion producing <5% of pipeline?',y:'Pause or kill. Reallocate budget.',n:'Continue with optimisations'},
+   ],
+   slas:[{t:'Quarter close',v:'Presented within 10 business days'}],
+   cross:[]},
+
+  {id:'P44',cat:'enable',sub:'3C · Reporting & intelligence',name:'Competitive Intelligence',r:'Head of GTM',a:'VP Alliances',roles:['gtm'],
+   freq:'Monthly monitoring · quarterly structured update',
+   target:'Top 5 competitors tracked · positioning updated quarterly · AEs briefed on any major change',
+   sla:'Major competitor update → brief to all AEs within 2 weeks',
+   why:'AEs lose deals to competitors DataSkate hasn\'t addressed. Staying current on competitor moves is a competitive advantage.',
+   kpis:[{v:'5',l:'Competitors tracked'},{v:'Monthly',l:'Monitoring cadence'},{v:'Quarterly',l:'Structured update'},{v:'<2wk',l:'Major change → AE brief'}],
+   steps:[
+     {n:1,t:'Monitor',s:'Monthly: competitor LinkedIn, job postings (product signals), release notes, pricing changes',o:'gtm'},
+     {n:2,t:'Quarterly Update',s:'Structured 1-page: who they are, how they position, our differentiation, objection responses',o:'gtm'},
+     {n:3,t:'VP Review',s:'VP Alliances validates from deal experience',o:'vp'},
+     {n:4,t:'AE Brief',s:'Major change → brief all AEs within 2 weeks with specific talking points',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Competitor launches feature that directly competes with our core?',y:'Fast-track: VP briefed immediately, AEs briefed within 1 week.',n:'Standard monthly monitoring'},
+   ],
+   slas:[{t:'Major competitor update',v:'AE brief within 2 weeks'}],
+   cross:[]},
+
+  {id:'P45',cat:'enable',sub:'3C · Reporting & intelligence',name:'Win/Loss Pattern Analysis',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Quarterly',
+   target:'100% closed deals included · ICP updated · sequences adjusted within 2 weeks of findings',
+   sla:'Quarter close → analysis complete within 10 business days',
+   why:'Without deliberate win/loss analysis, improvement is accidental. This makes improvement systematic.',
+   kpis:[{v:'Quarterly',l:'Analysis cadence'},{v:'100%',l:'Closed deals included'},{v:'<10d',l:'Quarter close → complete'},{v:'1 ICP update',l:'Per quarter minimum'}],
+   steps:[
+     {n:1,t:'Pull Closed Deals',s:'All closed won + lost from quarter. Source, size, partner, duration.',o:'ae'},
+     {n:2,t:'Win Patterns',s:'What do all wins share? Industry? Size? Partner AE? Pain type?',o:'gtm'},
+     {n:3,t:'Loss Patterns',s:'Why did we lose? Price? Competitor? Timing? Were these even ICP?',o:'gtm'},
+     {n:4,t:'ICP Update',s:'Head of GTM updates ICP. VP approves.',o:'gtm'},
+     {n:5,t:'Sequence Update',s:'Loss pattern = messaging issue → sequences updated within 2 weeks.',o:'gtm'},
+     {n:6,t:'Present',s:'Findings presented in Quarterly GTM Strategy Review (P43).',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Recurring loss reason emerging?',y:'Immediate fix — don\'t wait for quarterly presentation.',n:'Present in quarterly review'},
+   ],
+   slas:[{t:'Quarter close',v:'Analysis complete within 10 business days'}],
+   cross:[]},
+
+  {id:'P46',cat:'enable',sub:'3C · Reporting & intelligence',name:'Ecosystem Intelligence Monthly',r:'Head of GTM',a:'VP Alliances',roles:['gtm','vp'],
+   freq:'Monthly',
+   target:'1 intel report/month · distributed to VP + AE within 3 days of month close',
+   sla:'Month close → intel report within 3 business days',
+   why:'Partner ecosystems move fast. A monthly intel brief keeps DataSkate ahead of partner product changes that affect deal positioning.',
+   kpis:[{v:'Monthly',l:'Report cadence'},{v:'<3d',l:'Month close → complete'},{v:'5',l:'Partners covered'}],
+   steps:[
+     {n:1,t:'Scan',s:'All 5 partner release notes, pricing changes, new GTM motions, new ICP signals',o:'gtm'},
+     {n:2,t:'Compile',s:'1-page: key changes, what they mean for DataSkate, any action required',o:'gtm'},
+     {n:3,t:'GTM Impact',s:'New positioning emerging? ICP changes? Tech stack shifts?',o:'gtm'},
+     {n:4,t:'Share',s:'Distributed to VP + Alliance Mgr/AE. Action items flagged.',o:'gtm'},
+   ],
+   decisions:[
+     {q:'Partner product change affects ICP?',y:'Fast-track: update sequences and collateral within 2 weeks.',n:'Log in monthly intel'},
+   ],
+   slas:[{t:'Month close',v:'Intel report within 3 business days'}],
+   cross:[]},
+
+  {id:'P47',cat:'enable',sub:'3C · Reporting & intelligence',name:'Pillar 1 → Pillar 2 Handoff Review',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Monthly',
+   target:'0 handoffs where Delivery was surprised · 100% signed SOWs briefed to Delivery Head same day',
+   sla:'Signed SOW → Delivery Head briefed same day',
+   why:'The revenue engine and delivery engine must be synchronised. A poorly handed-off deal damages the client relationship and reduces case study eligibility.',
+   kpis:[{v:'0',l:'Delivery surprises'},{v:'Same day',l:'SOW signed → Delivery briefed'},{v:'5 days',l:'Kickoff scheduled after signing'},{v:'Monthly',l:'Joint review with Delivery Head'}],
+   steps:[
+     {n:1,t:'Monthly Joint Review',s:'VP Alliances + Delivery Head review all active projects: scope vs reality, expansion signals, case study candidates',o:'vp'},
+     {n:2,t:'Expansion Pipeline',s:'Delivery Head flags expansion signals. VP Alliances activates P12.',o:'vp'},
+     {n:3,t:'Case Study Queue',s:'Projects with CSAT ≥4.2 flagged for P26 case study process.',o:'vp'},
+     {n:4,t:'Complaint Triage',s:'Any client escalation in delivery? VP Alliances aware and co-owns resolution.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Delivery Head not briefed on a new project?',y:'Flag VP Alliances immediately. Root cause analysis on handoff failure.',n:'Standard process'},
+   ],
+   slas:[{t:'SOW signed',v:'Delivery Head briefed same day'}],
+   cross:['P2: Delivery Head owns the receiving side of this handoff — see P2 Kickoff process']},
+
+  {id:'P48',cat:'enable',sub:'3C · Reporting & intelligence',name:'CEO Operating Update (Revenue)',r:'VP Alliances',a:'VP Alliances',roles:['vp'],
+   freq:'Weekly + Monthly + Quarterly',
+   target:'CEO always has current pipeline view · no surprises at board or investor level',
+   sla:'Weekly Friday 5pm (P18) · Monthly (P42) · Quarterly (P43)',
+   why:'The CEO makes resource and strategic decisions based on revenue visibility. Any gap in visibility is a risk to the whole company.',
+   kpis:[{v:'Weekly',l:'Forecast to CEO'},{v:'Monthly',l:'Full GTM review'},{v:'Quarterly',l:'Strategy review'},{v:'0',l:'CEO surprises'}],
+   steps:[
+     {n:1,t:'Weekly',s:'Revenue forecast (P18). Friday 5pm. Pipeline + risks.',o:'vp'},
+     {n:2,t:'Monthly',s:'GTM review (P42). Attribution, motion performance, next month priorities.',o:'vp'},
+     {n:3,t:'Quarterly',s:'Strategy review (P43). Full attribution, win/loss, next quarter plan. CEO attends.',o:'vp'},
+     {n:4,t:'Ad Hoc',s:'Any deal at risk >$25K? CEO briefed same day. Always.',o:'vp'},
+   ],
+   decisions:[
+     {q:'Pipeline drops <2× monthly target?',y:'Emergency CEO brief. Action plan presented same day.',n:'Normal reporting cadence'},
+   ],
+   slas:[{t:'Pipeline drops <2×',v:'CEO brief same day'}],
+   cross:[]},
+];
+
+const RACI_DATA = [
+  {area:'Partner AE Acquisition & Nurture',ceo:'I',vp:'R/A',ae:'C',gtm:'C',sdr:'',dh:''},
+  {area:'AE Enablement Kit',ceo:'I',vp:'A',ae:'R',gtm:'R',sdr:'I',dh:'C'},
+  {area:'Inbound Lead Response',ceo:'I',vp:'A',ae:'R',gtm:'I',sdr:'',dh:''},
+  {area:'SDR Outbound Sequences',ceo:'I',vp:'A',ae:'I',gtm:'R/A',sdr:'R',dh:''},
+  {area:'Named Account Outbound',ceo:'I',vp:'A',ae:'C',gtm:'R',sdr:'R',dh:''},
+  {area:'Discovery Call',ceo:'',vp:'C/A',ae:'R',gtm:'I',sdr:'',dh:'C'},
+  {area:'Co-sell Call Execution',ceo:'I',vp:'A',ae:'R',gtm:'I',sdr:'',dh:''},
+  {area:'SOW Scoping & Pricing',ceo:'C',vp:'R/A',ae:'C',gtm:'I',sdr:'',dh:'C'},
+  {area:'SOW Negotiation & Close',ceo:'C',vp:'A',ae:'R',gtm:'I',sdr:'',dh:'I'},
+  {area:'Deal Escalation ($25K+)',ceo:'C',vp:'R/A',ae:'R',gtm:'I',sdr:'',dh:''},
+  {area:'Deal Escalation ($50K+)',ceo:'R/A',vp:'C',ae:'I',gtm:'I',sdr:'',dh:''},
+  {area:'Lost Deal Debrief',ceo:'I',vp:'A',ae:'R',gtm:'C',sdr:'I',dh:''},
+  {area:'Client Expansion',ceo:'C',vp:'A',ae:'R',gtm:'C',sdr:'',dh:'R (flag)'},
+  {area:'QBR Execution',ceo:'C',vp:'R/A',ae:'C',gtm:'C',sdr:'I',dh:'I'},
+  {area:'Partner Health Review',ceo:'I',vp:'R/A',ae:'I',gtm:'I',sdr:'',dh:''},
+  {area:'MDF Planning & Claim',ceo:'I',vp:'A',ae:'I',gtm:'R',sdr:'',dh:''},
+  {area:'Partner Tier Compliance',ceo:'C',vp:'R/A',ae:'I',gtm:'I',sdr:'',dh:'C'},
+  {area:'New Partner Onboarding',ceo:'A',vp:'R',ae:'C',gtm:'C',sdr:'',dh:'I'},
+  {area:'Weekly Revenue Forecast',ceo:'I',vp:'R/A',ae:'I',gtm:'I',sdr:'',dh:''},
+  {area:'CRM Hygiene & Audit',ceo:'I',vp:'A',ae:'R',gtm:'R',sdr:'I',dh:''},
+  {area:'SOW Minimum Enforcement',ceo:'C',vp:'R/A',ae:'I',gtm:'I',sdr:'',dh:''},
+  {area:'Pipeline Attribution Review',ceo:'I',vp:'A',ae:'I',gtm:'R',sdr:'',dh:''},
+  {area:'Executive LinkedIn Content',ceo:'C',vp:'C',ae:'I',gtm:'R/A',sdr:'I',dh:''},
+  {area:'Content Calendar',ceo:'I',vp:'A',ae:'I',gtm:'R',sdr:'I',dh:''},
+  {area:'Case Study Production',ceo:'I',vp:'A',ae:'I',gtm:'R',sdr:'',dh:'C'},
+  {area:'Thought Leadership Placement',ceo:'I',vp:'A',ae:'',gtm:'R',sdr:'',dh:''},
+  {area:'AppExchange Management',ceo:'I',vp:'A',ae:'',gtm:'R',sdr:'',dh:'I'},
+  {area:'Partner Portal Profiles',ceo:'I',vp:'A',ae:'',gtm:'R',sdr:'',dh:'C'},
+  {area:'Event Planning & Execution',ceo:'C',vp:'A',ae:'R',gtm:'R',sdr:'I',dh:''},
+  {area:'Webinar Production',ceo:'I',vp:'C',ae:'I',gtm:'R/A',sdr:'I',dh:'C'},
+  {area:'SDR Weekly Review & Coaching',ceo:'I',vp:'A',ae:'',gtm:'R',sdr:'C',dh:''},
+  {area:'Objection Handling Guide',ceo:'I',vp:'A',ae:'C',gtm:'R',sdr:'I',dh:''},
+  {area:'ICP Management',ceo:'C',vp:'A',ae:'C',gtm:'R',sdr:'I',dh:''},
+  {area:'AE Activation Success Track',ceo:'I',vp:'A',ae:'R',gtm:'I',sdr:'',dh:''},
+  {area:'Weekly GTM Report',ceo:'I',vp:'I',ae:'I',gtm:'R/A',sdr:'I',dh:''},
+  {area:'Monthly GTM Review',ceo:'C',vp:'A',ae:'I',gtm:'R',sdr:'I',dh:''},
+  {area:'Quarterly GTM Strategy Review',ceo:'C',vp:'A',ae:'I',gtm:'R',sdr:'',dh:'I'},
+  {area:'Win/Loss Pattern Analysis',ceo:'I',vp:'A',ae:'C',gtm:'R',sdr:'',dh:''},
+  {area:'P1 → P2 Handoff Review',ceo:'I',vp:'R/A',ae:'I',gtm:'I',sdr:'',dh:'C'},
+  {area:'CEO Revenue Update',ceo:'A',vp:'R',ae:'I',gtm:'C',sdr:'',dh:''},
+];
+
+const CADENCE_DATA = {
+  vp: {
+    label:'VP Alliances',
+    daily:[
+      {t:'Check CRM — new leads, any VP-level action required?',tool:'HubSpot / Salesforce · Slack #pipeline-alerts',tag:'must'},
+      {t:'Scan all 5 partner channels — any new opportunity or escalation?',tool:'Gmail · Slack partner channels',tag:'must'},
+      {t:'Escalate any deal stuck >5 days to CEO — never let deals stall silently',tool:'Slack DM CEO + CRM update',tag:'must'},
+      {t:'Engage on 2–3 LinkedIn posts by Salesforce/MuleSoft partners — substantive comments',tool:'LinkedIn',tag:'must'},
+      {t:'Review any inbound lead that arrived since yesterday — brief AE',tool:'Gmail · HubSpot',tag:'must'},
+      {t:'Read 1 ecosystem article (Salesforce releases, integration trends)',tool:'Feedly / newsletter digest',tag:'self'},
+    ],
+    weekly:[
+      {t:'Revenue sync with Head of GTM — pipeline, deals at risk, SDR KPIs, forecast',tool:'Monday meeting, 30 min',tag:'must'},
+      {t:'Weekly pipeline review — every open deal reviewed: stage, next action, owner',tool:'HubSpot pipeline view',tag:'must'},
+      {t:'Deliver Friday revenue forecast to CEO by 5pm — without CEO asking',tool:'HubSpot → email to CEO',tag:'must'},
+      {t:'AE check-ins: 1–2 partner AEs per day across the week via Slack/call',tool:'Slack / WhatsApp / Gmail',tag:'must'},
+      {t:'Review Head of GTM weekly report — respond with priorities',tool:'Slack/email',tag:'must'},
+      {t:'Review 1 lost deal debrief — validate root cause, learn pattern',tool:'HubSpot · Notion debrief log',tag:'good'},
+      {t:'1 thought leadership comment or thread in Salesforce Partner Community',tool:'Salesforce Trailblazer Community',tag:'brand'},
+      {t:'Read 1 deal/sales book chapter or podcast',tool:'Audible / podcast',tag:'self'},
+    ],
+    monthly:[
+      {t:'Partner health review — scorecard all 5 partners, action plans for under-performers',tool:'HubSpot + Notion',tag:'must'},
+      {t:'1 partner QBR prep and execution (rotate across 5 partners)',tool:'Slide deck + partner portal',tag:'must'},
+      {t:'CRM audit review — validate Alliance Mgr/AE audit output',tool:'HubSpot',tag:'must'},
+      {t:'Pipeline attribution report review — approve motion priorities for next month',tool:'Head of GTM attribution report',tag:'must'},
+      {t:'MDF utilisation check — any funds at risk of lapsing?',tool:'Partner portals',tag:'must'},
+      {t:'Partner tier compliance check — any certs at risk?',tool:'All 5 partner portals',tag:'good'},
+      {t:'P1 → P2 joint review with Delivery Head — expansion signals, case study queue',tool:'Monday meeting',tag:'must'},
+      {t:'30-min personal brand review: follower growth, engagement trends, 2 new post ideas',tool:'LinkedIn analytics',tag:'brand'},
+    ],
+    quarterly:[
+      {t:'5 QBRs complete — all partners, before month 1 of new quarter',tool:'Slide decks · partner portals',tag:'must'},
+      {t:'ICP review and approval with Head of GTM',tool:'ICP document',tag:'must'},
+      {t:'Quarterly GTM Strategy Review — present to CEO',tool:'Slide deck + attribution data',tag:'must'},
+      {t:'Win/loss pattern review — approve ICP and sequence changes',tool:'Notion win/loss log',tag:'must'},
+      {t:'New partner evaluation (if applicable) — present case to CEO',tool:'CEO sync',tag:'good'},
+      {t:'LinkedIn profile audit — own profile and all 3 exec profiles',tool:'LinkedIn',tag:'brand'},
+      {t:'External learning: 1 conference, course, or partner SKO attended',tool:'Calendar',tag:'self'},
+    ],
+  },
+  ae: {
+    label:'Alliance Mgr / AE',
+    daily:[
+      {t:'Check all inboxes for new leads — partner email, Slack, portal alerts',tool:'Gmail · Slack · portal notifications',tag:'must'},
+      {t:'Log every new lead in CRM same day — source, contact, company, size, stage',tool:'HubSpot',tag:'must'},
+      {t:'Respond to all partner AE messages within 4 hours',tool:'Gmail · Slack · WhatsApp',tag:'must'},
+      {t:'Register any deal that advanced stage in partner portal before EOD',tool:'Salesforce/Boomi/Workato portal',tag:'must'},
+      {t:'Follow up all open deals awaiting proposal, demo, or decision',tool:'HubSpot task reminders + Instantly',tag:'must'},
+      {t:'Engage 1–2 active partner AE LinkedIn posts — relevant comment',tool:'LinkedIn',tag:'brand'},
+    ],
+    weekly:[
+      {t:'Partner AE touchpoints: 5–7 AE check-ins per week across all 5 partners',tool:'Slack · Gmail · WhatsApp',tag:'must'},
+      {t:'Pipeline review with VP Alliances — every open deal, stage, risk',tool:'HubSpot pipeline view',tag:'must'},
+      {t:'AE outreach: 2 new cold AEs approached (LinkedIn comment → DM)',tool:'LinkedIn Sales Nav',tag:'must'},
+      {t:'Deal follow-ups: every deal >7 days without contact must have activity',tool:'HubSpot tasks',tag:'must'},
+      {t:'SDR co-working: review 3-way call prep for current week bookings',tool:'CRM + call notes',tag:'good'},
+      {t:'Read 1 integration industry article — MuleSoft, Salesforce, Boomi update',tool:'LinkedIn / newsletter',tag:'self'},
+      {t:'Post 1 original thought on LinkedIn relevant to partner ecosystem',tool:'LinkedIn',tag:'brand'},
+    ],
+    monthly:[
+      {t:'Named account list request from all Tier A partner AEs',tool:'Email / Slack to AEs',tag:'must'},
+      {t:'CRM hygiene audit — no stale deals >14 days, 100% source-tagged',tool:'HubSpot',tag:'must'},
+      {t:'Event follow-up: all event contacts from last month converted or disqualified',tool:'HubSpot',tag:'must'},
+      {t:'AE tier review: re-tier all 50 AEs based on referral activity last 30 days',tool:'CRM AE log',tag:'must'},
+      {t:'3 co-sell wins celebrated: personalised LinkedIn comments + thank-you messages',tool:'LinkedIn + Gmail',tag:'good'},
+      {t:'Lost deal pattern: review own losses this month — what recurring pattern?',tool:'Notion debrief log',tag:'self'},
+      {t:'Update LinkedIn with any new case study wins or certifications',tool:'LinkedIn',tag:'brand'},
+    ],
+    quarterly:[
+      {t:'90-day AE activation review — which AEs have been activated but not yet referred?',tool:'CRM AE log',tag:'must'},
+      {t:'AE enablement kit refresh — delivered updated kit to all Tier A AEs',tool:'Email · Zoom walkthrough',tag:'must'},
+      {t:'QBR data prep — pull co-sell wins, pipeline by partner, lead volume',tool:'HubSpot',tag:'must'},
+      {t:'Objection guide review — any new objections to add from this quarter\'s losses?',tool:'Notion objection log',tag:'good'},
+      {t:'1 external sales or ecosystem certification completed',tool:'LinkedIn Learning / Salesforce Trailhead',tag:'self'},
+      {t:'AE appreciation: send personal notes to top 3 referring AEs this quarter',tool:'LinkedIn + Gmail',tag:'brand'},
+    ],
+  },
+  gtm: {
+    label:'Head of GTM',
+    daily:[
+      {t:'Check Instantly — SDR replies overnight? Route qualified replies to AE within 2hr',tool:'Instantly',tag:'must'},
+      {t:'Draft 1–2 exec LinkedIn posts (CEO + VP) — submitted for approval by 10am',tool:'Buffer drafts · Slack to exec',tag:'must'},
+      {t:'Check content performance: any post from yesterday performing unusually?',tool:'LinkedIn analytics · Buffer',tag:'must'},
+      {t:'Source raw material: CEO voice note, win story, or ecosystem news article',tool:'Loom · Slack',tag:'good'},
+      {t:'Check SDR KPIs: prospects enrolled today, reply rate, any sequence issues?',tool:'Instantly · Apollo',tag:'must'},
+      {t:'Read 1 ecosystem or GTM article — add useful insights to content backlog',tool:'Feedly / Substack',tag:'self'},
+    ],
+    weekly:[
+      {t:'SDR weekly review — Monday 9am fixed. KPIs, blockers, sequence adjustments',tool:'Fixed Monday meeting',tag:'must'},
+      {t:'Content calendar production — draft all posts for next 2 weeks if not done',tool:'Buffer · Notion calendar',tag:'must'},
+      {t:'GTM performance report — compile and send to VP by Friday 5pm',tool:'HubSpot + analytics → Slack',tag:'must'},
+      {t:'Webinar pipeline — is next webinar on track for topic-approved-to-live-in-5-days SLA?',tool:'Loom / Zoom + landing page',tag:'must'},
+      {t:'Case study queue — any qualifying projects from last week\'s Delivery close list?',tool:'Delivery Head Slack update',tag:'good'},
+      {t:'Competitive scan — any competitor news or product announcements this week?',tool:'LinkedIn · G2 · product blogs',tag:'good'},
+      {t:'1 personal LinkedIn post (own voice, not exec ghost)',tool:'LinkedIn',tag:'brand'},
+    ],
+    monthly:[
+      {t:'Monthly GTM performance review — compile and present to VP within 3 days of month close',tool:'HubSpot + analytics deck',tag:'must'},
+      {t:'Content performance review — rank all assets, flag bottom 20%, update calendar',tool:'HubSpot CMS + Buffer analytics',tag:'must'},
+      {t:'Pipeline attribution report — 100% of pipeline attributed by source',tool:'HubSpot attribution view',tag:'must'},
+      {t:'AppExchange listing — any review requests to send from last month\'s project closes?',tool:'AppExchange portal',tag:'must'},
+      {t:'MDF tracking — utilisation rate, any campaigns to launch before deadline?',tool:'Partner portals',tag:'must'},
+      {t:'Webinar tracking report — views, captures, conversion per video',tool:'Vimeo / HubSpot landing pages',tag:'must'},
+      {t:'Ecosystem intelligence report — partner updates, ICP signals, GTM changes',tool:'Partner release notes · LinkedIn',tag:'must'},
+      {t:'SDR sequence performance — retire any sequence under 1% reply rate',tool:'Instantly / Apollo',tag:'good'},
+      {t:'Update personal thought leadership — 1 comment on major ecosystem blog/thread',tool:'LinkedIn',tag:'brand'},
+    ],
+    quarterly:[
+      {t:'Quarterly GTM strategy review — full attribution, content ROI, SDR performance, next quarter plan',tool:'Slide deck + HubSpot data',tag:'must'},
+      {t:'ICP update — based on win/loss patterns',tool:'ICP document',tag:'must'},
+      {t:'Win/loss pattern analysis — 100% closed deals reviewed',tool:'HubSpot + Notion debrief logs',tag:'must'},
+      {t:'Objection guide update — new objections added, old ones retired',tool:'Notion objection library',tag:'must'},
+      {t:'AE enablement kit refresh — new case studies, updated messaging, partner wins',tool:'PDF kit + email to AEs',tag:'must'},
+      {t:'Thought leadership placement — 1 article pitch to external publication',tool:'Email to publication editor',tag:'good'},
+      {t:'1 GTM or product marketing course completed',tool:'LinkedIn Learning / Maven / Reforge',tag:'self'},
+      {t:'LinkedIn profile audit — own profile optimised',tool:'LinkedIn',tag:'brand'},
+    ],
+  },
+  sdr: {
+    label:'SDR / BDR',
+    daily:[
+      {t:'Enrol 12–15 new prospects into active sequences',tool:'Instantly / Apollo',tag:'must'},
+      {t:'Review all replies in Instantly — respond to positive replies within 2 hours',tool:'Instantly',tag:'must'},
+      {t:'15–20 cold calls on high-priority named accounts',tool:'Orum / Aircall / direct dial',tag:'must'},
+      {t:'Log every booked meeting in CRM with contact, company, pain noted',tool:'HubSpot',tag:'must'},
+      {t:'Personalise first lines of tomorrow\'s new sequence contacts (next-day batch)',tool:'Apollo / Clay enrichment',tag:'must'},
+      {t:'Read 1 case study or success story — refresh product knowledge for calls',tool:'Internal library',tag:'self'},
+    ],
+    weekly:[
+      {t:'Weekly review with Head of GTM — Monday 9am. KPIs, blockers, next week plan',tool:'Fixed meeting',tag:'must'},
+      {t:'60 new prospects enrolled for the week across active sequences',tool:'Instantly + Apollo',tag:'must'},
+      {t:'4 qualified meetings booked this week — track daily progress to target',tool:'HubSpot meetings',tag:'must'},
+      {t:'Named account list request to Alliance Mgr/AE (per active AEs)',tool:'Email / Slack to AE',tag:'must'},
+      {t:'Call recording review — listen to 2 own calls, note what to improve',tool:'Gong / call recorder',tag:'good'},
+      {t:'LinkedIn: engage on 3 partner AE posts — build familiarity for future co-sell',tool:'LinkedIn',tag:'brand'},
+      {t:'Review sequence performance with Head of GTM — any changes needed?',tool:'Instantly analytics',tag:'good'},
+    ],
+    monthly:[
+      {t:'SDR KPI report prepared for VP: meetings booked, sequences run, reply rates',tool:'Instantly + HubSpot → report',tag:'must'},
+      {t:'Named account research batch — research 10 named accounts per active AE',tool:'Clay + LinkedIn Sales Nav',tag:'must'},
+      {t:'Sequence library refresh — any sequence under 1% reply rate needs rewrite',tool:'Instantly',tag:'must'},
+      {t:'Review top 3 won meetings from this month: what worked in outreach?',tool:'CRM + call notes',tag:'good'},
+      {t:'1 cold outreach or SDR craft article read — stay current on best practices',tool:'Lavender / Outbound Mastery',tag:'self'},
+      {t:'LinkedIn: 1 post sharing a genuine insight about outbound or your industry',tool:'LinkedIn',tag:'brand'},
+    ],
+    quarterly:[
+      {t:'SDR performance review with VP — conversion rates, CAC from outbound, career discussion',tool:'VP Alliances quarterly sync',tag:'must'},
+      {t:'New sequence library created for Q+1 — 5 new sequences based on updated ICP',tool:'Instantly',tag:'must'},
+      {t:'1 SDR or sales certification completed',tool:'Salesforce Trailhead / Outbound Squad',tag:'self'},
+      {t:'Update LinkedIn: any new skills, courses, or notable results from the quarter',tool:'LinkedIn',tag:'brand'},
+    ],
+  },
+};
+
+/* ══════════════════════════════════════
+   RENDER FUNCTIONS
+══════════════════════════════════════ */
+function tab(id, btn) {
+  document.querySelectorAll('.page-section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ── REGISTER ── */
+let regCatFilter='all', regRoleFilter='all', regQuery='';
+function regFilt(type, val, btn){
+  if(type==='cat'){regCatFilter=val; document.querySelectorAll('.filters-bar .filter-btn').forEach(b=>{if(['all','rev','brand','enable'].includes(b.textContent.trim().toLowerCase().split(' ')[0])||b.textContent==='All')b.classList.toggle('on',b===btn)})}
+  else{regRoleFilter=val; document.querySelectorAll('.filters-bar .filter-btn').forEach(b=>{if(['VP Alliances','Head of GTM','Alliance Mgr/AE','SDR/BDR'].includes(b.textContent.trim()))b.classList.toggle('on',b===btn)})}
+  renderRegister();
+}
+function regSearch(q){regQuery=q.toLowerCase();renderRegister();}
+
+function renderRegister(){
+  const tbody=document.getElementById('reg-body');
+  const catMap={'rev':'Revenue generation','brand':'Brand & presence','enable':'Enablement & intelligence'};
+  let html='', lastCat='', lastSub='';
+  PROCS.filter(p=>{
+    const catOk=regCatFilter==='all'||p.cat===regCatFilter;
+    const roleOk=regRoleFilter==='all'||p.roles.includes(regRoleFilter);
+    const qOk=!regQuery||p.name.toLowerCase().includes(regQuery)||p.id.toLowerCase().includes(regQuery)||(p.sub||'').toLowerCase().includes(regQuery);
+    return catOk&&roleOk&&qOk;
+  }).forEach(p=>{
+    if(p.cat!==lastCat){
+      html+=`<tr class="cat-group-row"><td colspan="6">${catMap[p.cat]||p.cat}</td></tr>`;
+      lastCat=p.cat; lastSub='';
+    }
+    const catColor=p.cat==='rev'?'coral':p.cat==='brand'?'amber':'purple';
+    const roleBadges=p.roles.map(r=>`<span class="badge b-${r}">${r==='vp'?'VP Alliances':r==='ae'?'Alliance Mgr/AE':r==='gtm'?'Head of GTM':'SDR/BDR'}</span>`).join(' ');
+    html+=`<tr class="prow" onclick="goProc('${p.id}')">
+      <td><span class="pid">${p.id}</span></td>
+      <td><span class="plink">${p.name}</span><div style="font-size:10px;color:var(--muted);margin-top:2px">${p.sub||''}</div></td>
+      <td><span class="badge b-${catColor==='coral'?'rev':catColor==='amber'?'brand':'enable'}">${p.cat==='rev'?'Revenue':p.cat==='brand'?'Brand':'Enablement'}</span></td>
+      <td>${roleBadges}</td>
+      <td style="font-size:11px;color:var(--muted)">${p.freq}</td>
+      <td style="font-size:11px;color:var(--ink)">${p.target}</td>
+    </tr>`;
+  });
+  tbody.innerHTML=html||'<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:24px">No processes match your filters.</td></tr>';
+}
+
+function goProc(id){
+  document.querySelectorAll('.tnav-btn')[4].click();
+  setTimeout(()=>{const el=document.getElementById('proc-'+id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});},50);
+}
+
+/* ── RACI ── */
+function renderRaci(){
+  const el=document.getElementById('raci-body');
+  if(!el)return;
+  const cols=['ceo','vp','ae','gtm','sdr','dh'];
+  const cls={'R/A':'raci-r','R':'raci-r','A':'raci-a','C':'raci-c','I':'raci-i','R (flag)':'raci-r','C/A':'raci-c','':'raci-i'};
+  el.innerHTML=RACI_DATA.map(r=>`<tr>
+    <td>${r.area}</td>
+    ${cols.map(c=>`<td>${r[c]?`<span class="${cls[r[c]]||'raci-i'}">${r[c]}</span>`:''}</td>`).join('')}
+  </tr>`).join('');
+}
+
+/* ── PROCESS DETAIL ── */
+const OWN_LABEL={'vp':'VP Alliances','ae':'Alliance Mgr/AE','gtm':'Head of GTM','sdr':'SDR/BDR'};
+const OWN_BG={'vp':'var(--vp-bg)','ae':'var(--ae-bg)','gtm':'var(--gtm-bg)','sdr':'var(--sdr-bg)'};
+const OWN_DK={'vp':'var(--vp-dk)','ae':'var(--ae-dk)','gtm':'var(--gtm-dk)','sdr':'var(--sdr-dk)'};
+
+function renderProcesses(){
+  const el=document.getElementById('proc-detail-body');
+  if(!el)return;
+  const catColors={'rev':'coral','brand':'amber','enable':'purple'};
+  el.innerHTML=PROCS.map(p=>{
+    const cc=catColors[p.cat]||'coral';
+    const kpis=p.kpis.map(k=>`<div class="kpi-box"><div class="kpi-val">${k.v}</div><div class="kpi-lbl">${k.l}</div></div>`).join('');
+    const steps=p.steps.map(s=>`<div class="step-card">
+      <div class="step-num">${String(s.n).padStart(2,'0')}</div>
+      <div class="step-owner" style="background:${OWN_BG[s.o]||'var(--bg)'};color:${OWN_DK[s.o]||'var(--muted)'}">${OWN_LABEL[s.o]||s.o}</div>
+      <div class="step-title" style="margin-top:6px">${s.t}</div>
+      <div class="step-sub">${s.s}</div>
+    </div>`).join('');
+    const decisions=p.decisions.map(d=>`<div class="decision-row"><div class="dq">❓ ${d.q}</div>${d.y?`<div class="dy">✓ Yes: ${d.y}</div>`:''}${d.n?`<div class="dn">→ No: ${d.n}</div>`:''}</div>`).join('');
+    const slas=p.slas.map(s=>`<div class="sla-row"><span class="sla-trigger">${s.t}</span><span class="sla-val">${s.v}</span></div>`).join('');
+    const cross=p.cross&&p.cross.length?`<div class="cross-ref"><strong>Cross-Pillar Reference</strong>${p.cross.map(c=>`<div>↗ ${c}</div>`).join('')}</div>`:'';
+    return `<div class="proc-card" id="proc-${p.id}">
+      <div class="proc-card-head">
+        <div>
+          <div class="proc-id" style="background:var(--${cc}-lt);color:var(--${cc}-dk);display:inline-block">${p.id} · ${p.sub||''}</div>
+          <div class="proc-title">${p.name}</div>
+          <div class="proc-meta-row">
+            <span class="badge b-${p.cat==='rev'?'rev':p.cat==='brand'?'brand':'enable'}">${p.cat==='rev'?'Revenue':p.cat==='brand'?'Brand':'Enablement'}</span>
+            ${p.roles.map(r=>`<span class="badge b-${r}">${OWN_LABEL[r]}</span>`).join('')}
+            <span style="font-size:11px;color:var(--muted);padding:3px 0">${p.freq}</span>
+          </div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:var(--muted);min-width:200px">
+          <div><strong>Accountable:</strong> ${p.a}</div>
+          <div style="margin-top:4px"><strong>SLA:</strong> ${p.sla}</div>
+        </div>
+      </div>
+      <div class="proc-why"><strong>Why this process exists: </strong>${p.why}</div>
+      <div class="kpi-row">${kpis}</div>
+      <div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Process Steps</div>
+      <div class="steps-grid">${steps}</div>
+      <div class="two-col">
+        <div class="panel"><div class="panel-title">Decision Gates</div>${decisions||'<div style="font-size:12px;color:var(--muted)">No decision gates for this process.</div>'}</div>
+        <div class="panel"><div class="panel-title">SLAs & Deadlines</div>${slas||'<div style="font-size:12px;color:var(--muted)">SLA embedded in steps above.</div>'}</div>
+      </div>
+      ${cross}
+      <div style="margin-top:12px;text-align:right"><button onclick="document.getElementById('tab-register').scrollIntoView({behavior:'smooth'})" style="font-size:11px;color:var(--coral);cursor:pointer;background:none;border:none">↑ Back to register</button></div>
+    </div>`;
+  }).join('');
+}
+
+/* ── CADENCE ── */
+const TAG_LABEL={must:'Must',good:'Good to do',nice:'Nice to do',self:'Self improvement',brand:'Personal brand'};
+function renderCadence(){
+  const el=document.getElementById('cadence-body');
+  if(!el)return;
+  const freqs=['daily','weekly','monthly','quarterly'];
+  const freqLabel={daily:'Daily',weekly:'Weekly',monthly:'Monthly',quarterly:'Quarterly'};
+  el.innerHTML=Object.entries(CADENCE_DATA).map(([role,data])=>`
+    <div style="margin-bottom:40px">
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--ink);margin-bottom:16px;padding-top:24px;border-top:2px solid var(--border)">${data.label}</div>
+      <div class="cadence-grid">
+        ${freqs.map(f=>data[f]&&data[f].length?`
+          <div class="cadence-col">
+            <div class="cadence-col-head">
+              <span class="cadence-col-title">${data.label} · ${freqLabel[f]}</span>
+              <span class="cadence-freq">${freqLabel[f]}</span>
+            </div>
+            <div class="cadence-body">
+              ${data[f].map(t=>`<div class="ctask">
+                <div class="ctask-check" onclick="this.classList.toggle('done')"></div>
+                <div class="ctask-body">
+                  <div class="ctask-title">${t.t}</div>
+                  ${t.tool?`<div class="ctask-tool">🛠 ${t.tool}</div>`:''}
+                </div>
+                <div class="ctask-tag"><span class="ttag t-${t.tag}">${TAG_LABEL[t.tag]||t.tag}</span></div>
+              </div>`).join('')}
+            </div>
+          </div>
+        `:'').join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ── INIT ── */
+document.addEventListener('DOMContentLoaded',()=>{
+  renderRegister();
+  renderRaci();
+  renderProcesses();
+  renderCadence();
+  // Set all category filter buttons correctly
+  document.querySelectorAll('.filters-bar .filter-btn')[0].classList.add('on');
+});
+</script>
+</body>
+</html>

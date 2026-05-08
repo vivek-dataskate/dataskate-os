@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · SDR / BDR · Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#09090E;--surface:#0F1117;--surface2:#14161F;--surface3:#1A1D28;
+  --border:#1E2235;--border2:#252A3C;
+  --ink:#E8EAF4;--muted:#5A6080;--subtle:#2A2F45;
+  --green:#22C55E;--green-lt:rgba(34,197,94,.1);
+  --red:#EF4444;--red-lt:rgba(239,68,68,.1);
+  --yellow:#EAB308;--yellow-lt:rgba(234,179,8,.1);
+  --amber:#F59E0B;--amber-lt:rgba(245,158,11,.1);
+  --role-color:#FF4D2E;--role-lt:rgba(255,77,46,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:24px 32px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.role-name{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:.04em;color:var(--ink);line-height:1}
+.role-name span{color:var(--role-color)}
+.role-reports{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi-bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.kpi-chip{font-size:9px;padding:2px 10px;border-radius:20px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid var(--border2)}
+main{max-width:1200px;margin:0 auto;padding:24px 32px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.card-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.card-icon{font-size:14px}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card-count{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto}
+.card-body{padding:14px 16px}
+.kpi-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.kpi-row:last-child{border-bottom:none}
+.kpi-label{font-size:11px;color:var(--muted);flex:1}
+.kpi-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);font-weight:500}
+.kpi-note{font-size:9px;color:var(--muted);text-align:right;min-width:80px}
+.kpi-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.kpi-dot.ok{background:var(--green)}
+.kpi-dot.warn{background:var(--yellow)}
+.kpi-dot.bad{background:var(--red)}
+.action-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.action-item:last-child{border-bottom:none}
+.action-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.action-dot.red{background:var(--red)}
+.action-dot.amber{background:var(--amber)}
+.action-dot.green{background:var(--green)}
+.action-body{flex:1}
+.action-title{font-size:12px;font-weight:600;color:var(--ink)}
+.action-sub{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5}
+.wait-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px;align-items:flex-start}
+.wait-item:last-child{border-bottom:none}
+.wait-from{font-weight:700;color:var(--role-color);min-width:120px;flex-shrink:0}
+.wait-text{color:var(--muted);flex:1}
+.escalation-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;font-size:11px;color:var(--muted);line-height:1.7}
+.doc-links{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px}
+.doc-link{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:6px;border:1px solid var(--border2);color:var(--muted);text-decoration:none;cursor:pointer}
+.doc-link.primary{background:var(--role-lt);border-color:var(--role-color);color:var(--role-color)}
+.hub-link{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);padding:4px 0}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:14px 32px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="role-tag">Pillar 1 · Partner Alliance & GTM · Command Center</div>
+    <div class="role-name"><span>SDR / BDR</span></div>
+    <div class="role-reports">Reports to: Head of GTM · Updated: every Monday from weekly reports</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip">Prospects enrolled today: 13</span><span class="kpi-chip">Meetings booked this wk: 3.2</span><span class="kpi-chip">Cold dials today: 17</span>
+    </div>
+  </div>
+  <a class="hub-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">← Back to Master Hub</a>
+</header>
+<main>
+  <!-- KPIs -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">📊</div><div class="card-title">My KPIs This Week</div></div>
+    <div class="card-body"><div class="kpi-row"><div class="kpi-label">Prospects enrolled today</div><div class="kpi-val">13</div><div class="kpi-note">floor 12–15/day</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">Meetings booked this wk</div><div class="kpi-val">3.2</div><div class="kpi-note">floor 4 — below target</div><div class="kpi-dot warn"></div></div>
+<div class="kpi-row"><div class="kpi-label">Cold dials today</div><div class="kpi-val">17</div><div class="kpi-note">floor 15–20/day</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">Reply rate (sequence avg)</div><div class="kpi-val">3.2%</div><div class="kpi-note">target ≥3%</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">CRM logged same-day</div><div class="kpi-val">100%</div><div class="kpi-note">every activity, always</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">Prospect briefs sent</div><div class="kpi-val">All ✓</div><div class="kpi-note">before EOD on booking day</div><div class="kpi-dot ok"></div></div>
+</div>
+  </div>
+
+  <!-- Actions Today -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">⚡</div><div class="card-title">Actions Required Today</div><div class="card-count" style="background:var(--red-lt);color:var(--red)">3 items</div></div>
+    <div class="card-body"><div class="action-item"><div class="action-dot red"></div><div class="action-body"><div class="action-title">Positive reply from HealthTech prospect — route to AE NOW</div><div class="action-sub">Reply came in 2h ago. >1hr is a failed hand-off. Slack AE with full context immediately.</div></div></div>
+<div class="action-item"><div class="action-dot amber"></div><div class="action-body"><div class="action-title">Load tomorrow's prospect list — 60+ verified contacts</div><div class="action-sub">Do this PM block today. Monday AM is execution, not list building.</div></div></div>
+<div class="action-item"><div class="action-dot amber"></div><div class="action-body"><div class="action-title">Step 5 open rate dropped to 24% — flag to Head of GTM</div><div class="action-sub">Below 30% threshold. Pull Instantly data, write a 2-line note to GTM today.</div></div></div>
+</div>
+  </div>
+
+  <!-- Waiting On -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">⏳</div><div class="card-title">Waiting On — I Cannot Proceed Without These</div></div>
+    <div class="card-body"><div class="wait-item"><div class="wait-from">Head of GTM</div><div class="wait-text">Rewritten step 4 email — A/B test requested last week</div></div>
+<div class="wait-item"><div class="wait-from">VP Alliances</div><div class="wait-text">Named account list from Salesforce AEs — for targeted outreach</div></div>
+</div>
+  </div>
+
+  <!-- Escalation Path -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">🚨</div><div class="card-title">Escalation Path</div></div>
+    <div class="card-body"><div class="escalation-box">Any reply routing delay → flag to Head of GTM same day. Bounce rate hits 3% → stop all sequences immediately, escalate to Head of GTM.</div></div>
+  </div>
+
+  <!-- Doc Links -->
+  <div class="card full">
+    <div class="card-head"><div class="card-icon">📁</div><div class="card-title">My Documents</div></div>
+    <div class="doc-links">
+      <a class="doc-link primary" href="P1_SDR_BDR_Cadence_v3.html" target="_blank">My Cadence Doc</a>
+      <a class="doc-link primary" href="Pillar1-Partner_Alliance-GTM-Processes-v2.html" target="_blank">Pillar Process Bible</a>
+      <a class="doc-link primary" href="../CEO/DataSkate_GTM_Strategy_v2.html" target="_blank">GTM Strategy</a>
+    <a class="doc-link" href="../CEO/DataSkate_RACI_v3.html" target="_blank">RACI Matrix</a>
+      <a class="doc-link" href="../CEO/01_DataSkate_Org_Structure_v2.html" target="_blank">Org Structure</a>
+      <a class="doc-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">Master Hub</a>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>DataSkate · SDR / BDR · Command Center · Pillar 1 · Partner Alliance & GTM</span>
+  <span>Reports to: Head of GTM · Open Master Hub for org-wide view</span>
+</footer>
+</body>
+</html>

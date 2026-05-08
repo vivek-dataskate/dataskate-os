@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Fresher / Junior Developer · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --role-color:#7C3AED;--role-lt:#EDE9FE;--role-dk:#3C3489;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--teal-lt);color:var(--teal-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--teal);border-color:var(--teal);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.info-box{background:#F0FDF4;border:1px solid #A7F3D0;border-radius:10px;padding:14px 18px;margin-bottom:28px}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px}
+.info-body{font-size:12px;line-height:1.7}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="Fresher_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Fresher Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 2 · Delivery &amp; CoE · Cadence v3</div>
+    <div class="role-name">Fresher / Junior Developer</div>
+    <div class="role-sub">Ramp Phase · Days 1–90 · Reports to: Dev Lead · Non-billable D1–30 · Reduced rate D31–90 · Full billable D91+</div>
+    <div class="kpi-bar"><span class="kpi-chip">1 cert in 90 days</span><span class="kpi-chip">Hours logged daily</span><span class="kpi-chip">Blocker at 20 min</span><span class="kpi-chip">Day 91 billable gate</span></div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8">Primary KPI<br/><span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">Cert passed by Day 90 · Full billable by Day 91</span></div>
+</header>
+<main>
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">D02</span> = process reference · checkboxes reset on reload</span>
+</div>
+<div class="diagram section">
+  <div class="diagram-title">Fresher / Junior Developer — role in the delivery system</div>
+  <svg viewBox="0 0 700 120" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect x="20" y="35" width="160" height="50" rx="7" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+    <text x="100" y="57" text-anchor="middle" fill="#3C3489" font-size="10" font-weight="700">Days 1–30 · Ramp</text>
+    <text x="100" y="72" text-anchor="middle" fill="#3C3489" font-size="9">Trailhead 2hr/day</text>
+    <text x="100" y="84" text-anchor="middle" fill="#3C3489" font-size="9">Shadow · Not billable</text>
+    <text x="193" y="63" text-anchor="middle" fill="#7C3AED" font-size="14">→</text>
+    <rect x="210" y="35" width="160" height="50" rx="7" fill="#EDE9FE" stroke="#7C3AED" stroke-width="1.5"/>
+    <text x="290" y="57" text-anchor="middle" fill="#3C3489" font-size="10" font-weight="700">Days 31–90 · Partial</text>
+    <text x="290" y="72" text-anchor="middle" fill="#3C3489" font-size="9">Config + testing tickets</text>
+    <text x="290" y="84" text-anchor="middle" fill="#3C3489" font-size="9">Reduced billing rate</text>
+    <text x="383" y="63" text-anchor="middle" fill="#7C3AED" font-size="14">→</text>
+    <rect x="400" y="35" width="140" height="50" rx="7" fill="#7C3AED"/>
+    <text x="470" y="57" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Day 91 Gate</text>
+    <text x="470" y="72" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="9">Cert ✓ · DL sign-off ✓</text>
+    <text x="470" y="84" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="9">EC milestone ✓</text>
+    <text x="553" y="63" text-anchor="middle" fill="#7C3AED" font-size="14">→</text>
+    <rect x="568" y="35" width="112" height="50" rx="7" fill="#EAF3DE" stroke="#27500A" stroke-width="1.5"/>
+    <text x="624" y="57" text-anchor="middle" fill="#27500A" font-size="10" font-weight="700">Full Billable</text>
+    <text x="624" y="72" text-anchor="middle" fill="#27500A" font-size="9">Developer role</text>
+    <text x="624" y="84" text-anchor="middle" fill="#27500A" font-size="9">All 3 criteria met</text>
+  </svg>
+</div>
+<div class="section"><div class="sec-title">📥 What you receive — reports and data that land on your desk</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Sprint tickets from Dev Lead with acceptance criteria and priority <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Jira / Linear</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">PR feedback from Dev Lead — specific written comments on your code <span class="proc-ref">D06</span></div>
+            <div class="task-tool">🛠 GitHub / Bitbucket</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Ramp milestone status check from EC — on track or behind? <span class="proc-ref">P01</span></div>
+            <div class="task-tool">🛠 Notion ramp tracker</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Ramp review with EC + Practice Head — cert progress, gate readiness <span class="proc-ref">P01</span></div>
+            <div class="task-tool">🛠 Google Meet · Notion ramp checklist</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">⚡ What you do — operational cadence</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Log hours before EOD — correct project code, every day, no batch logging on Friday </div>
+            <div class="task-tool">🛠 Harvest</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Attend daily standup — done / today / blockers in 3 sentences max <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Zoom / Slack huddle</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Raise any blocker to Dev Lead at 20 min — what I am trying / what blocks / what I tried <span class="proc-ref">D05</span></div>
+            <div class="task-sub">Never stay blocked silently. 20 minutes is the rule.</div><div class="task-tool">🛠 Slack DM + Jira Blocked status</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Follow C10 on every ticket — library check, env setup, self-review before any PR <span class="proc-ref">C10</span></div>
+            <div class="task-tool">🛠 GitHub · Notion accelerator library</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">2hr minimum cert study — Trailhead modules, mock exams, platform docs </div>
+            <div class="task-sub">During ramp period. Non-negotiable — this is your primary job in hours 1–90.</div><div class="task-tool">🛠 Trailhead · Webassessor</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Friday: self-assessment against ramp milestones — flag to EC same day if behind <span class="proc-ref">P01</span></div>
+            <div class="task-tool">🛠 Notion ramp tracker</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Submit mock exam score to EC when ≥70% — triggers exam booking within 1 week <span class="proc-ref">P02</span></div>
+            <div class="task-tool">🛠 Slack DM to EC</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Attend sprint planning, review, and retro — all sprint ceremonies mandatory <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Jira · Zoom</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Write 1 wiki entry from something learned this week — not copy-paste from documentation <span class="proc-ref">C10</span></div>
+            <div class="task-tool">🛠 Notion personal wiki</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Update LinkedIn with new certs and skills as earned </div>
+            <div class="task-tool">🛠 LinkedIn</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Ramp milestone review with EC + Practice Head — on track for cert? Any blockers? <span class="proc-ref">P01</span></div>
+            <div class="task-tool">🛠 Google Meet · Notion ramp checklist</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Performance review with Practice Head — billability, cert, code quality, growth plan <span class="proc-ref">P03</span></div>
+            <div class="task-tool">🛠 Notion review template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">📤 What you send up — reporting obligations you own</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Hours logged in Harvest before EOD — correct project and task code <span class="proc-ref">E13</span></div>
+            <div class="task-tool">🛠 Harvest → visible to Dev Lead and Practice Head</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Blocker flag to Dev Lead at 20 min with full context — what/why/tried <span class="proc-ref">D05</span></div>
+            <div class="task-tool">🛠 Slack DM + Jira status update</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Jira ticket status updated as work progresses — same day, not at EOD <span class="proc-ref">D04</span></div>
+            <div class="task-tool">🛠 Jira</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">PR raised with C10 self-review complete — Dev Lead tagged for 24hr review window <span class="proc-ref">D06/C10</span></div>
+            <div class="task-tool">🛠 GitHub / Bitbucket</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">1 wiki entry submitted — feeds accelerator library over time <span class="proc-ref">C10</span></div>
+            <div class="task-tool">🛠 Notion personal wiki</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Mock exam score to EC (when ≥70%) — triggers exam booking <span class="proc-ref">P02</span></div>
+            <div class="task-tool">🛠 Slack DM to EC</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">🌱 Self-improvement & personal brand</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">30-min platform learning beyond Trailhead — release notes, community posts, real projects </div>
+            <div class="task-tool">🛠 Salesforce / MuleSoft release notes · platform blogs</div>
+          </div>
+          <span class="tb2" style="background:#EDE9FE;color:#6D28D9">Self</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Ask one question in Trailblazer Community or platform forum — start building presence </div>
+            <div class="task-tool">🛠 Trailblazer Community</div>
+          </div>
+          <span class="tb2" style="background:#FFFBEB;color:#D97706">Nice</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Update LinkedIn — new cert, new skill, new project type completed </div>
+            <div class="task-tool">🛠 LinkedIn</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div></div></div>
+<div class="info-box" style="background:#FEF2F2;border-color:#FECACA;margin:0 40px 32px">
+  <div class="info-title" style="color:#B91C1C">Must NOT do</div>
+  <div class="info-body" style="color:#7F1D1D">✕ Start any ticket without confirming you understand the acceptance criteria.<br/>✕ Stay blocked for more than 20 minutes without escalating to Dev Lead.<br/>✕ Submit a PR without completing the C10 self-review checklist.<br/>✕ Communicate directly with the client on any matter.<br/>✕ Log hours in batch at end of week — log daily, correct code, correct project.<br/></div>
+</div>
+</main>
+<footer>
+  <span>DataSkate · Fresher / Junior Developer Cadence · v3 · Q2 2026 · Pillar 2</span>
+  <a href="Pillar2-Delivery-Processes.html" target="_blank" style="font-size:10px;color:var(--teal,#00C9A7);text-decoration:none;font-weight:700">📖 P2 Process Bible →</a>
+</footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

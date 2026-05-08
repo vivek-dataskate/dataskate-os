@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · SDR / BDR · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --indigo:#4F46E5;--indigo-lt:#EEF2FF;--indigo-dk:#3730A3;
+  --role-color:#3730A3;--role-lt:#EEF2FF;--role-dk:#3730A3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--teal-lt);color:var(--teal-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--indigo);border-color:var(--indigo);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.kpi-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+.kpi-table th{background:var(--ink);color:#fff;padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.kpi-table td{padding:8px 12px;border-bottom:1px solid #F3F4F6}
+.kpi-table tr:nth-child(even) td{background:#FAFAFA}
+.kpi-floor{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--role-lt);color:var(--role-dk);font-weight:500}
+.kpi-ramp{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--teal-lt);color:var(--teal-dk);font-weight:500}
+.info-box{background:#EEF2FF;border:1px solid #C7D2FE;border-radius:10px;padding:14px 18px;margin-bottom:28px}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px;color:var(--role-dk)}
+.info-body{font-size:12px;line-height:1.7}
+.ramp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.ramp-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;padding:14px}
+.ramp-head{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--role-dk);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--role-lt)}
+.ramp-item{font-size:11px;color:var(--ink);padding:3px 0;border-bottom:1px solid #F9FAFB}
+.ramp-item:last-child{border-bottom:none}
+.daily-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="SDR_BDR_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">SDR/BDR Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 1 · Partner Alliance &amp; GTM · Cadence v3</div>
+    <div class="role-name">SDR / BDR — Outbound</div>
+    <div class="role-sub">Outbound pipeline generator · Reports to: Head of GTM · Managed by: Head of GTM daily / VP Alliances weekly · Joins org at Day 61 (Head of GTM ramp)</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip">12–15 prospects enrolled/day</span>
+      <span class="kpi-chip">15–20 cold dials/day</span>
+      <span class="kpi-chip">≥4 qualified meetings/week</span>
+      <span class="kpi-chip">Reply rate ≥3%</span>
+      <span class="kpi-chip">Prospect brief to AE before EOD same day</span>
+      <span class="kpi-chip">CRM logged — every activity, same day</span>
+    </div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8">
+    Primary KPI<br/>
+    <span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">4 meetings/wk · Reply ≥3% · Prospect brief same day</span>
+  </div>
+</header>
+<main>
+
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">P04</span> = Pillar 1 process ref · checkboxes reset on reload</span>
+</div>
+
+<!-- ROLE MAP DIAGRAM -->
+<div class="diagram section">
+  <div class="diagram-title">SDR / BDR — role in the outbound engine</div>
+  <svg viewBox="0 0 720 130" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <!-- Head of GTM -->
+    <rect x="5" y="45" width="140" height="36" rx="7" fill="#111827"/>
+    <text x="75" y="60" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Head of GTM</text>
+    <text x="75" y="73" text-anchor="middle" fill="rgba(255,255,255,.6)" font-size="8">Manages SDR daily · sequences · KPIs</text>
+    <line x1="145" y1="63" x2="165" y2="63" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr2)"/>
+    <!-- ICP/List -->
+    <rect x="165" y="5" width="130" height="28" rx="7" fill="#F3F4F6" stroke="#E5E7EB"/>
+    <text x="230" y="23" text-anchor="middle" fill="#374151" font-size="8" font-weight="600">ICP List (Apollo → Clay)</text>
+    <line x1="230" y1="33" x2="230" y2="48" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr2)"/>
+    <!-- SDR -->
+    <rect x="165" y="45" width="140" height="36" rx="7" fill="#3730A3"/>
+    <text x="235" y="60" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">SDR / BDR</text>
+    <text x="235" y="73" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8">Sequence · Call · LinkedIn · Brief</text>
+    <line x1="305" y1="63" x2="325" y2="63" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr2)"/>
+    <!-- Instantly -->
+    <rect x="325" y="5" width="130" height="28" rx="7" fill="#F3F4F6" stroke="#E5E7EB"/>
+    <text x="390" y="23" text-anchor="middle" fill="#374151" font-size="8" font-weight="600">Instantly — 9-touch / 18 days</text>
+    <line x1="390" y1="33" x2="390" y2="48" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr2)"/>
+    <!-- Meeting booked -->
+    <rect x="325" y="45" width="130" height="36" rx="7" fill="#F9FAFB" stroke="#E5E7EB"/>
+    <text x="390" y="60" text-anchor="middle" fill="#374151" font-size="9" font-weight="700">Meeting Booked</text>
+    <text x="390" y="73" text-anchor="middle" fill="#9CA3AF" font-size="8">+ Prospect Brief → AE same day</text>
+    <line x1="455" y1="63" x2="475" y2="63" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr2)"/>
+    <!-- AE -->
+    <rect x="475" y="45" width="130" height="36" rx="7" fill="#92400E"/>
+    <text x="540" y="60" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Alliance Mgr / AE</text>
+    <text x="540" y="73" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8">Qualify → Discovery → Propose</text>
+    <line x1="540" y1="81" x2="540" y2="95" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="235" y1="81" x2="235" y2="115" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="235" y="127" text-anchor="middle" fill="#9CA3AF" font-size="8">KPI report → Head of GTM weekly</text>
+    <!-- VP -->
+    <rect x="615" y="45" width="100" height="36" rx="7" fill="#9B2513"/>
+    <text x="665" y="60" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">VP Alliances</text>
+    <text x="665" y="73" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8">Approves ICP quarterly</text>
+    <line x1="605" y1="63" x2="615" y2="63" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr2)"/>
+    <defs><marker id="arr2" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#E5E7EB"/></marker></defs>
+  </svg>
+</div>
+
+<!-- KPI TABLE -->
+<div class="section">
+  <div class="sec-title">📊 KPI floors, ramp targets, and activity minimums</div>
+  <table class="kpi-table">
+    <thead><tr><th>Metric</th><th>Floor (Month 3+)</th><th>Month 1 Ramp</th><th>Month 2 Ramp</th><th>Tool</th></tr></thead>
+    <tbody>
+      <tr><td>Prospects enrolled per day</td><td><span class="kpi-floor">12–15</span></td><td>5–8</td><td>10–12</td><td>Apollo → Instantly</td></tr>
+      <tr><td>Cold dials per day</td><td><span class="kpi-floor">15–20</span></td><td>5–10</td><td>10–15</td><td>Aircall / RingCentral</td></tr>
+      <tr><td>LinkedIn DMs sent per day</td><td><span class="kpi-floor">5–8</span></td><td>3–5</td><td>5–7</td><td>LinkedIn Sales Navigator</td></tr>
+      <tr><td>Qualified meetings per week</td><td><span class="kpi-floor">≥4</span></td><td>1–2</td><td>2–3</td><td>HubSpot + Calendly</td></tr>
+      <tr><td>Email reply rate</td><td><span class="kpi-floor">≥3%</span></td><td>≥1.5%</td><td>≥2.5%</td><td>Instantly analytics</td></tr>
+      <tr><td>Prospect email open rate</td><td><span class="kpi-floor">≥35%</span></td><td>≥25%</td><td>≥30%</td><td>Instantly analytics</td></tr>
+      <tr><td>Meeting show rate</td><td><span class="kpi-floor">≥80%</span></td><td>≥65%</td><td>≥75%</td><td>HubSpot meeting log</td></tr>
+      <tr><td>CRM logging — all activity</td><td><span class="kpi-floor">Same day, 100%</span></td><td>Same day</td><td>Same day</td><td>HubSpot CRM</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- DAILY CADENCE - THREE BLOCKS -->
+<div class="section">
+  <div class="sec-title">☀️ Daily cadence — three structured blocks</div>
+  <div class="daily-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--role-lt);color:var(--role-dk)">AM Block</span><span style="font-size:10px;color:var(--muted)">8:00–10:30</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Check Instantly inbox — replies overnight? Respond within 1 hour. Route positives to AE immediately <span class="proc-ref">P04</span></div><div class="task-sub">A positive reply that sits >1hr is a failed hand-off.</div><div class="task-tool">🛠 Instantly → Slack to Alliance Mgr/AE</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Load 12–15 new prospects into Instantly sequences from Apollo/Clay list <span class="proc-ref">P04</span></div><div class="task-sub">Verify email before loading. No unverified contacts into sequences.</div><div class="task-tool">🛠 Apollo → Clay enrichment → email verify → Instantly</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Cold calls — 15–20 dials. Best windows: 8–9am, 12–1pm, 4–5pm prospect local time</div><div class="task-sub">Objection handling: use the guide in Notion. Do not improvise early.</div><div class="task-tool">🛠 Aircall / Salesloft / RingCentral</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--role-lt);color:var(--role-dk)">Mid Block</span><span style="font-size:10px;color:var(--muted)">11:00–1:30</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">LinkedIn — respond to connections, send Day 2 and Day 10 touch DMs for active prospects <span class="proc-ref">P04</span></div><div class="task-tool">🛠 LinkedIn Sales Navigator</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Log ALL activity in CRM — every email sent, call made, reply received, meeting booked <span class="proc-ref">P06</span></div><div class="task-sub">Same day, no exceptions. Unlogged activity = no credit for that activity.</div><div class="task-tool">🛠 HubSpot CRM</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Send prospect brief to Alliance Mgr/AE for any call booked today — before EOD <span class="proc-ref">P05</span></div><div class="task-sub">Use Notion brief template. AE needs: company, pain point, what was said, best call time.</div><div class="task-tool">🛠 Notion brief template → Slack to AE</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--role-lt);color:var(--role-dk)">PM Block</span><span style="font-size:10px;color:var(--muted)">2:00–5:00</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Second calling window — 4–5pm prospect local time (decision makers answering before EOD)</div><div class="task-tool">🛠 Aircall / RingCentral</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Review sequence performance — any step with open rate below 30%? Flag to Head of GTM <span class="proc-ref">P04</span></div><div class="task-tool">🛠 Instantly analytics</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Confirm tomorrow's prospect list is built and verified — no scrambling in AM block</div><div class="task-tool">🛠 Apollo → Clay → Instantly drafts</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Read 1 SDR training resource — cold email, calling technique, objection handling (15 min max)</div><div class="task-tool">🛠 30 Min to President's Club · Belkins blog · YouTube</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WEEKLY / MONTHLY / QUARTERLY -->
+<div class="section">
+  <div class="sec-title">⚡ Weekly · Monthly · Quarterly cadence</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SDR weekly review with Head of GTM — Mon 9am fixed. KPIs from last week, blockers, sequence adjustments <span class="proc-ref">P38</span></div><div class="task-sub">Max 30 min. Bring Instantly analytics. Never cancel.</div><div class="task-tool">🛠 Instantly analytics + HubSpot activity log</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Build next week's prospect list — 60+ contacts enriched, verified, and ready in Instantly <span class="proc-ref">P04</span></div><div class="task-sub">Done by Friday EOD. Mon AM is execution, not list building.</div><div class="task-tool">🛠 Apollo ICP pull → Clay enrichment → email verify</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Update VP Alliances on partner AE-sourced named account progress <span class="proc-ref">P03</span></div><div class="task-tool">🛠 Slack update to VP Alliances + HubSpot tag</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">A/B test review — which subject lines, openers, CTAs winning? Rewrite the losers <span class="proc-ref">P45</span></div><div class="task-tool">🛠 Instantly A/B reports</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">90-day nurture check — any previously sequenced prospects ready to re-engage?</div><div class="task-tool">🛠 HubSpot nurture filter — last activity >90 days</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Listen to 1 recorded discovery call — improve handoff quality and qualifying instincts</div><div class="task-tool">🛠 Gong / Zoom recording library</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Full sequence audit — rewrite any email with reply rate below 2% over 50+ sends <span class="proc-ref">P04</span></div><div class="task-sub">Rewrite in Claude.ai with a good prompt. Test new version vs old.</div><div class="task-tool">🛠 Instantly → rewrite → Claude.ai</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">ICP review with VP Alliances — is targeting still right? New verticals or titles to add? <span class="proc-ref">P43</span></div><div class="task-tool">🛠 HubSpot won/lost analysis + Apollo ICP segments</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Partner AE relationship check — request new named account list from each active AE via VP <span class="proc-ref">P03</span></div><div class="task-tool">🛠 Via VP Alliances or Head of GTM</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Activity vs booking funnel review — dials + emails per booked call. Identify biggest drop-off</div><div class="task-tool">🛠 HubSpot funnel report</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Read 1 B2B SaaS outbound playbook or SDR training resource — 30 min deep dive</div><div class="task-tool">🛠 30 Min to President's Club / Belkins / SalesHive</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEEDFE;color:#6D28D9">Quarterly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Full outbound playbook review — what changed in market, ICP, or sequence performance? Update with VP Alliances and Head of GTM <span class="proc-ref">P46</span></div><div class="task-tool">🛠 Notion playbook doc — SDR + Head of GTM + VP Alliances</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">QBR contribution — present SDR pipeline contribution to CEO: leads generated, calls booked, deals influenced <span class="proc-ref">P21</span></div><div class="task-tool">🛠 HubSpot attribution report → Google Slides</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">New partner AE activation — target 2 new AEs per partner per quarter to bring into co-prospecting model <span class="proc-ref">P39</span></div><div class="task-tool">🛠 With VP Alliances lead</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Complete 1 sales training course — cold email, cold calling, or B2B SaaS sales methodology</div><div class="task-tool">🛠 Sandler / MEDDIC / SalesHive training</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CROSS-DEPT HANDOFFS -->
+<div class="section">
+  <div class="sec-title">🔄 Cross-department handoffs SDR owns</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">→ To Alliance Mgr / AE</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Prospect brief for every booked meeting — before EOD same day as booking <span class="proc-ref">P05</span></div><div class="task-sub">Contents: company, role, pain point raised, platform, what was said, ideal call time. No exceptions — AE cannot fly blind.</div><div class="task-tool">🛠 Notion brief template → Slack to AE</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Warm positive replies routed immediately — phone call or chat, not email forwarding <span class="proc-ref">P05</span></div><div class="task-tool">🛠 Slack DM to AE with full context</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">→ To Head of GTM</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Weekly KPI report — enrollments, dials, replies, meetings booked — before Monday 9am meeting <span class="proc-ref">P38</span></div><div class="task-tool">🛠 Instantly export + HubSpot → Notion or Slack</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Sequence feedback — any step that commonly triggers negative replies or unsubscribes flagged to Head of GTM for rewrite <span class="proc-ref">P45</span></div><div class="task-tool">🛠 Slack note to Head of GTM</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">→ To VP Alliances</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Named account progress update — which partner AE target accounts have been contacted or replied this week <span class="proc-ref">P03</span></div><div class="task-tool">🛠 Slack update or HubSpot tag update</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">ICP anomaly flag — prospects outside ICP that replied positively. Could signal new segment.</div><div class="task-tool">🛠 Slack to VP Alliances with context</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 90-DAY RAMP -->
+<div class="section">
+  <div class="sec-title">🚀 90-day onboarding ramp — SDR / BDR</div>
+  <div class="info-box">
+    <div class="info-title">Ramp context — SDR joins at Day 61 of the Head of GTM ramp</div>
+    <div class="info-body">The SDR is the volume engine. They join after Head of GTM has proven the sequences and messaging work (Days 1–60). The SDR inherits validated sequences — they don't start from scratch. Head of GTM manages them daily. VP Alliances reviews KPIs weekly. First 30 days are learning + light ramp. Full KPIs apply from Month 3.</div>
+  </div>
+  <div class="ramp-grid">
+    <div class="ramp-col">
+      <div class="ramp-head">Days 1–30 · Learn the motion</div>
+      <div class="ramp-item">Shadow Head of GTM running sequences — understand the full tool stack</div>
+      <div class="ramp-item">Read the SDR/BDR Outbound Playbook end-to-end — takes 2 days</div>
+      <div class="ramp-item">Set up Apollo, Clay, Instantly, Aircall, HubSpot accounts correctly</div>
+      <div class="ramp-item">Run first sequences at 30% volume (5–8 prospects/day) with Head of GTM review</div>
+      <div class="ramp-item">First cold call live by Day 7 with Head of GTM listening in</div>
+      <div class="ramp-item">30-day gate: 1 booked meeting (no quality bar — just prove you can get one)</div>
+    </div>
+    <div class="ramp-col">
+      <div class="ramp-head">Days 31–60 · Build the habit</div>
+      <div class="ramp-item">Scale to 70% volume (10–12 prospects/day)</div>
+      <div class="ramp-item">Weekly KPI report started — first report to Head of GTM by end of Week 5</div>
+      <div class="ramp-item">First prospect brief sent to AE on any booked meeting — quality reviewed by Head of GTM</div>
+      <div class="ramp-item">First A/B test run on one sequence variant — results reviewed</div>
+      <div class="ramp-item">60-day gate: 2 meetings/week minimum, reply rate ≥1.5%, all CRM logged</div>
+    </div>
+    <div class="ramp-col">
+      <div class="ramp-head">Days 61–90 · Hit full KPIs</div>
+      <div class="ramp-item">Full volume: 12–15 prospects/day, 15–20 dials/day</div>
+      <div class="ramp-item">4 meetings/week target from Day 75</div>
+      <div class="ramp-item">Full sequence suite running — VP Alliances approves named account additions</div>
+      <div class="ramp-item">First sequence rewrite ownership — SDR owns one sequence update solo</div>
+      <div class="ramp-item">90-day gate: KPI floors hit for 2 consecutive weeks, VP and Head of GTM sign-off</div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>
+  <span>DataSkate · Pillar 1 · SDR / BDR · Cadence v3 · See also: SDR/BDR Outbound Playbook</span>
+  <span>Reports to: Head of GTM (daily) · VP Alliances (weekly) · Ref: P04 P05 P06 P38 P43 P45 P46</span>
+</footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

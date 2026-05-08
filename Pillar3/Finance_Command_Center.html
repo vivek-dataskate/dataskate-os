@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Finance Lead · Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#09090E;--surface:#0F1117;--surface2:#14161F;--surface3:#1A1D28;
+  --border:#1E2235;--border2:#252A3C;
+  --ink:#E8EAF4;--muted:#5A6080;--subtle:#2A2F45;
+  --green:#22C55E;--green-lt:rgba(34,197,94,.1);
+  --red:#EF4444;--red-lt:rgba(239,68,68,.1);
+  --yellow:#EAB308;--yellow-lt:rgba(234,179,8,.1);
+  --amber:#F59E0B;--amber-lt:rgba(245,158,11,.1);
+  --role-color:#4A6FA5;--role-lt:rgba(74,111,165,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:24px 32px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.role-name{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:.04em;color:var(--ink);line-height:1}
+.role-name span{color:var(--role-color)}
+.role-reports{font-size:11px;color:var(--muted);margin-top:4px}
+.kpi-bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.kpi-chip{font-size:9px;padding:2px 10px;border-radius:20px;background:rgba(255,255,255,.06);color:rgba(255,255,255,.5);border:1px solid var(--border2)}
+main{max-width:1200px;margin:0 auto;padding:24px 32px;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.full{grid-column:1/-1}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.card-head{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.card-icon{font-size:14px}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card-count{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto}
+.card-body{padding:14px 16px}
+.kpi-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border)}
+.kpi-row:last-child{border-bottom:none}
+.kpi-label{font-size:11px;color:var(--muted);flex:1}
+.kpi-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);font-weight:500}
+.kpi-note{font-size:9px;color:var(--muted);text-align:right;min-width:80px}
+.kpi-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.kpi-dot.ok{background:var(--green)}
+.kpi-dot.warn{background:var(--yellow)}
+.kpi-dot.bad{background:var(--red)}
+.action-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.action-item:last-child{border-bottom:none}
+.action-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.action-dot.red{background:var(--red)}
+.action-dot.amber{background:var(--amber)}
+.action-dot.green{background:var(--green)}
+.action-body{flex:1}
+.action-title{font-size:12px;font-weight:600;color:var(--ink)}
+.action-sub{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5}
+.wait-item{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px;align-items:flex-start}
+.wait-item:last-child{border-bottom:none}
+.wait-from{font-weight:700;color:var(--role-color);min-width:120px;flex-shrink:0}
+.wait-text{color:var(--muted);flex:1}
+.escalation-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;font-size:11px;color:var(--muted);line-height:1.7}
+.doc-links{display:flex;gap:8px;flex-wrap:wrap;padding:14px 16px}
+.doc-link{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 12px;border-radius:6px;border:1px solid var(--border2);color:var(--muted);text-decoration:none;cursor:pointer}
+.doc-link.primary{background:var(--role-lt);border-color:var(--role-color);color:var(--role-color)}
+.hub-link{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);padding:4px 0}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:14px 32px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="role-tag">Pillar 3 · Admin, Finance & HR · Command Center</div>
+    <div class="role-name"><span>Finance Lead</span></div>
+    <div class="role-reports">Reports to: Admin Head / COO · Updated: every Monday from weekly reports</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip">Cash runway: 14 months</span><span class="kpi-chip">Gross margin: 61%</span><span class="kpi-chip">Invoices outstanding: 2</span>
+    </div>
+  </div>
+  <a class="hub-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">← Back to Master Hub</a>
+</header>
+<main>
+  <!-- KPIs -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">📊</div><div class="card-title">My KPIs This Week</div></div>
+    <div class="card-body"><div class="kpi-row"><div class="kpi-label">Cash runway</div><div class="kpi-val">14 months</div><div class="kpi-note">at current burn — healthy</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">Gross margin</div><div class="kpi-val">61%</div><div class="kpi-note">floor ≥60% — 1pt above</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">Invoices outstanding</div><div class="kpi-val">2</div><div class="kpi-note">RetailCo + ManufactureCo</div><div class="kpi-dot warn"></div></div>
+<div class="kpi-row"><div class="kpi-label">Collections rate</div><div class="kpi-val">94%</div><div class="kpi-note">target ≥90%</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">Payroll accuracy</div><div class="kpi-val">100%</div><div class="kpi-note">0 errors this year</div><div class="kpi-dot ok"></div></div>
+<div class="kpi-row"><div class="kpi-label">MDF cost tracking</div><div class="kpi-val">Current</div><div class="kpi-note">all claims documented</div><div class="kpi-dot ok"></div></div>
+</div>
+  </div>
+
+  <!-- Actions Today -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">⚡</div><div class="card-title">Actions Required Today</div><div class="card-count" style="background:var(--red-lt);color:var(--red)">3 items</div></div>
+    <div class="card-body"><div class="action-item"><div class="action-dot red"></div><div class="action-body"><div class="action-title">RetailCo invoice 14 days outstanding — send reminder today</div><div class="action-sub">Standard: reminder at Day 10, escalation call at Day 14. Today is Day 14. Call the client AP contact.</div></div></div>
+<div class="action-item"><div class="action-dot amber"></div><div class="action-body"><div class="action-title">TechCorp SOW signed — invoice schedule must be set up today</div><div class="action-sub">VP Alliances sent SOW this morning. Invoice schedule: 30% on kick-off, 40% at UAT, 30% at go-live. Set up now.</div></div></div>
+<div class="action-item"><div class="action-dot amber"></div><div class="action-body"><div class="action-title">Monthly P&L — due to CEO by day 5 of month (3 days away)</div><div class="action-sub">Pull QuickBooks actuals. Format: revenue, costs by category, margin, runway. No surprises for CEO.</div></div></div>
+</div>
+  </div>
+
+  <!-- Waiting On -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">⏳</div><div class="card-title">Waiting On — I Cannot Proceed Without These</div></div>
+    <div class="card-body"><div class="wait-item"><div class="wait-from">VP Alliances</div><div class="wait-text">RetailCo milestone completion confirmation — triggers invoice</div></div>
+<div class="wait-item"><div class="wait-from">Project Manager</div><div class="wait-text">ManufactureCo project milestone sign-off</div></div>
+<div class="wait-item"><div class="wait-from">Admin Head</div><div class="wait-text">Q3 headcount budget approval for payroll projection</div></div>
+</div>
+  </div>
+
+  <!-- Escalation Path -->
+  <div class="card">
+    <div class="card-head"><div class="card-icon">🚨</div><div class="card-title">Escalation Path</div></div>
+    <div class="card-body"><div class="escalation-box">Any invoice >30 days outstanding → Admin Head + CEO same day. Any unexpected cost spike >10% vs budget → CEO within 24hr. Cash runway drops below 6 months → CEO immediately.</div></div>
+  </div>
+
+  <!-- Doc Links -->
+  <div class="card full">
+    <div class="card-head"><div class="card-icon">📁</div><div class="card-title">My Documents</div></div>
+    <div class="doc-links">
+      <a class="doc-link primary" href="P3_Finance_Cadence.html" target="_blank">My Cadence Doc</a>
+      <a class="doc-link primary" href="Pillar3-Admin-Processes.html" target="_blank">Pillar Process Bible</a>
+      <a class="doc-link" href="../CEO/DataSkate_RACI_v3.html" target="_blank">RACI Matrix</a>
+      <a class="doc-link" href="../CEO/01_DataSkate_Org_Structure_v2.html" target="_blank">Org Structure</a>
+      <a class="doc-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">Master Hub</a>
+    </div>
+  </div>
+</main>
+<footer>
+  <span>DataSkate · Finance Lead · Command Center · Pillar 3 · Admin, Finance & HR</span>
+  <span>Reports to: Admin Head / COO · Open Master Hub for org-wide view</span>
+</footer>
+</body>
+</html>

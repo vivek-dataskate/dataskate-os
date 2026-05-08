@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate — RACI Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-md:#F5C4B3;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-md:#9FD8CF;
+  --slate:#2A3550;--slate-lt:#EEF1F7;--slate-md:#B0BBCF;
+  --amber:#D97706;--amber-lt:#FFFBEB;
+  --ink:#111827;--muted:#6B7280;--border:#E5E7EB;
+  --white:#FFFFFF;--bg:#F8F7F4;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* HEADER */
+header{background:var(--ink);padding:40px 48px 36px;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:var(--coral);opacity:.1}
+.logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:12px}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,42px);font-weight:800;color:#fff;line-height:1.1;position:relative;z-index:1}
+header h1 span{color:var(--coral)}
+.header-sub{margin-top:10px;font-size:13px;color:rgba(255,255,255,.4);font-weight:300;position:relative;z-index:1}
+
+/* LEGEND + FILTERS */
+.controls{background:var(--white);border-bottom:1px solid var(--border);padding:16px 48px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.legend{display:flex;gap:12px;flex-wrap:wrap}
+.leg{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;font-size:11px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0}
+.pill-R{background:#FDE8E4;color:#9B1C0A}
+.pill-A{background:#EDE9FE;color:#4C1D95}
+.pill-C{background:#D1FAE5;color:#064E3B}
+.pill-I{background:#F1F5F9;color:#334155}
+.divider{width:1px;height:28px;background:var(--border);flex-shrink:0}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.fbtn{padding:5px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:all .15s}
+.fbtn:hover{border-color:var(--ink);color:var(--ink)}
+.fbtn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* TABLE WRAPPER */
+.table-wrap{overflow-x:auto;padding:32px 48px 60px}
+
+table{width:100%;border-collapse:collapse;font-size:12px;min-width:900px}
+
+/* SECTION HEADER ROW */
+tr.sec-head td{
+  padding:10px 14px 6px;
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--white);
+  background:var(--ink);
+}
+tr.sec-head.s-alliance td{background:var(--coral)}
+tr.sec-head.s-delivery td{background:var(--teal)}
+tr.sec-head.s-admin   td{background:var(--slate)}
+tr.sec-head.s-cross   td{background:#374151}
+
+/* COL HEADERS */
+thead tr th{
+  padding:8px 10px;
+  font-family:'Syne',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  border-bottom:2px solid var(--border);
+  white-space:nowrap;
+  text-align:center;
+  background:var(--bg);
+  position:sticky;top:61px;z-index:50
+}
+thead tr th:first-child{text-align:left;min-width:260px;position:sticky;top:61px;left:0;z-index:60;background:var(--bg)}
+
+/* PILLAR COLOR HEADER TOPS */
+th.h-ceo  {border-top:3px solid var(--amber)}
+th.h-ally {border-top:3px solid var(--coral)}
+th.h-dh   {border-top:3px solid var(--teal)}
+th.h-pl   {border-top:3px solid var(--teal)}
+th.h-pm   {border-top:3px solid var(--teal)}
+th.h-sd   {border-top:3px solid var(--teal)}
+th.h-dev  {border-top:3px solid var(--teal)}
+th.h-adm  {border-top:3px solid var(--slate)}
+th.h-hr   {border-top:3px solid var(--slate)}
+th.h-fin  {border-top:3px solid var(--slate)}
+
+/* DATA ROWS */
+tbody tr.data-row td{
+  padding:8px 10px;
+  border-bottom:1px solid var(--border);
+  text-align:center;
+  vertical-align:middle;
+  background:var(--white);
+  transition:background .1s
+}
+tbody tr.data-row:hover td{background:#F9FAFB}
+tbody tr.data-row td:first-child{
+  text-align:left;
+  font-size:12px;
+  font-weight:400;
+  color:var(--ink);
+  padding-left:14px;
+  position:sticky;left:0;
+  background:inherit;
+  border-right:1px solid var(--border)
+}
+tbody tr.data-row.hidden{display:none}
+
+/* PILL COMBOS */
+.cell{display:flex;align-items:center;justify-content:center;gap:3px;flex-wrap:wrap}
+
+/* FOOTER */
+footer{background:var(--ink);padding:28px 48px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.f-note{font-size:12px;color:rgba(255,255,255,.35);line-height:1.6;max-width:400px}
+.f-meta{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DataSkate · RACI Matrix 2026</div>
+  <h1>Who owns <span>what.</span></h1>
+  <p class="header-sub">Every key activity mapped to Responsible · Accountable · Consulted · Informed · across all roles</p>
+</header>
+
+<div class="controls">
+  <div class="legend">
+    <span class="leg"><span class="pill pill-R">R</span> Responsible — does the work</span>
+    <span class="leg"><span class="pill pill-A">A</span> Accountable — owns the outcome</span>
+    <span class="leg"><span class="pill pill-C">C</span> Consulted — input required</span>
+    <span class="leg"><span class="pill pill-I">I</span> Informed — kept in loop</span>
+  </div>
+  <div class="divider"></div>
+  <div class="filters" id="filters"></div>
+</div>
+
+<div class="table-wrap">
+<table id="raci">
+<thead>
+  <tr>
+    <th style="text-align:left">Activity</th>
+    <th class="h-ceo">CEO</th>
+    <th class="h-ally">VP<br/>Alliances</th>
+    <th class="h-ally">Alliance<br/>Mgr / AE</th>
+    <th class="h-ally">Head of<br/>GTM</th>
+    <th class="h-ally">SDR /<br/>BDR</th>
+    <th class="h-dh">Delivery<br/>Head / SA</th>
+    <th class="h-pl">Practice<br/>Head</th>
+    <th class="h-pl">Dev<br/>Lead</th>
+    <th class="h-pm">Project<br/>Mgr</th>
+    <th class="h-sd">Developer</th>
+    <th class="h-dev">Fresher</th>
+    <th class="h-adm">Admin<br/>Head</th>
+    <th class="h-hr">HR<br/>Manager</th>
+    <th class="h-fin">Finance<br/>Lead</th>
+  </tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<footer>
+  <div class="f-meta">DataSkate · RACI v3.0 · Q2 2026</div>
+  <div class="f-note">Delivery hierarchy: Delivery Head → Practice Heads (non-billable) → Dev Leads (billable, pod of 5) → Developer + 3 Freshers. All activities mapped to the three-pillar org structure. Head of GTM added at index 3. SDR/BDR added at index 4. All indices shifted accordingly.</div>
+</footer>
+
+<script>
+const R='R',A='A',C='C',I='I';
+// columns: CEO, VP Alliances, Alliance Mgr/AE, Head of GTM, SDR/BDR, Delivery Head/SA, Practice Head, Dev Lead, PM, Developer, Fresher, Admin Head, HR Mgr, Finance Lead
+// index:    0    1             2                3            4        5                  6              7         8   9          10        11         12      13
+
+const sections = [
+  {
+    id:'partner', label:'Partner Alliance & GTM', cls:'s-alliance',
+    rows:[
+      {a:'Partner tier strategy & annual plan',          r:[1],   ac:[0],  c:[5],    i:[11,13]},
+      {a:'Partner QBR (quarterly business review)',      r:[1],   ac:[1],  c:[2],    i:[0,11]},
+      {a:'AE / CAM relationship — day-to-day',           r:[2],   ac:[1],  c:[],     i:[0]},
+      {a:'Deal registration in partner portal',          r:[2],   ac:[1],  c:[],     i:[0,13]},
+      {a:'MDF request & utilisation',                    r:[1,3], ac:[0],  c:[],     i:[13]},
+      {a:'AppExchange listing & content',                r:[3],   ac:[1],  c:[5],    i:[0]},
+      {a:'Certification roadmap per partner',            r:[1],   ac:[5],  c:[6],    i:[0,12]},
+      {a:'Co-marketing decks & case studies',            r:[3],   ac:[1],  c:[8,6],  i:[0]},
+      {a:'PR & LinkedIn content calendar',               r:[3],   ac:[1],  c:[],     i:[0]},
+      {a:'Event & webinar logistics',                    r:[3],   ac:[1],  c:[],     i:[0,13]},
+      {a:'Outbound ICP definition & sequence strategy',   r:[3],   ac:[3],  c:[1],    i:[4]},
+      {a:'Prospect list building — Apollo/Clay (60+/wk)', r:[4],   ac:[3],  c:[],     i:[1]},
+      {a:'Cold email sequences & Instantly management',   r:[4],   ac:[3],  c:[],     i:[1]},
+      {a:'Cold calling — 15–20 dials/day',               r:[4],   ac:[3],  c:[],     i:[1]},
+      {a:'Qualifying call (5 questions pre-booking)',      r:[4],   ac:[3],  c:[],     i:[1]},
+      {a:'3-way call booking (prospect+DS+partner AE)',   r:[4],   ac:[3],  c:[2],    i:[1]},
+      {a:'Prospect brief to Alliance Mgr/AE before call', r:[4],   ac:[3],  c:[],     i:[2]},
+      {a:'SDR weekly review & sequence coaching',         r:[3],   ac:[3],  c:[],     i:[1]},
+      {a:'Outbound KPI report to VP Alliances (weekly)',  r:[3],   ac:[3],  c:[],     i:[1]},
+    ]
+  },
+  {
+    id:'revenue', label:'Sales & SOW', cls:'s-alliance',
+    rows:[
+      {a:'Inbound lead qualification',                   r:[2],   ac:[1],  c:[],     i:[0]},
+      {a:'Discovery & scoping call',                     r:[2,6], ac:[1],  c:[5],    i:[8]},
+      {a:'SOW creation & pricing',                       r:[1],   ac:[0],  c:[5,6],  i:[13]},
+      {a:'SOW minimum enforcement ($5K / $25K)',         r:[1],   ac:[0],  c:[13],   i:[5]},
+      {a:'Contract & MSA sign-off',                      r:[13],  ac:[0],  c:[1],    i:[5]},
+      {a:'Revenue forecasting to CEO',                   r:[1],   ac:[0],  c:[13],   i:[5]},
+      {a:'CRM hygiene & pipeline reporting',             r:[2],   ac:[1],  c:[],     i:[0,13]},
+    ]
+  },
+  {
+    id:'delivery', label:'Project Delivery', cls:'s-delivery',
+    rows:[
+      {a:'Project kick-off & client onboarding',         r:[8],   ac:[5],  c:[1,6],  i:[0]},
+      {a:'Solution architecture design (ARB gate)',       r:[5],   ac:[5],  c:[6,7],  i:[8,0]},
+      {a:'Sprint planning & task breakdown',              r:[7],   ac:[6],  c:[9],    i:[5]},
+      {a:'Feature development',                          r:[9,10], ac:[7],  c:[6],    i:[8]},
+      {a:'Code review gate (every PR)',                  r:[7],   ac:[6],  c:[5],    i:[]},
+      {a:'Integration design & standards',               r:[5,7], ac:[6],  c:[5],    i:[8]},
+      {a:'Test plan creation',                           r:[7],   ac:[5],  c:[9],    i:[8]},
+      {a:'QA execution & defect triage',                 r:[7,9], ac:[5],  c:[],     i:[8]},
+      {a:'UAT co-ordination with client',                r:[8],   ac:[5],  c:[7],    i:[0]},
+      {a:'Go-live sign-off',                             r:[5,6], ac:[5],  c:[8],    i:[0,1]},
+      {a:'Post go-live hypercare (2 weeks)',              r:[7,9], ac:[8],  c:[],     i:[5]},
+      {a:'Client status reporting (weekly)',              r:[8],   ac:[5],  c:[7],    i:[0,1]},
+      {a:'Escalation management',                        r:[5],   ac:[0],  c:[8,6],  i:[1]},
+      {a:'Retrospective facilitation',                   r:[8],   ac:[5],  c:[7],    i:[]},
+      {a:'CSAT collection & action plan',                r:[8],   ac:[5],  c:[7],    i:[0,1]},
+    ]
+  },
+  {
+    id:'coe', label:'CoE & Quality Standards', cls:'s-delivery',
+    rows:[
+      {a:'Coding standards definition & docs',           r:[5],   ac:[5],  c:[6,7],  i:[0]},
+      {a:'Standards enforcement across practices',       r:[5],   ac:[5],  c:[6],    i:[0]},
+      {a:'Technology & tooling selection',               r:[5],   ac:[0],  c:[6],    i:[13]},
+      {a:'CoE playbook & template maintenance',          r:[5],   ac:[5],  c:[6],    i:[]},
+      {a:'Reusable accelerator / IP library',            r:[5],   ac:[5],  c:[6,7],  i:[0]},
+      {a:'Reference architecture per practice',          r:[5],   ac:[5],  c:[6],    i:[]},
+      {a:'Utilisation tracking (≥76% target)',           r:[8],   ac:[5],  c:[13],   i:[0]},
+      {a:'Practice capability deck (strategy doc)',      r:[5],   ac:[0],  c:[1],    i:[11]},
+    ]
+  },
+  {
+    id:'enablement', label:'Enablement & Training', cls:'s-admin',
+    rows:[
+      {a:'91-day fresher ramp program — design',         r:[5],   ac:[5],  c:[12],   i:[0]},
+      {a:'91-day fresher ramp program — administer',     r:[12],  ac:[11], c:[7,5],  i:[0]},
+      {a:'Certification roadmap per role — define',      r:[5],   ac:[5],  c:[12],   i:[0]},
+      {a:'Certification sponsorship & reimbursement',    r:[11],  ac:[0],  c:[12,13],i:[7]},
+      {a:'Training calendar & LMS management',           r:[12],  ac:[11], c:[5],    i:[]},
+      {a:'Cert exam booking & tracking',                 r:[12],  ac:[11], c:[],     i:[5,7]},
+      {a:'Internal knowledge sharing sessions',          r:[5,6], ac:[5],  c:[12],   i:[]},
+    ]
+  },
+  {
+    id:'hr', label:'HR & Talent Acquisition', cls:'s-admin',
+    rows:[
+      {a:'Role brief & cert spec — define',              r:[5,1], ac:[5],  c:[0],    i:[12]},
+      {a:'Job description creation',                     r:[12],  ac:[11], c:[5,1],  i:[0]},
+      {a:'Recruiting & candidate sourcing',              r:[12],  ac:[11], c:[],     i:[0]},
+      {a:'Technical interview & assessment',             r:[5,6], ac:[5],  c:[12],   i:[0]},
+      {a:'HR / culture interview',                       r:[12],  ac:[11], c:[],     i:[0]},
+      {a:'Offer letter & contract',                      r:[12],  ac:[11], c:[13,0], i:[]},
+      {a:'Onboarding — day 1 to 31 logistics',          r:[12],  ac:[11], c:[5],    i:[7]},
+      {a:'Performance review process — administer',      r:[12],  ac:[11], c:[5,6],  i:[0]},
+      {a:'Compensation bands — define',                  r:[13],  ac:[0],  c:[12,5], i:[]},
+      {a:'Attrition & retention planning',               r:[12],  ac:[11], c:[5,1],  i:[0]},
+      {a:'Fresher pipeline — college partnerships',      r:[12],  ac:[11], c:[0],    i:[5]},
+    ]
+  },
+  {
+    id:'finance', label:'Finance & Operations', cls:'s-admin',
+    rows:[
+      {a:'Monthly P&L reporting',                        r:[13],  ac:[0],  c:[],     i:[1,5,11]},
+      {a:'Invoicing & collections',                      r:[13],  ac:[0],  c:[1,8],  i:[5]},
+      {a:'Payroll processing',                           r:[13],  ac:[11], c:[12],   i:[0]},
+      {a:'Headcount budget & approval',                  r:[13],  ac:[0],  c:[11,5], i:[]},
+      {a:'Tool stack selection & renewals',              r:[11],  ac:[0],  c:[1,5],  i:[]},
+      {a:'Vendor contract management',                   r:[13],  ac:[0],  c:[1,11], i:[]},
+      {a:'Partner portal billing & cost tracking',       r:[13],  ac:[11], c:[1],    i:[]},
+      {a:'Cert & training budget tracking',              r:[13],  ac:[11], c:[12,5], i:[]},
+      {a:'Legal — MSA & SOW review',                    r:[13],  ac:[0],  c:[1],    i:[5]},
+      {a:'Legal — NDA & compliance',                     r:[13],  ac:[0],  c:[11],   i:[]},
+    ]
+  },
+  {
+    id:'cross', label:'Cross-Pillar & Strategic', cls:'s-cross',
+    rows:[
+      {a:'Annual org & headcount plan',                  r:[0],   ac:[0],  c:[1,5,11],i:[12,13]},
+      {a:'Valuation & investor narrative',               r:[0],   ac:[0],  c:[13,1], i:[]},
+      {a:'New practice launch decision',                 r:[0],   ac:[0],  c:[5,1],  i:[11,13]},
+      {a:'SOW above $50K — final approval',             r:[1],   ac:[0],  c:[5,13], i:[]},
+      {a:'Partner tier upgrade strategy',                r:[1],   ac:[0],  c:[5],    i:[11]},
+      {a:'Competitive & market positioning',             r:[1],   ac:[0],  c:[5,3],  i:[11]},
+      {a:'Culture & values — stewardship',               r:[0],   ac:[0],  c:[11,12],i:[1,5]},
+    ]
+  }
+];
+
+const COLS = 13;
+
+function mkPill(type){
+  return `<span class="pill pill-${type}">${type}</span>`;
+}
+
+function buildCell(rowData, colIdx){
+  const isR = rowData.r  && rowData.r.includes(colIdx);
+  const isA = rowData.ac && rowData.ac.includes(colIdx);
+  const isC = rowData.c  && rowData.c.includes(colIdx);
+  const isI = rowData.i  && rowData.i.includes(colIdx);
+  const pills = [];
+  if(isR) pills.push(mkPill('R'));
+  if(isA) pills.push(mkPill('A'));
+  if(isC) pills.push(mkPill('C'));
+  if(isI) pills.push(mkPill('I'));
+  return pills.length ? `<div class="cell">${pills.join('')}</div>` : '';
+}
+
+const tbody = document.getElementById('tbody');
+let html = '';
+
+sections.forEach(sec => {
+  html += `<tr class="sec-head ${sec.cls}" data-sec="${sec.id}"><td colspan="${COLS+1}">${sec.label}</td></tr>`;
+  sec.rows.forEach(row => {
+    const cells = Array.from({length:COLS},(_,i)=>i).map(i=>`<td>${buildCell(row,i)}</td>`).join('');
+    html += `<tr class="data-row" data-sec="${sec.id}"><td>${row.a}</td>${cells}</tr>`;
+  });
+});
+
+tbody.innerHTML = html;
+
+// filters
+const secDefs = [
+  {id:'all',      label:'All activities'},
+  {id:'partner',  label:'Partner Alliance'},
+  {id:'revenue',  label:'Sales & SOW'},
+  {id:'delivery', label:'Project Delivery'},
+  {id:'coe',      label:'CoE & Quality'},
+  {id:'enablement',label:'Enablement'},
+  {id:'hr',       label:'HR & Talent'},
+  {id:'finance',  label:'Finance & Ops'},
+  {id:'cross',    label:'Cross-pillar'},
+];
+
+const filtersEl = document.getElementById('filters');
+secDefs.forEach(def => {
+  const b = document.createElement('button');
+  b.className = 'fbtn' + (def.id==='all'?' active':'');
+  b.textContent = def.label;
+  b.onclick = () => {
+    document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.data-row,.sec-head').forEach(r=>{
+      if(def.id==='all') r.classList.remove('hidden');
+      else r.classList.toggle('hidden', r.dataset.sec !== def.id);
+    });
+  };
+  filtersEl.appendChild(b);
+});
+</script>
+</body>
+</html>

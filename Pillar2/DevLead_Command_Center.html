@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Dev Lead · Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#09090E;--surface:#0F1117;--surface2:#14161F;--surface3:#1A1D28;
+  --border:#1E2235;--border2:#252A3C;
+  --ink:#E8EAF4;--muted:#5A6080;
+  --green:#22C55E;--green-lt:rgba(34,197,94,.1);--green-dk:rgba(34,197,94,.2);
+  --red:#EF4444;--red-lt:rgba(239,68,68,.08);
+  --yellow:#EAB308;
+  --amber:#F59E0B;--amber-lt:rgba(245,158,11,.1);--amber-dk:#D97706;
+  --teal:#00C9A7;--teal-lt:rgba(0,201,167,.08);
+  --role-color:#00C9A7;--role-lt:rgba(0,201,167,.08);--role-dk:rgba(0,201,167,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5}
+header{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 32px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.role-name{font-family:'Bebas Neue',cursive;font-size:30px;letter-spacing:.04em;color:var(--ink);line-height:1}
+.role-name span{color:var(--role-color)}
+.role-reports{font-size:11px;color:var(--muted);margin-top:3px}
+.kpi-bar{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:9px;padding:2px 10px;border-radius:20px;background:rgba(255,255,255,.05);color:rgba(255,255,255,.45);border:1px solid var(--border2)}
+.kpi-chip.warn{background:var(--amber-lt);color:var(--amber);border-color:rgba(245,158,11,.3)}
+.kpi-chip.bad{background:var(--red-lt);color:var(--red);border-color:rgba(239,68,68,.3)}
+.hub-link{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);text-decoration:none;white-space:nowrap}
+.hub-link:hover{color:var(--amber-dk)}
+main{max-width:1500px;margin:0 auto;padding:20px 32px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.card-head{padding:11px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.card-icon{font-size:14px}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.card-count{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-left:auto}
+.card-sub{font-size:9px;color:var(--muted);margin-left:auto;letter-spacing:.05em;text-transform:uppercase}
+.card-body{padding:13px 16px}
+.kpi-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)}
+.kpi-row:last-child{border-bottom:none}
+.kpi-label{font-size:11px;color:var(--muted);flex:1}
+.kpi-val{font-family:'DM Mono',monospace;font-size:11px;color:var(--ink);font-weight:500}
+.kpi-note{font-size:9px;color:var(--muted);text-align:right;min-width:90px}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dot.ok{background:var(--green)}.dot.warn{background:var(--yellow)}.dot.bad{background:var(--red)}
+.action-item{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.action-item:last-child{border-bottom:none}
+.adot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.adot.red{background:var(--red)}.adot.amber{background:var(--amber)}.adot.green{background:var(--green)}
+.action-title{font-size:12px;font-weight:600;color:var(--ink)}
+.action-sub{font-size:10px;color:var(--muted);margin-top:2px;line-height:1.5}
+.wait-item{display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px;align-items:flex-start}
+.wait-item:last-child{border-bottom:none}
+.wait-from{font-weight:700;color:var(--role-color);min-width:110px;flex-shrink:0}
+.wait-text{color:var(--muted);flex:1}
+.escalation-box{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;padding:12px;font-size:11px;color:var(--muted);line-height:1.8}
+.doc-links{display:flex;gap:7px;flex-wrap:wrap;padding:13px 16px}
+.doc-link{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 11px;border-radius:6px;border:1px solid var(--border2);color:var(--muted);text-decoration:none;display:inline-block}
+.doc-link:hover{color:var(--ink);border-color:var(--muted)}
+.doc-link.primary{background:var(--role-lt);border-color:var(--role-color);color:var(--role-color)}
+.doc-link.primary:hover{background:var(--role-dk)}
+
+/* ══ POD TABLE ══ */
+.pod-summary-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface3)}
+.pod-stat{padding:12px 20px;border-right:1px solid var(--border);text-align:center}
+.pod-stat:last-child{border-right:none}
+.pod-val{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:.04em;line-height:1}
+.pod-lbl{font-size:8px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2);align-items:center}
+.filter-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.filter-btn{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;font-family:inherit}
+.filter-btn:hover{color:var(--ink);border-color:var(--muted)}
+.filter-btn.active{background:var(--role-lt);border-color:var(--role-color);color:var(--role-color)}
+.pod-table{width:100%;border-collapse:collapse;font-size:11px}
+.pod-table th{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border2);background:var(--surface2);cursor:pointer;user-select:none;white-space:nowrap}
+.pod-table th:hover{color:var(--ink)}
+.sort-icon{color:var(--border2);margin-left:3px;font-size:8px}
+.pod-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+.pod-table tr:last-child td{border-bottom:none}
+.pod-table tr:hover td{background:rgba(255,255,255,.02)}
+.pod-table tr.row-red td{background:rgba(239,68,68,.04)}
+.pod-table tr.row-amber td{background:rgba(245,158,11,.03)}
+.pod-table tr.hidden{display:none}
+.member-cell{display:flex;flex-direction:column}
+.member-nm{font-weight:600;color:var(--ink);font-size:11px}
+.member-sub{font-size:9px;color:var(--muted)}
+.role-pill{font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:10px;display:inline-block;white-space:nowrap}
+.role-pill.dev{background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.role-pill.fresh{background:rgba(245,158,11,.1);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
+.badge{font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:10px;display:inline-block;white-space:nowrap}
+.badge.green{background:var(--green-lt);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.badge.amber{background:var(--amber-lt);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
+.badge.red{background:var(--red-lt);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.badge.grey{background:rgba(90,96,128,.12);color:var(--muted);border:1px solid var(--border2)}
+.badge.teal{background:var(--teal-lt);color:var(--teal);border:1px solid rgba(0,201,167,.25)}
+.mono{font-family:'DM Mono',monospace;font-size:10px}
+.bar-wrap{display:flex;align-items:center;gap:5px}
+.bar-track{width:48px;height:4px;background:var(--border2);border-radius:2px;overflow:hidden}
+.bar-fill{height:4px;border-radius:2px}
+.check-ok{color:var(--green);font-weight:700}
+.check-bad{color:var(--red)}
+.flag-inline{font-size:9px;color:var(--muted);max-width:170px;line-height:1.4}
+.cc-link{font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:2px 7px;border-radius:5px;background:var(--role-lt);border:1px solid rgba(0,201,167,.3);color:var(--role-color);text-decoration:none;cursor:pointer;font-family:inherit;display:inline-block}
+.cc-link:hover{background:var(--role-dk)}
+.tbl-scroll{overflow-x:auto}
+footer{background:var(--surface);border-top:1px solid var(--border);padding:14px 32px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="role-tag">Pillar 2 · Delivery & CoE · Command Center</div>
+    <div class="role-name"><span>Dev Lead</span></div>
+    <div class="role-reports">Reports to: Practice Head · Updated daily from pod stand-up</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip">PRs reviewed &lt;24hr: 94%</span>
+      <span class="kpi-chip">Sprint completion (Thu): On track</span>
+      <span class="kpi-chip warn">Open PRs &gt;18hr: 3</span>
+    </div>
+  </div>
+  <a class="hub-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">← Back to Master Hub</a>
+</header>
+
+<main>
+
+<!-- ══ POD TABLE ══ -->
+<div class="card full">
+  <div class="card-head">
+    <div class="card-icon">🧑‍💻</div>
+    <div class="card-title">My Pod — Developer & Fresher View</div>
+    <div class="card-sub">filterable · click column to sort</div>
+  </div>
+
+  <div class="pod-summary-bar">
+    <div class="pod-stat"><div class="pod-val" style="color:var(--ink)">5</div><div class="pod-lbl">Pod Size</div></div>
+    <div class="pod-stat"><div class="pod-val" style="color:var(--red)">1</div><div class="pod-lbl">Blocked</div></div>
+    <div class="pod-stat"><div class="pod-val" style="color:var(--amber)">1</div><div class="pod-lbl">Watch</div></div>
+    <div class="pod-stat"><div class="pod-val" style="color:var(--green)">3</div><div class="pod-lbl">On Track</div></div>
+    <div class="pod-stat"><div class="pod-val" style="color:var(--amber)">3</div><div class="pod-lbl">Open PRs</div></div>
+    <div class="pod-stat"><div class="pod-val" style="color:var(--amber)">74%</div><div class="pod-lbl">Avg Utilisation</div></div>
+    <div class="pod-stat"><div class="pod-val" style="color:var(--teal)">2</div><div class="pod-lbl">Freshers Ramping</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Role:</span>
+    <button class="filter-btn active" onclick="filterPod('all',this)">All</button>
+    <button class="filter-btn" onclick="filterPod('dev',this)">Developer</button>
+    <button class="filter-btn" onclick="filterPod('fresh',this)">Fresher</button>
+    <span class="filter-label" style="margin-left:8px">Status:</span>
+    <button class="filter-btn" onclick="filterStatus('all',this)">All</button>
+    <button class="filter-btn" onclick="filterStatus('blocked',this)">Blocked</button>
+    <button class="filter-btn" onclick="filterStatus('watch',this)">Watch</button>
+    <button class="filter-btn" onclick="filterStatus('ok',this)">On Track</button>
+  </div>
+
+  <div class="tbl-scroll">
+  <table class="pod-table">
+    <thead>
+      <tr>
+        <th>Name <span class="sort-icon">↕</span></th>
+        <th>Role <span class="sort-icon">↕</span></th>
+        <th>Project <span class="sort-icon">↕</span></th>
+        <th>Status <span class="sort-icon">↕</span></th>
+        <th>Utilisation <span class="sort-icon">↕</span></th>
+        <th>Open PRs <span class="sort-icon">↕</span></th>
+        <th>Time Logged <span class="sort-icon">↕</span></th>
+        <th>Defects <span class="sort-icon">↕</span></th>
+        <th>Ramp Gate <span class="sort-icon">↕</span></th>
+        <th>Last Stand-up <span class="sort-icon">↕</span></th>
+        <th>Dev Lead Flag</th>
+        <th>CC</th>
+      </tr>
+    </thead>
+    <tbody id="podTbody">
+      <tr data-role="dev" data-status="blocked" class="row-red">
+        <td><div class="member-cell"><span class="member-nm">M. Thomas</span><span class="member-sub">Developer · MuleSoft</span></div></td>
+        <td><span class="role-pill dev">Developer</span></td>
+        <td><span class="mono">GlobalRetail</span></td>
+        <td><span class="badge red">Blocked</span></td>
+        <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:72%;background:var(--amber)"></div></div><span class="mono">72%</span></div></td>
+        <td><span class="mono" style="color:var(--red)">2 open &gt;18hr</span></td>
+        <td><span class="check-bad">Missing today</span></td>
+        <td><span class="mono" style="color:var(--red)">1 critical</span></td>
+        <td>—</td>
+        <td><span style="color:var(--red)">Not logged</span></td>
+        <td class="flag-inline" style="color:var(--red)">Blocked on API design decision. Needs Practice Head input. Escalate today.</td>
+        <td><a class="cc-link" href="Developer_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-role="dev" data-status="ok">
+        <td><div class="member-cell"><span class="member-nm">R. Pillai</span><span class="member-sub">Developer · Salesforce</span></div></td>
+        <td><span class="role-pill dev">Developer</span></td>
+        <td><span class="mono">FinServe / ManufactureCo</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--green)"></div></div><span class="mono">85%</span></div></td>
+        <td><span class="mono" style="color:var(--green)">0</span></td>
+        <td><span class="check-ok">✓ Today</span></td>
+        <td><span class="mono" style="color:var(--muted)">0</span></td>
+        <td>—</td>
+        <td><span style="color:var(--green)">Today ✓</span></td>
+        <td class="flag-inline">Reliable. On pace ManufactureCo close. Good stretch candidate for TechCorp.</td>
+        <td><a class="cc-link" href="Developer_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-role="dev" data-status="watch" class="row-amber">
+        <td><div class="member-cell"><span class="member-nm">A. Singh</span><span class="member-sub">Developer · Bench</span></div></td>
+        <td><span class="role-pill dev">Developer</span></td>
+        <td><span class="mono" style="color:var(--amber)">Bench</span></td>
+        <td><span class="badge amber">Watch</span></td>
+        <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:0%;background:var(--red)"></div></div><span class="mono" style="color:var(--red)">0%</span></div></td>
+        <td><span class="mono" style="color:var(--muted)">0</span></td>
+        <td><span class="check-ok">✓ Today</span></td>
+        <td><span class="mono" style="color:var(--muted)">0</span></td>
+        <td>—</td>
+        <td><span style="color:var(--amber)">Today ✓</span></td>
+        <td class="flag-inline">On bench 1 week. Assign to TechCorp W2. Confirm with DH/SA today.</td>
+        <td><a class="cc-link" href="Developer_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-role="fresh" data-status="ok">
+        <td><div class="member-cell"><span class="member-nm">T. Nair</span><span class="member-sub">Fresher · Ramp W6</span></div></td>
+        <td><span class="role-pill fresh">Fresher</span></td>
+        <td><span class="mono">GlobalRetail (shadow)</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--teal)"></div></div><span class="mono">60%</span></div></td>
+        <td><span class="mono" style="color:var(--muted)">0</span></td>
+        <td><span class="check-ok">✓ Today</span></td>
+        <td><span class="mono" style="color:var(--muted)">0</span></td>
+        <td><span style="color:var(--amber)">W8 gate due</span></td>
+        <td><span style="color:var(--green)">Today ✓</span></td>
+        <td class="flag-inline">Good ramp pace. W8 gate in 2 weeks — start prep now.</td>
+        <td><a class="cc-link" href="Fresher_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+      <tr data-role="fresh" data-status="ok">
+        <td><div class="member-cell"><span class="member-nm">S. Kumar</span><span class="member-sub">Fresher · Ramp W3</span></div></td>
+        <td><span class="role-pill fresh">Fresher</span></td>
+        <td><span class="mono">Training / Bench</span></td>
+        <td><span class="badge green">On Track</span></td>
+        <td><div class="bar-wrap"><div class="bar-track"><div class="bar-fill" style="width:40%;background:var(--teal)"></div></div><span class="mono">40%</span></div></td>
+        <td><span class="mono" style="color:var(--muted)">0</span></td>
+        <td><span class="check-ok">✓ Today</span></td>
+        <td><span class="mono" style="color:var(--muted)">0</span></td>
+        <td><span style="color:var(--green)">W4 gate on pace</span></td>
+        <td><span style="color:var(--green)">Today ✓</span></td>
+        <td class="flag-inline">In cert prep. Shadow TechCorp W2 once assigned.</td>
+        <td><a class="cc-link" href="Fresher_Command_Center.html" target="_blank">Open CC</a></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- ══ MY KPIs ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">📊</div><div class="card-title">My KPIs This Week</div></div>
+  <div class="card-body">
+    <div class="kpi-row"><div class="kpi-label">PRs reviewed &lt;24hr</div><div class="kpi-val">94% on time</div><div class="kpi-note">SLA — no PR waits &gt;24hr</div><div class="dot ok"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Sprint completion (Thu)</div><div class="kpi-val">On track</div><div class="kpi-note">report due Thu 5pm to PM</div><div class="dot ok"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Fresher daily check-in</div><div class="kpi-val">Active daily</div><div class="kpi-note">logged in Notion each day</div><div class="dot ok"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Harvest logged (all pod)</div><div class="kpi-val">100%</div><div class="kpi-note">all pod members</div><div class="dot ok"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Defects in QA</div><div class="kpi-val">2 open</div><div class="kpi-note">none critical</div><div class="dot ok"></div></div>
+    <div class="kpi-row"><div class="kpi-label">Standards violations</div><div class="kpi-val">0</div><div class="kpi-note">this sprint</div><div class="dot ok"></div></div>
+  </div>
+</div>
+
+<!-- ══ ACTIONS TODAY ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">⚡</div><div class="card-title">Actions Required Today</div><div class="card-count" style="background:var(--red-lt);color:var(--red)">3 items</div></div>
+  <div class="card-body">
+    <div class="action-item"><div class="adot red"></div><div><div class="action-title">M. Thomas blocked — escalate API design question to Practice Head</div><div class="action-sub">Blocked since yesterday. Dev Lead cannot unblock this — needs architecture decision. Slack Practice Head now.</div></div></div>
+    <div class="action-item"><div class="adot red"></div><div><div class="action-title">3 PRs open &gt;18 hours — review before EOD</div><div class="action-sub">PR review SLA is 24hr. 2 are approaching limit. Block 90 min now to clear queue.</div></div></div>
+    <div class="action-item"><div class="adot amber"></div><div><div class="action-title">Sprint completion report due Thursday 5pm — prep now</div><div class="action-sub">PM needs it to write Friday client status. Format: tasks done, tasks moved, blockers. Max 1 page.</div></div></div>
+  </div>
+</div>
+
+<!-- ══ WAITING ON ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">⏳</div><div class="card-title">Waiting On</div></div>
+  <div class="card-body">
+    <div class="wait-item"><div class="wait-from">Practice Head</div><div class="wait-text">Architecture clarification on HealthData integration design — M. Thomas blocked</div></div>
+    <div class="wait-item"><div class="wait-from">Fresher (T. Nair)</div><div class="wait-text">Updated unit test results — requested this morning</div></div>
+    <div class="wait-item"><div class="wait-from">DH/SA</div><div class="wait-text">Confirmation to assign A. Singh to TechCorp W2</div></div>
+  </div>
+</div>
+
+<!-- ══ ESCALATION ══ -->
+<div class="card">
+  <div class="card-head"><div class="card-icon">🚨</div><div class="card-title">Escalation Path</div></div>
+  <div class="card-body">
+    <div class="escalation-box">
+      Any blocker that will slip sprint delivery → Practice Head same day<br/>
+      Code quality issue involving production risk → Practice Head immediately<br/>
+      Fresher failing ramp gate → Practice Head + HR within 48hr<br/>
+      Developer underperformance 2+ sprints → Practice Head for PIP discussion
+    </div>
+  </div>
+</div>
+
+<!-- ══ DOC LINKS ══ -->
+<div class="card full">
+  <div class="card-head"><div class="card-icon">📁</div><div class="card-title">My Documents</div></div>
+  <div class="doc-links">
+    <a class="doc-link primary" href="P2_DevLead_Cadence_v3.html" target="_blank">My Cadence Doc</a>
+    <a class="doc-link primary" href="Pillar2-Delivery-Processes.html" target="_blank">Pillar Process Bible</a>
+    <a class="doc-link primary" href="../CEO/03.DataSkate_Project_Lifecycle.html" target="_blank">Project Lifecycle</a>
+    <a class="doc-link" href="../CEO/DataSkate_RACI_v3.html" target="_blank">RACI Matrix</a>
+    <a class="doc-link" href="../CEO/01_DataSkate_Org_Structure_v2.html" target="_blank">Org Structure</a>
+    <a class="doc-link" href="../DataSkate_Master_CommandCenter.html" target="_blank">Master Hub</a>
+  </div>
+</div>
+
+</main>
+<footer>
+  <span>DataSkate · Dev Lead · Command Center · Pillar 2 · Delivery & CoE</span>
+  <span>Pod: 3 developers + 2 freshers · Reports to Practice Head</span>
+</footer>
+
+<script>
+let activeRole = 'all';
+let activeStatus = 'all';
+
+function applyFilters() {
+  document.querySelectorAll('#podTbody tr').forEach(row => {
+    const role = row.getAttribute('data-role');
+    const status = row.getAttribute('data-status');
+    const roleOk = activeRole === 'all' || role === activeRole;
+    const statusOk = activeStatus === 'all' || status === activeStatus;
+    row.classList.toggle('hidden', !(roleOk && statusOk));
+  });
+}
+
+function filterPod(role, btn) {
+  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => {
+    if (b.onclick && b.onclick.toString().includes('filterPod')) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  activeRole = role;
+  applyFilters();
+}
+
+function filterStatus(status, btn) {
+  document.querySelectorAll('.filter-bar .filter-btn').forEach(b => {
+    if (b.onclick && b.onclick.toString().includes('filterStatus')) b.classList.remove('active');
+  });
+  btn.classList.add('active');
+  activeStatus = status;
+  applyFilters();
+}
+
+// Column sort
+let sortDir = {};
+document.querySelectorAll('.pod-table th').forEach((th, idx) => {
+  th.addEventListener('click', () => {
+    const tbody = document.getElementById('podTbody');
+    const rows = Array.from(tbody.querySelectorAll('tr'));
+    const asc = !sortDir[idx];
+    sortDir = {}; sortDir[idx] = asc;
+    rows.sort((a, b) => {
+      const aT = (a.cells[idx] ? a.cells[idx].innerText : '').trim();
+      const bT = (b.cells[idx] ? b.cells[idx].innerText : '').trim();
+      const aN = parseFloat(aT.replace(/[^0-9.]/g,'')), bN = parseFloat(bT.replace(/[^0-9.]/g,''));
+      if (!isNaN(aN) && !isNaN(bN)) return asc ? aN-bN : bN-aN;
+      return asc ? aT.localeCompare(bT) : bT.localeCompare(aT);
+    });
+    rows.forEach(r => tbody.appendChild(r));
+    th.querySelectorAll('.sort-icon').forEach(s => s.textContent = asc ? '↑' : '↓');
+  });
+});
+</script>
+</body>
+</html>

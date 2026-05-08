@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Alliance Manager / AE · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B2513;
+  --amber:#D97706;--amber-lt:#FFFBEB;
+  --role-color:#D97706;--role-lt:#FFFBEB;--role-dk:#92400E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--teal-lt);color:var(--teal-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--amber);border-color:var(--amber);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.owns-table{width:100%;border-collapse:collapse;font-size:12px}
+.owns-table th{background:var(--ink);color:#fff;padding:9px 12px;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.07em}
+.owns-table td{padding:8px 12px;border-bottom:1px solid #F3F4F6;vertical-align:top}
+.owns-table tr:nth-child(even) td{background:#FAFAFA}
+.badge-o{font-size:9px;padding:1px 8px;border-radius:10px;background:var(--amber-lt);color:var(--role-dk);font-weight:500}
+.badge-s{font-size:9px;padding:1px 8px;border-radius:10px;background:var(--teal-lt);color:var(--teal-dk);font-weight:500}
+.info-box{background:#FFFBF0;border:1px solid #FDE68A;border-radius:10px;padding:14px 18px;margin-bottom:28px}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px;color:var(--role-dk)}
+.info-body{font-size:12px;line-height:1.7}
+.flow-row{display:flex;align-items:center;gap:0;margin-bottom:12px;flex-wrap:wrap}
+.flow-step{background:var(--white);border:1px solid #E5E7EB;border-radius:8px;padding:10px 14px;font-size:11px;flex:1;min-width:120px}
+.flow-step strong{display:block;font-size:10px;font-weight:700;color:var(--role-dk);margin-bottom:3px}
+.flow-arrow{font-size:14px;color:var(--muted);padding:0 6px;flex-shrink:0}
+.ramp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
+.ramp-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;padding:14px}
+.ramp-head{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--role-dk);margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--role-lt)}
+.ramp-item{font-size:11px;color:var(--ink);padding:3px 0;border-bottom:1px solid #F9FAFB}
+.ramp-item:last-child{border-bottom:none}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="Alliance_Mgr_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Alliance Mgr Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 1 · Partner Alliance &amp; GTM · Cadence v3</div>
+    <div class="role-name">Alliance Manager / AE</div>
+    <div class="role-sub">Deal executor · Partner AE relationship owner · Lead → SOW · Reports to: VP Alliances · Owns every deal from lead receipt to signed contract</div>
+    <div class="kpi-bar">
+      <span class="kpi-chip">Lead response &lt;4hr</span>
+      <span class="kpi-chip">CRM updated same day — zero exceptions</span>
+      <span class="kpi-chip">Deal reg same day as stage advance</span>
+      <span class="kpi-chip">SOW min $5K SMB / $25K MM</span>
+      <span class="kpi-chip">≥3 proactive partner AE touches/week</span>
+      <span class="kpi-chip">Discovery-to-proposal ≤5 days</span>
+    </div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8">
+    Primary KPI<br/>
+    <span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">Lead &lt;4hr · CRM same day · Deal reg same day</span>
+  </div>
+</header>
+<main>
+
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">P06</span> = Pillar 1 process ref · checkboxes reset on reload</span>
+</div>
+
+<!-- ROLE MAP DIAGRAM -->
+<div class="diagram section">
+  <div class="diagram-title">Alliance Manager / AE — role in the deal motion</div>
+  <svg viewBox="0 0 720 120" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <!-- Partner AE -->
+    <rect x="5" y="42" width="110" height="36" rx="7" fill="#F3F4F6" stroke="#E5E7EB"/>
+    <text x="60" y="57" text-anchor="middle" fill="#374151" font-size="9" font-weight="700">Partner AE</text>
+    <text x="60" y="70" text-anchor="middle" fill="#9CA3AF" font-size="8">Referral / co-sell</text>
+    <line x1="115" y1="60" x2="135" y2="60" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr)"/>
+    <!-- SDR -->
+    <rect x="5" y="86" width="110" height="28" rx="7" fill="#F3F4F6" stroke="#E5E7EB"/>
+    <text x="60" y="104" text-anchor="middle" fill="#9CA3AF" font-size="8">SDR Outbound Booked</text>
+    <line x1="115" y1="100" x2="135" y2="68" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr)"/>
+    <!-- AE Box -->
+    <rect x="135" y="42" width="160" height="36" rx="7" fill="#92400E"/>
+    <text x="215" y="57" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Alliance Mgr / AE</text>
+    <text x="215" y="70" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8">Qualify → Discover → Propose → Close</text>
+    <line x1="295" y1="60" x2="315" y2="60" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr)"/>
+    <!-- CRM box -->
+    <rect x="315" y="42" width="130" height="36" rx="7" fill="#F9FAFB" stroke="#E5E7EB"/>
+    <text x="380" y="57" text-anchor="middle" fill="#374151" font-size="9" font-weight="700">CRM (HubSpot)</text>
+    <text x="380" y="70" text-anchor="middle" fill="#9CA3AF" font-size="8">All stages, same-day logging</text>
+    <line x1="380" y1="78" x2="380" y2="95" stroke="#E5E7EB" stroke-width="1.5"/>
+    <!-- VP line -->
+    <line x1="215" y1="78" x2="215" y2="95" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="215" y1="95" x2="490" y2="95" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="490" y1="95" x2="490" y2="108" stroke="#E5E7EB" stroke-width="1.5"/>
+    <!-- signed SOW -->
+    <rect x="460" y="42" width="130" height="36" rx="7" fill="#F9FAFB" stroke="#E5E7EB"/>
+    <text x="525" y="57" text-anchor="middle" fill="#374151" font-size="9" font-weight="700">Signed SOW</text>
+    <text x="525" y="70" text-anchor="middle" fill="#9CA3AF" font-size="8">→ Delivery (P2) + Finance (P3)</text>
+    <line x1="445" y1="60" x2="460" y2="60" stroke="#E5E7EB" stroke-width="1.5" marker-end="url(#arr)"/>
+    <!-- VP -->
+    <rect x="595" y="42" width="120" height="36" rx="7" fill="#9B2513"/>
+    <text x="655" y="57" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">VP Alliances</text>
+    <text x="655" y="70" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="8">Escalation · forecast</text>
+    <line x1="655" y1="78" x2="655" y2="108" stroke="#E5E7EB" stroke-width="1.5"/>
+    <text x="215" y="118" text-anchor="middle" fill="#9CA3AF" font-size="8">VP Alliances escalation</text>
+    <text x="380" y="108" text-anchor="middle" fill="#9CA3AF" font-size="8">Deal registration</text>
+    <text x="490" y="118" text-anchor="middle" fill="#9CA3AF" font-size="8">Same day</text>
+    <text x="655" y="118" text-anchor="middle" fill="#9CA3AF" font-size="8">Weekly pipeline review</text>
+    <defs><marker id="arr" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#E5E7EB"/></marker></defs>
+  </svg>
+</div>
+
+<!-- LEAD TO SOW FLOW -->
+<div class="section">
+  <div class="sec-title">📋 Lead → SOW — every deal runs this sequence</div>
+  <div class="flow-row">
+    <div class="flow-step"><strong>1. Receive</strong>Lead from partner AE, SDR, or inbound — log CRM within 2hr</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>2. Qualify</strong>BANT check within 4hr. Budget? Authority? Need? Timeline? Pass/fail decision to VP.</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>3. Discovery</strong>45-min call. Pain buckets, platform, integration scope. Brief Delivery Head if complex.</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>4. Proposal</strong>SOW drafted within 5 days. Floor: $5K SMB / $25K MM. VP approves before send.</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>5. Close</strong>Follow up every 48hr. Objections → Head of GTM for collateral. Deal reg on advance.</div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step"><strong>6. Handoff</strong>Signed SOW → P2 Delivery Head brief within 24hr. Finance cc'd same day.</div>
+  </div>
+</div>
+
+<!-- OWNS VS SUPPORTS -->
+<div class="section">
+  <div class="sec-title">🎯 Owns vs Supports</div>
+  <table class="owns-table">
+    <thead><tr><th>Alliance Mgr / AE OWNS</th><th>Alliance Mgr / AE SUPPORTS</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge-o">Owns</span> Every lead from receipt to signed SOW — no deal moves without AE action</td><td><span class="badge-s">Supports</span> VP Alliances on QBR prep — provides deal list and co-sell win data</td></tr>
+      <tr><td><span class="badge-o">Owns</span> CRM hygiene — all stages, contacts, amounts, next actions logged same day</td><td><span class="badge-s">Supports</span> Head of GTM with brief when new collateral is needed for a deal</td></tr>
+      <tr><td><span class="badge-o">Owns</span> Deal registration in partner portals on every stage advance</td><td><span class="badge-s">Supports</span> SDR weekly review — confirms which meetings were qualified and which were not</td></tr>
+      <tr><td><span class="badge-o">Owns</span> Partner AE relationship — 30+ active AEs across 5 partners cultivated weekly</td><td><span class="badge-s">Supports</span> Delivery Head on scoping questions that arise during SOW draft phase</td></tr>
+      <tr><td><span class="badge-o">Owns</span> SOW minimum enforcement — escalate any sub-floor deal request to VP before responding</td><td><span class="badge-s">Supports</span> VP Alliances on partner tier compliance data — tracks deal volume by partner</td></tr>
+      <tr><td><span class="badge-o">Owns</span> Discovery call quality — brief Delivery Head on any technically complex deal before proposal</td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- RECEIVES SECTION -->
+<div class="section">
+  <div class="sec-title">📥 What you receive — inputs that land on your desk</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">New lead notifications — partner Slack, email, CRM alerts, portal notifications <span class="proc-ref">P01</span></div><div class="task-tool">🛠 Gmail · Slack partner channels · HubSpot lead alerts</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">SDR prospect brief — any meeting booked by SDR needs qualifying brief before call <span class="proc-ref">P05</span></div><div class="task-sub">Brief should arrive from SDR before EOD on day of booking.</div><div class="task-tool">🛠 Notion brief template from SDR via Slack</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Collateral from Head of GTM — one-pager, deck, or case study for an active deal <span class="proc-ref">P36</span></div><div class="task-tool">🛠 Slack from Head of GTM → Google Drive link</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Pipeline review with VP Alliances — every deal staged, next action confirmed, close date set <span class="proc-ref">P18</span></div><div class="task-sub">Mon · 30 min. Come prepared — VP will not tolerate unstaged deals.</div><div class="task-tool">🛠 HubSpot pipeline board</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Named account list from partner AEs — any new target accounts to co-prospect this week? <span class="proc-ref">P03</span></div><div class="task-tool">🛠 Slack from partner AE via VP or direct</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Partner health data — AE referral volume, days since last referral, conversion rate per AE <span class="proc-ref">P16</span></div><div class="task-tool">🛠 HubSpot contact list tagged 'Partner AE'</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Updated ICP from VP Alliances or Head of GTM — any new verticals, titles, or use-cases added? <span class="proc-ref">P43</span></div><div class="task-tool">🛠 Notion ICP doc — VP / Head of GTM update monthly</div></div><span class="tb2 t-good">Good</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OPERATIONAL CADENCE -->
+<div class="section">
+  <div class="sec-title">⚡ What you do — daily operational cadence</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Check all inboxes for new leads — partner email, Slack, portal alerts <span class="proc-ref">P01</span></div><div class="task-sub">First check by 8:30am. If a lead came in overnight, respond within 2hr of your morning check.</div><div class="task-tool">🛠 Gmail · Slack · partner portal notifications</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Log every new lead in CRM — source, contact, company, est. size, stage <span class="proc-ref">P06</span></div><div class="task-sub">Same day — no exceptions. Unlogged leads do not exist.</div><div class="task-tool">🛠 HubSpot / Salesforce CRM</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Respond to all partner AE messages within 4 hours — even just to acknowledge receipt</div><div class="task-tool">🛠 Gmail · Slack · WhatsApp (wherever AE communicates)</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Register any deal that advanced stage in partner portal before EOD <span class="proc-ref">P09</span></div><div class="task-sub">Deal reg = revenue protection. Never skip. Takes 5 minutes.</div><div class="task-tool">🛠 Salesforce Partner Community / Boomi / Workato portal</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Follow up on all open deals — awaiting proposal, demo, or client decision <span class="proc-ref">P10</span></div><div class="task-tool">🛠 HubSpot task reminders + Instantly follow-up sequences</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Engage on 1–2 LinkedIn posts by active partner AEs — comment with substance, not emoji</div><div class="task-tool">🛠 LinkedIn</div></div><span class="tb2 t-brand">Brand</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Pipeline review with VP Alliances — stage each deal, next action, close date <span class="proc-ref">P18</span></div><div class="task-sub">Mon · 30 min. Fixed. Bring HubSpot open. Have a clear answer for every deal.</div><div class="task-tool">🛠 HubSpot board · Google Meet</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Proactive outreach to 3 partner AEs — add value, never just asking for leads <span class="proc-ref">P03</span></div><div class="task-sub">One message per AE minimum. Warm relationship = consistent referrals.</div><div class="task-tool">🛠 Gmail · LinkedIn · Slack</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Run 1–2 discovery calls — qualify BANT, agree scoping as next step <span class="proc-ref">P07</span></div><div class="task-tool">🛠 Calendly · Zoom · HubSpot call logging</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Request collateral from Head of GTM if deal needs a one-pager or deck <span class="proc-ref">P36</span></div><div class="task-sub">Use Notion brief template. Give Head of GTM 48hr minimum before the meeting.</div><div class="task-tool">🛠 Slack → Notion brief template to Head of GTM</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Research 3 new partner AEs to add to nurture pipeline this week <span class="proc-ref">P03</span></div><div class="task-tool">🛠 Apollo.io / LinkedIn Sales Navigator</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Complete 1 Salesforce / MuleSoft Trailhead module — stay credible in product conversations</div><div class="task-tool">🛠 Trailhead / partner enablement portal</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">AE acquisition review — net-new AEs added? How many are active referrers vs dormant? <span class="proc-ref">P03</span></div><div class="task-tool">🛠 HubSpot contact list tagged 'Partner AE'</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Coverage gap — AEs with no referral in 60+ days. Re-engage with personalised outreach <span class="proc-ref">P03</span></div><div class="task-tool">🛠 HubSpot filter: partner AE · last activity date</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Win/loss debrief — what did we win on? What did we lose on? Update objection guide for Head of GTM <span class="proc-ref">P38</span></div><div class="task-tool">🛠 HubSpot closed/lost deals → Notion doc → Slack to Head of GTM</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Attend 1 partner virtual lunch-and-learn or enablement session</div><div class="task-tool">🛠 Partner event calendar</div></div><span class="tb2 t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEEDFE;color:#6D28D9">Quarterly</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">QBR support for VP Alliances — prep deal list, co-sell wins, lead volume per partner <span class="proc-ref">P13</span></div><div class="task-tool">🛠 HubSpot report → Google Slides</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">AE mapping with VP Alliances — top 10 AEs across 5 partners to deepen next quarter <span class="proc-ref">P03</span></div><div class="task-tool">🛠 Apollo.io + LinkedIn + Google Sheets AE tracker</div></div><span class="tb2 t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Earn 1 new partner cert or badge — improves DataSkate's portal tier score</div><div class="task-tool">🛠 Trailhead / partner training hub</div></div><span class="tb2 t-self">Self</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">AE activation success review — which AEs from last quarter's target list became active referrers? <span class="proc-ref">P39</span></div><div class="task-tool">🛠 HubSpot partner AE tag report</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CROSS-DEPT HANDOFFS -->
+<div class="section">
+  <div class="sec-title">🔄 Cross-department handoffs Alliance Mgr owns</div>
+  <div class="freq-grid">
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">→ To Pillar 2 (Delivery)</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Signed SOW brief to Delivery Head — within 24hr of signature <span class="proc-ref">P11 → D01</span></div><div class="task-sub">Must include: client name, contacts, pain point summary, platform, agreed scope, go-live date, SOW amount. Delivery cannot start without this.</div><div class="task-tool">🛠 Notion SOW brief template → Slack to DH</div></div><span class="tb2 t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Complex scoping brief to DH before proposal send — any integration >3 systems or unknown platform <span class="proc-ref">P08</span></div><div class="task-tool">🛠 Slack to Delivery Head with discovery call notes</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">→ To Pillar 3 (Finance)</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Signed SOW to Finance same day as signature — Finance cannot invoice without it <span class="proc-ref">P11</span></div><div class="task-tool">🛠 Email to Finance Lead with SOW PDF attached</div></div><span class="tb2 t-must">Must</span></div>
+      </div>
+    </div>
+    <div class="freq-col">
+      <div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">→ To Head of GTM</span></div>
+      <div class="freq-body">
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Collateral request via Notion brief — one-pager, deck, objection guide needed for a deal <span class="proc-ref">P36</span></div><div class="task-sub">48hr minimum notice. Fill out the brief properly — Head of GTM cannot write well without context.</div><div class="task-tool">🛠 Notion brief template → Slack to Head of GTM</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+        <div class="task"><div class="cb" onclick="this.classList.toggle('checked')"></div><div class="task-body"><div class="task-title">Win/loss input for objection guide and case study — monthly debrief data sent to Head of GTM <span class="proc-ref">P38</span></div><div class="task-tool">🛠 Slack summary or Notion entry</div></div><span class="tb2 t-cross">Cross-dept</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 90-DAY RAMP -->
+<div class="section">
+  <div class="sec-title">🚀 90-day onboarding ramp — Alliance Manager / AE</div>
+  <div class="info-box">
+    <div class="info-title">Ramp context</div>
+    <div class="info-body">The Alliance Mgr / AE is DataSkate's deal executor. Every referral that doesn't move to SOW is a wasted partner relationship. The 90-day ramp proves one thing: can you move a lead to a signed contract reliably and without VP hand-holding? The first deal closed is the gate.</div>
+  </div>
+  <div class="ramp-grid">
+    <div class="ramp-col">
+      <div class="ramp-head">Days 1–30 · Learn the deals</div>
+      <div class="ramp-item">Shadow 2–3 active deals in HubSpot from beginning to end</div>
+      <div class="ramp-item">Read all P1 revenue process docs: P01–P21</div>
+      <div class="ramp-item">Learn all 5 partner portals: deal reg, MDF, co-sell tools</div>
+      <div class="ramp-item">Set up CRM, sequences, Calendly, Zoom correctly</div>
+      <div class="ramp-item">Meet 5 partner AEs via intro from VP Alliances</div>
+      <div class="ramp-item">30-day gate: CRM set up, 5 AE intros done, 1 solo discovery call attempted</div>
+    </div>
+    <div class="ramp-col">
+      <div class="ramp-head">Days 31–60 · Run the motion</div>
+      <div class="ramp-item">Own first live deal end-to-end (VP available to advise, not do)</div>
+      <div class="ramp-item">Deal reg in at least 2 portals for active deals</div>
+      <div class="ramp-item">Weekly pipeline cadence with VP established and running</div>
+      <div class="ramp-item">3 proactive partner AE touches per week — documented in CRM</div>
+      <div class="ramp-item">First SOW draft submitted and reviewed by VP</div>
+      <div class="ramp-item">60-day gate: 1 SOW in negotiation or signed, CRM hygiene score reviewed</div>
+    </div>
+    <div class="ramp-col">
+      <div class="ramp-head">Days 61–90 · Prove the machine</div>
+      <div class="ramp-item">First deal closed (any size) — demonstrates full motion capability</div>
+      <div class="ramp-item">AE map built: 10+ active partner AEs tracked in CRM</div>
+      <div class="ramp-item">All cross-pillar handoffs running correctly — DH and Finance briefed on new deals</div>
+      <div class="ramp-item">Win/loss first debrief submitted to Head of GTM</div>
+      <div class="ramp-item">90-day gate: 1 deal closed, AE map done, VP formally signs off on ramp</div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>
+  <span>DataSkate · Pillar 1 · Alliance Manager / AE · Cadence v3</span>
+  <span>Cross-refs: Pillar 2 D01 · Pillar 3 Finance · P1 processes P01–P21 · P36–P40</span>
+</footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

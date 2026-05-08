@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Master Operating Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#09090E;--surface:#0F1117;--surface2:#14161F;--surface3:#1A1D28;
+  --border:#1E2235;--border2:#252A3C;
+  --ink:#E8EAF4;--muted:#5A6080;--subtle:#2A2F45;
+  --amber:#F59E0B;--amber-lt:rgba(245,158,11,.1);--amber-dk:#D97706;
+  --coral:#FF4D2E;--coral-lt:rgba(255,77,46,.08);
+  --teal:#00C9A7;--teal-lt:rgba(0,201,167,.08);
+  --slate:#4A6FA5;--slate-lt:rgba(74,111,165,.1);
+  --green:#22C55E;--green-lt:rgba(34,197,94,.1);
+  --red:#EF4444;--red-lt:rgba(239,68,68,.1);
+  --yellow:#EAB308;--yellow-lt:rgba(234,179,8,.1);
+  --purple:#A78BFA;--purple-lt:rgba(167,139,250,.1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:13px;line-height:1.5;min-height:100vh}
+
+/* HERO */
+.hero{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:48px 40px 40px;
+  position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 40% 60% at 15% 50%, rgba(255,77,46,.06) 0%,transparent 70%),
+    radial-gradient(ellipse 50% 80% at 85% 30%, rgba(0,201,167,.05) 0%,transparent 70%),
+    radial-gradient(ellipse 30% 50% at 50% 100%, rgba(245,158,11,.04) 0%,transparent 60%);
+}
+.hero-grid{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:flex-start;position:relative;z-index:1}
+.hero-eyebrow{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+.hero-title{font-family:'Bebas Neue',cursive;font-size:clamp(36px,5vw,64px);letter-spacing:.02em;line-height:.95;color:var(--ink)}
+.hero-title span{color:var(--amber)}
+.hero-desc{font-size:13px;color:var(--muted);margin-top:14px;max-width:500px;line-height:1.8}
+.hero-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.hpill{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;border:1px solid var(--border2);color:var(--muted)}
+.hpill.live{background:var(--amber-lt);border-color:rgba(245,158,11,.3);color:var(--amber)}
+
+/* ORG PULSE (right side of hero) */
+.org-pulse{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;min-width:380px}
+.pulse-tile{background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center;position:relative;overflow:hidden}
+.pulse-tile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.pulse-tile.p1::before{background:var(--coral)}
+.pulse-tile.p2::before{background:var(--teal)}
+.pulse-tile.p3::before{background:var(--slate)}
+.pulse-tile.ceo::before{background:var(--amber);grid-column:1/-1}
+.pt-val{font-family:'Bebas Neue',cursive;font-size:28px;line-height:1}
+.pt-label{font-size:9px;color:var(--muted);margin-top:3px;line-height:1.3;text-transform:uppercase;letter-spacing:.06em}
+.pt-status{font-size:9px;font-weight:700;padding:2px 7px;border-radius:10px;margin-top:6px;display:inline-block}
+.pt-status.ok{background:var(--green-lt);color:var(--green)}
+.pt-status.warn{background:var(--yellow-lt);color:var(--yellow)}
+.pt-status.bad{background:var(--red-lt);color:var(--red)}
+
+/* STICKY NAV */
+.sticky-nav{background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;padding:0 40px;display:flex;align-items:center;gap:0;overflow-x:auto;height:46px}
+.snav-btn{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 14px;height:100%;border:none;background:transparent;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap}
+.snav-btn:hover{color:var(--ink)}
+.snav-btn.active{color:var(--amber);border-bottom-color:var(--amber)}
+
+/* MAIN */
+main{max-width:1400px;margin:0 auto}
+.page{display:none;padding:32px 40px}
+.page.active{display:block}
+
+/* SECTION HEADERS */
+.sh{display:flex;align-items:baseline;gap:10px;margin-bottom:20px}
+.sh-label{font-family:'Bebas Neue',cursive;font-size:22px;letter-spacing:.04em;color:var(--ink)}
+.sh-desc{font-size:10px;color:var(--muted)}
+.sh-line{flex:1;height:1px;background:var(--border);margin-left:6px}
+.gap{margin-bottom:28px}
+
+/* ROLE CARD GRID */
+.role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+
+/* ROLE CARD */
+.role-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  overflow:hidden;transition:border-color .2s,transform .2s;cursor:pointer;
+  display:flex;flex-direction:column;
+}
+.role-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.rc-top{padding:16px 16px 12px;display:flex;gap:12px;align-items:flex-start}
+.rc-avatar{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:14px;flex-shrink:0;letter-spacing:.04em}
+.rc-info{flex:1;min-width:0}
+.rc-role{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:700;color:var(--ink);line-height:1.2}
+.rc-pillar{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.rc-kpis{padding:0 16px 10px;flex:1}
+.rc-kpi-row{display:flex;align-items:center;gap:6px;padding:4px 0;border-bottom:1px solid var(--border);font-size:10px}
+.rc-kpi-row:last-child{border-bottom:none}
+.rc-kpi-label{color:var(--muted);flex:1}
+.rc-kpi-val{font-family:'DM Mono',monospace;font-size:10px;color:var(--ink);font-weight:500}
+.rc-kpi-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.rc-footer{padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:6px;flex-wrap:wrap}
+.rc-link{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px;border:1px solid var(--border2);color:var(--muted);text-decoration:none;transition:all .15s;cursor:pointer;display:inline-block}
+.rc-link:hover{color:var(--ink);border-color:var(--muted)}
+.rc-link.primary{background:var(--amber-lt);border-color:rgba(245,158,11,.3);color:var(--amber)}
+.rc-link.primary:hover{background:rgba(245,158,11,.2)}
+
+/* PILLAR SECTION */
+.pillar-section{margin-bottom:36px}
+.pillar-header{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;margin-bottom:14px}
+.pillar-header.p1{background:var(--coral-lt);border:1px solid rgba(255,77,46,.15)}
+.pillar-header.p2{background:var(--teal-lt);border:1px solid rgba(0,201,167,.15)}
+.pillar-header.p3{background:var(--slate-lt);border:1px solid rgba(74,111,165,.2)}
+.ph-icon{font-size:18px}
+.ph-name{font-family:'Bebas Neue',cursive;font-size:18px;letter-spacing:.04em}
+.ph-name.p1{color:var(--coral)}
+.ph-name.p2{color:var(--teal)}
+.ph-name.p3{color:var(--slate)}
+.ph-desc{font-size:11px;color:var(--muted);margin-left:4px}
+.ph-links{margin-left:auto;display:flex;gap:6px}
+.ph-link{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:6px;border:1px solid var(--border2);color:var(--muted);text-decoration:none;transition:all .15s;display:inline-block}
+.ph-link:hover{color:var(--ink)}
+.ph-link.accent{background:var(--amber-lt);border-color:rgba(245,158,11,.25);color:var(--amber)}
+
+/* DOC CARD (in Docs tab) */
+.doc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.doc-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;transition:border-color .2s;cursor:pointer}
+.doc-card:hover{border-color:var(--border2)}
+.dc-type{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:8px}
+.dc-type.process{background:var(--teal-lt);color:var(--teal)}
+.dc-type.cadence{background:var(--amber-lt);color:var(--amber)}
+.dc-type.dashboard{background:var(--purple-lt);color:var(--purple)}
+.dc-type.raci{background:var(--coral-lt);color:var(--coral)}
+.dc-type.strategy{background:var(--slate-lt);color:var(--slate)}
+.dc-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:4px;line-height:1.3}
+.dc-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+.dc-meta{font-size:9px;color:var(--muted);display:flex;gap:8px}
+.dc-open{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--amber);margin-top:8px;display:block;text-decoration:none;cursor:pointer}
+.dc-open:hover{color:var(--amber-dk)}
+
+/* SIGNAL / ALERT FEED */
+.alert-feed{display:flex;flex-direction:column;gap:8px}
+.alert-item{display:flex;gap:10px;padding:12px;background:var(--surface);border:1px solid var(--border);border-left:3px solid;border-radius:0 8px 8px 0;align-items:flex-start}
+.alert-item.red{border-left-color:var(--red)}
+.alert-item.amber{border-left-color:var(--amber)}
+.alert-item.green{border-left-color:var(--green)}
+.alert-item.blue{border-left-color:var(--slate)}
+.ai-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.ai-body{flex:1}
+.ai-title{font-size:12px;font-weight:700;color:var(--ink)}
+.ai-sub{font-size:11px;color:var(--muted);margin-top:2px;line-height:1.5}
+.ai-tag{font-size:9px;font-weight:700;padding:1px 7px;border-radius:10px;margin-left:6px}
+.ai-time{font-family:'DM Mono',monospace;font-size:9px;color:var(--muted);flex-shrink:0}
+
+/* HOW TO USE */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+.how-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px}
+.how-num{font-family:'Bebas Neue',cursive;font-size:42px;color:var(--border2);line-height:1;margin-bottom:8px}
+.how-title{font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.how-desc{font-size:11px;color:var(--muted);line-height:1.7}
+.how-links{margin-top:10px;display:flex;flex-direction:column;gap:4px}
+.how-link{font-size:10px;color:var(--amber);text-decoration:none;cursor:pointer}
+.how-link:hover{text-decoration:underline}
+
+/* BADGE */
+.badge{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.badge.green{background:var(--green-lt);color:var(--green)}
+.badge.red{background:var(--red-lt);color:var(--red)}
+.badge.amber{background:var(--amber-lt);color:var(--amber)}
+.badge.muted{background:var(--surface3);color:var(--muted)}
+
+footer{background:var(--surface);border-top:1px solid var(--border);padding:16px 40px;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow">DataSkate · Q2 2026 · Operating System</div>
+      <div class="hero-title">Master<br/><span>Operating</span><br/>Hub</div>
+      <div class="hero-desc">One entry point. Every role. Every process. Every KPI. Open this file first — it tells you where to go, what's happening, and what needs attention across all three pillars.</div>
+      <div class="hero-pills">
+        <span class="hpill live">Live Org Pulse</span>
+        <span class="hpill">14 Roles</span>
+        <span class="hpill">3 Pillars</span>
+        <span class="hpill">48 P1 Processes</span>
+        <span class="hpill">80+ RACI Items</span>
+        <span class="hpill">All Cadence Docs</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Company Pulse — This Week</div>
+      <div class="org-pulse">
+        <div class="pulse-tile ceo" style="grid-column:1/-1;text-align:left;display:flex;gap:20px;align-items:center">
+          <div>
+            <div class="pt-label" style="margin-bottom:4px">ARR Progress</div>
+            <div class="pt-val" style="font-size:36px;color:var(--amber)">$840K</div>
+            <div class="pt-label">of $2M target · 42%</div>
+          </div>
+          <div style="flex:1;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden">
+            <div style="width:42%;height:100%;background:var(--amber);border-radius:2px"></div>
+          </div>
+          <div>
+            <div class="pt-status warn">Q2 On Track</div>
+            <div style="font-size:9px;color:var(--muted);margin-top:4px">2.8× pipeline · 58% partner</div>
+          </div>
+        </div>
+        <div class="pulse-tile p1">
+          <div class="pt-val" style="color:var(--coral)">B+</div>
+          <div class="pt-label">Pillar 1<br/>Revenue</div>
+          <div class="pt-status warn">Watch</div>
+        </div>
+        <div class="pulse-tile p2">
+          <div class="pt-val" style="color:var(--teal)">A–</div>
+          <div class="pt-label">Pillar 2<br/>Delivery</div>
+          <div class="pt-status ok">Healthy</div>
+        </div>
+        <div class="pulse-tile p3">
+          <div class="pt-val" style="color:var(--slate)">A</div>
+          <div class="pt-label">Pillar 3<br/>Operations</div>
+          <div class="pt-status ok">Healthy</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STICKY NAV -->
+<div class="sticky-nav">
+  <button class="snav-btn active" onclick="tab('overview',this)">How to Use</button>
+  <button class="snav-btn" onclick="tab('roles',this)">All Roles</button>
+  <button class="snav-btn" onclick="tab('p1',this)">Pillar 1 · Revenue</button>
+  <button class="snav-btn" onclick="tab('p2',this)">Pillar 2 · Delivery</button>
+  <button class="snav-btn" onclick="tab('p3',this)">Pillar 3 · Ops</button>
+  <button class="snav-btn" onclick="tab('docs',this)">All Documents</button>
+  <button class="snav-btn" onclick="tab('alerts',this)">⚠ Alerts (3)</button>
+</div>
+
+<main>
+
+<!-- ══════════════════════
+  HOW TO USE
+══════════════════════ -->
+<div class="page active" id="tab-overview">
+  <div class="sh"><div class="sh-label">How This System Works</div><div class="sh-line"></div></div>
+
+  <div class="how-grid gap">
+    <div class="how-card">
+      <div class="how-num">01</div>
+      <div class="how-title">Start here — every morning</div>
+      <div class="how-desc">Open this Master Hub first. Check the Org Pulse in the header. Go to Alerts tab if anything is red. Then open your role's Command Center for your personal action list.</div>
+      <div class="how-links">
+        <a class="how-link" href="CEO/CEO_Command_Center.html" target="_blank">→ CEO Command Center (your personal dashboard)</a>
+        <a class="how-link" href="#" onclick="tab('alerts',document.querySelectorAll('.snav-btn')[6]);return false;">→ Alerts tab (what needs action today)</a>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">02</div>
+      <div class="how-title">Every role has its own Command Center</div>
+      <div class="how-desc">Each of the 14 roles has a personal dashboard — KPIs, what's due today, what they're waiting on, their escalation path. Click any role card to open their Command Center.</div>
+      <div class="how-links">
+        <a class="how-link" href="#" onclick="tab('roles',document.querySelectorAll('.snav-btn')[1]);return false;">→ All Roles tab to see every command center</a>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">03</div>
+      <div class="how-title">Each role links to 3 more docs</div>
+      <div class="how-desc">From any Command Center you can reach: (1) the Cadence doc — daily/weekly tasks, (2) the Pillar Process Bible — how each process runs, (3) the RACI — who owns what org-wide.</div>
+      <div class="how-links">
+        <a class="how-link" href="#" onclick="tab('docs',document.querySelectorAll('.snav-btn')[5]);return false;">→ All Documents tab for the full library</a>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">04</div>
+      <div class="how-title">Pillar tabs show the full engine</div>
+      <div class="how-desc">Pillar 1 tab = Revenue Engine health. Pillar 2 = Delivery Engine. Pillar 3 = Operations. Each shows all roles in that pillar, their KPIs, and cross-pillar handoff status.</div>
+      <div class="how-links">
+        <a class="how-link" href="#" onclick="tab('p1',document.querySelectorAll('.snav-btn')[2]);return false;">→ Pillar 1 · Revenue tab</a>
+        <a class="how-link" href="#" onclick="tab('p2',document.querySelectorAll('.snav-btn')[3]);return false;">→ Pillar 2 · Delivery tab</a>
+        <a class="how-link" href="#" onclick="tab('p3',document.querySelectorAll('.snav-btn')[4]);return false;">→ Pillar 3 · Ops tab</a>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">05</div>
+      <div class="how-title">The document hierarchy</div>
+      <div class="how-desc">Master Hub → Role Command Center → Cadence Doc → Pillar Process Bible → RACI. You should never need to go deeper than 2 clicks from here to find any process, task, or decision rule.</div>
+      <div class="how-links">
+        <a class="how-link" href="#" onclick="tab('docs',document.querySelectorAll('.snav-btn')[5]);return false;">→ All Documents tab for the full index</a>
+      </div>
+    </div>
+    <div class="how-card">
+      <div class="how-num">06</div>
+      <div class="how-title">Updating the system</div>
+      <div class="how-desc">KPIs in this hub are updated weekly by pillar heads (VP Alliances, Delivery Head, Admin Head) and submitted to CEO. The data here reflects Friday reports. Stale data = the reporting process broke.</div>
+      <div class="how-links">
+        <a class="how-link" href="CEO/CEO_Command_Center.html" target="_blank">→ CEO Command Center for the full live view</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOC HIERARCHY VISUAL -->
+  <div class="sh"><div class="sh-label">Document Architecture</div><div class="sh-line"></div></div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:28px">
+    <svg viewBox="0 0 900 220" width="100%" xmlns="http://www.w3.org/2000/svg">
+      <!-- Master Hub -->
+      <rect x="350" y="10" width="200" height="42" rx="8" fill="#F59E0B"/>
+      <text x="450" y="29" text-anchor="middle" fill="#0A0C10" font-family="'Bebas Neue',cursive" font-size="13" letter-spacing="1">MASTER HUB</text>
+      <text x="450" y="44" text-anchor="middle" fill="rgba(0,0,0,.5)" font-size="9">This file · Entry point for everyone</text>
+      <!-- lines down from master -->
+      <line x1="450" y1="52" x2="450" y2="70" stroke="#1E2235" stroke-width="1.5"/>
+      <line x1="150" y1="70" x2="750" y2="70" stroke="#1E2235" stroke-width="1.5"/>
+      <line x1="150" y1="70" x2="150" y2="88" stroke="#1E2235" stroke-width="1.5"/>
+      <line x1="450" y1="70" x2="450" y2="88" stroke="#1E2235" stroke-width="1.5"/>
+      <line x1="750" y1="70" x2="750" y2="88" stroke="#1E2235" stroke-width="1.5"/>
+      <!-- Role Command Centers -->
+      <rect x="50" y="88" width="200" height="40" rx="7" fill="#1A1D28" stroke="#FF4D2E" stroke-width="1.5"/>
+      <text x="150" y="104" text-anchor="middle" fill="#FF4D2E" font-family="'Bebas Neue',cursive" font-size="11" letter-spacing=".5">P1 COMMAND CENTERS</text>
+      <text x="150" y="120" text-anchor="middle" fill="#5A6080" font-size="9">VP · AE · GTM · SDR — 4 roles</text>
+      <rect x="350" y="88" width="200" height="40" rx="7" fill="#1A1D28" stroke="#00C9A7" stroke-width="1.5"/>
+      <text x="450" y="104" text-anchor="middle" fill="#00C9A7" font-family="'Bebas Neue',cursive" font-size="11" letter-spacing=".5">P2 COMMAND CENTERS</text>
+      <text x="450" y="120" text-anchor="middle" fill="#5A6080" font-size="9">DH · PH · DL · PM · Dev · Fresher — 6 roles</text>
+      <rect x="650" y="88" width="200" height="40" rx="7" fill="#1A1D28" stroke="#4A6FA5" stroke-width="1.5"/>
+      <text x="750" y="104" text-anchor="middle" fill="#4A6FA5" font-family="'Bebas Neue',cursive" font-size="11" letter-spacing=".5">P3 COMMAND CENTERS</text>
+      <text x="750" y="120" text-anchor="middle" fill="#5A6080" font-size="9">Admin · Finance · HR — 3 roles</text>
+      <!-- lines down from centers -->
+      <line x1="150" y1="128" x2="150" y2="148" stroke="#1E2235" stroke-width="1.5"/>
+      <line x1="450" y1="128" x2="450" y2="148" stroke="#1E2235" stroke-width="1.5"/>
+      <line x1="750" y1="128" x2="750" y2="148" stroke="#1E2235" stroke-width="1.5"/>
+      <!-- Bottom docs row -->
+      <rect x="20" y="148" width="110" height="34" rx="6" fill="#14161F" stroke="#1E2235" stroke-width="1"/>
+      <text x="75" y="163" text-anchor="middle" fill="#F59E0B" font-size="9" font-weight="700">Cadence Docs</text>
+      <text x="75" y="175" text-anchor="middle" fill="#5A6080" font-size="8">Daily/Wkly tasks</text>
+      <rect x="140" y="148" width="110" height="34" rx="6" fill="#14161F" stroke="#1E2235" stroke-width="1"/>
+      <text x="195" y="163" text-anchor="middle" fill="#00C9A7" font-size="9" font-weight="700">Process Bibles</text>
+      <text x="195" y="175" text-anchor="middle" fill="#5A6080" font-size="8">How each process runs</text>
+      <rect x="320" y="148" width="110" height="34" rx="6" fill="#14161F" stroke="#1E2235" stroke-width="1"/>
+      <text x="375" y="163" text-anchor="middle" fill="#FF4D2E" font-size="9" font-weight="700">RACI Matrix</text>
+      <text x="375" y="175" text-anchor="middle" fill="#5A6080" font-size="8">Who owns what</text>
+      <rect x="440" y="148" width="110" height="34" rx="6" fill="#14161F" stroke="#1E2235" stroke-width="1"/>
+      <text x="495" y="163" text-anchor="middle" fill="#A78BFA" font-size="9" font-weight="700">Job Specs</text>
+      <text x="495" y="175" text-anchor="middle" fill="#5A6080" font-size="8">Role definitions</text>
+      <rect x="620" y="148" width="110" height="34" rx="6" fill="#14161F" stroke="#1E2235" stroke-width="1"/>
+      <text x="675" y="163" text-anchor="middle" fill="#4A6FA5" font-size="9" font-weight="700">Org Structure</text>
+      <text x="675" y="175" text-anchor="middle" fill="#5A6080" font-size="8">Reporting lines</text>
+      <rect x="740" y="148" width="110" height="34" rx="6" fill="#14161F" stroke="#1E2235" stroke-width="1"/>
+      <text x="795" y="163" text-anchor="middle" fill="#EAB308" font-size="9" font-weight="700">GTM Strategy</text>
+      <text x="795" y="175" text-anchor="middle" fill="#5A6080" font-size="8">Revenue playbook</text>
+      <!-- CEO special -->
+      <rect x="370" y="210" width="160" height="10" rx="4" fill="none"/>
+      <text x="450" y="218" text-anchor="middle" fill="#5A6080" font-size="8">CEO also has Command Center + Operating Manual as additional layer</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ══════════════════════
+  ALL ROLES
+══════════════════════ -->
+<div class="page" id="tab-roles">
+
+  <!-- CEO -->
+  <div class="sh"><div class="sh-label">CEO</div><div class="sh-desc">All pillars report here</div><div class="sh-line"></div></div>
+  <div class="role-grid gap">
+    <div class="role-card" style="border-color:rgba(245,158,11,.3)">
+      <div class="rc-top">
+        <div class="rc-avatar" style="background:var(--amber-lt);color:var(--amber)">CEO</div>
+        <div class="rc-info">
+          <div class="rc-role">CEO / Co-founder</div>
+          <div class="rc-pillar">All Pillars · Reports to: Board</div>
+        </div>
+        <span class="badge amber">2 actions today</span>
+      </div>
+      <div class="rc-kpis">
+        <div class="rc-kpi-row"><div class="rc-kpi-label">ARR vs $2M target</div><div class="rc-kpi-val">$840K / 42%</div><div class="rc-kpi-dot" style="background:var(--yellow)"></div></div>
+        <div class="rc-kpi-row"><div class="rc-kpi-label">Pipeline coverage</div><div class="rc-kpi-val">2.8×</div><div class="rc-kpi-dot" style="background:var(--yellow)"></div></div>
+        <div class="rc-kpi-row"><div class="rc-kpi-label">CSAT org-wide</div><div class="rc-kpi-val">4.3 / 5</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        <div class="rc-kpi-row"><div class="rc-kpi-label">SOW awaiting sign-off</div><div class="rc-kpi-val">1 ($72K)</div><div class="rc-kpi-dot" style="background:var(--red)"></div></div>
+      </div>
+      <div class="rc-footer">
+        <a class="rc-link primary" href="CEO/CEO_Command_Center.html" target="_blank">Command Center</a>
+        <a class="rc-link" href="CEO/CEO_Cadence_v3.html" target="_blank">Cadence v3</a>
+        <a class="rc-link" href="CEO/DataSkate_RACI_v3.html" target="_blank">RACI</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- PILLAR 1 -->
+  <div class="pillar-section">
+    <div class="pillar-header p1">
+      <div class="ph-icon">💼</div>
+      <div class="ph-name p1">Pillar 1</div>
+      <div class="ph-desc">Partner Alliance & GTM · Revenue Engine · Health: <strong style="color:var(--yellow)">B+</strong></div>
+      <div class="ph-links">
+        <a class="ph-link accent" href="Pillar1/Pillar1-Partner_Alliance-GTM-Processes-v2.html" target="_blank">Process Bible</a>
+        <a class="ph-link" href="CEO/04_DataSkate_GTM_Strategy_v2.html" target="_blank">GTM Strategy</a>
+      </div>
+    </div>
+    <div class="role-grid">
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--coral-lt);color:var(--coral)">VP</div>
+          <div class="rc-info"><div class="rc-role">VP Alliances</div><div class="rc-pillar">Pillar 1 · Revenue owner · Reports to: CEO</div></div>
+          <span class="badge amber">Watch</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Partner-sourced ARR</div><div class="rc-kpi-val">58% (target ≥60%)</div><div class="rc-kpi-dot" style="background:var(--yellow)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Friday report sent</div><div class="rc-kpi-val">1h 42m late</div><div class="rc-kpi-dot" style="background:var(--red)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">MDF utilised</div><div class="rc-kpi-val">91%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">SOW floor breaches</div><div class="rc-kpi-val">0</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar1/VP_Alliances_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar1/P1_VPAlliances_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--coral-lt);color:var(--coral)">AE</div>
+          <div class="rc-info"><div class="rc-role">Alliance Manager / AE</div><div class="rc-pillar">Pillar 1 · Deal executor · Reports to: VP Alliances</div></div>
+          <span class="badge green">On track</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Lead response time</div><div class="rc-kpi-val">&lt;4hr avg</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Active AEs nurtured</div><div class="rc-kpi-val">38 of 50</div><div class="rc-kpi-dot" style="background:var(--yellow)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">CRM logged same-day</div><div class="rc-kpi-val">100%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Deals in pipeline</div><div class="rc-kpi-val">5 open</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar1/Alliance_Mgr_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar1/P1_AllianceMgr_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--coral-lt);color:var(--coral)">GTM</div>
+          <div class="rc-info"><div class="rc-role">Head of GTM</div><div class="rc-pillar">Pillar 1 · Content + outbound · Reports to: VP Alliances</div></div>
+          <span class="badge amber">1 pending</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">CEO posts approved/wk</div><div class="rc-kpi-val">Pending (5 drafts)</div><div class="rc-kpi-dot" style="background:var(--amber)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">LinkedIn followers</div><div class="rc-kpi-val">2,840 / 5,000</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">GTM report (Fri 5pm)</div><div class="rc-kpi-val">Sent ✓</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Sequence reply rate</div><div class="rc-kpi-val">3.2%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar1/Head_GTM_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar1/P1_HeadOfGTM_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--coral-lt);color:var(--coral)">SDR</div>
+          <div class="rc-info"><div class="rc-role">SDR / BDR</div><div class="rc-pillar">Pillar 1 · Outbound engine · Reports to: Head of GTM</div></div>
+          <span class="badge amber">Below floor</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Meetings booked/wk</div><div class="rc-kpi-val">3.2 (floor: 4)</div><div class="rc-kpi-dot" style="background:var(--yellow)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Prospects enrolled/day</div><div class="rc-kpi-val">13</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Dials/day</div><div class="rc-kpi-val">17</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Reply rate</div><div class="rc-kpi-val">3.2%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar1/SDR_BDR_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar1/P1_SDR_BDR_Cadence_v3.html" target="_blank">Cadence v3</a>
+          <a class="rc-link" href="Pillar1/21_SDR_BDR_Outbound_Playbook.html" target="_blank">Playbook</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PILLAR 2 -->
+  <div class="pillar-section">
+    <div class="pillar-header p2">
+      <div class="ph-icon">⚙️</div>
+      <div class="ph-name p2">Pillar 2</div>
+      <div class="ph-desc">Delivery & CoE · Execution Engine · Health: <strong style="color:var(--teal)">A–</strong></div>
+      <div class="ph-links">
+        <a class="ph-link accent" href="Pillar2/Pillar2-Delivery-Processes.html" target="_blank">Process Bible</a>
+      </div>
+    </div>
+    <div class="role-grid">
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--teal-lt);color:var(--teal)">DH</div>
+          <div class="rc-info"><div class="rc-role">Delivery Head / SA</div><div class="rc-pillar">Pillar 2 · All delivery quality · Reports to: CEO</div></div>
+          <span class="badge amber">1 red account</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">CSAT avg</div><div class="rc-kpi-val">4.3 / 5</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">On-time delivery</div><div class="rc-kpi-val">88%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">ARB gate violations</div><div class="rc-kpi-val">0</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Red accounts</div><div class="rc-kpi-val">1</div><div class="rc-kpi-dot" style="background:var(--amber)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar2/DH_SA_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar2/P2_DH_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--teal-lt);color:var(--teal)">PH</div>
+          <div class="rc-info"><div class="rc-role">Practice Head ×4</div><div class="rc-pillar">Pillar 2 · Practice P&L · Reports to: Delivery Head</div></div>
+          <span class="badge green">On track</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Dev Leads managed</div><div class="rc-kpi-val">2 per practice</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Certs earned QTD</div><div class="rc-kpi-val">4 total</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Standards compliant</div><div class="rc-kpi-val">100%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar2/PracticeHead_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar2/P2_PracticeHead_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--teal-lt);color:var(--teal)">DL</div>
+          <div class="rc-info"><div class="rc-role">Dev Lead</div><div class="rc-pillar">Pillar 2 · Pod of 5 · Reports to: Practice Head</div></div>
+          <span class="badge green">On track</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">PR review SLA (&lt;24hr)</div><div class="rc-kpi-val">94% on time</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Sprint completion</div><div class="rc-kpi-val">Thu EOD ✓</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Fresher mentoring</div><div class="rc-kpi-val">Active</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar2/DevLead_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar2/P2_DevLead_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--teal-lt);color:var(--teal)">PM</div>
+          <div class="rc-info"><div class="rc-role">Project Manager</div><div class="rc-pillar">Pillar 2 · 3–4 projects · Reports to: Delivery Head</div></div>
+          <span class="badge amber">1 at risk</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Client status sent Fri</div><div class="rc-kpi-val">6/6 projects ✓</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Timelines on track</div><div class="rc-kpi-val">5/6</div><div class="rc-kpi-dot" style="background:var(--amber)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Invoices triggered</div><div class="rc-kpi-val">All current</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar2/PM_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar2/P2_PM_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--teal-lt);color:var(--teal)">DEV</div>
+          <div class="rc-info"><div class="rc-role">Developer</div><div class="rc-pillar">Pillar 2 · Billable · Reports to: Dev Lead</div></div>
+          <span class="badge green">On track</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Utilisation rate</div><div class="rc-kpi-val">76%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Harvest logged daily</div><div class="rc-kpi-val">100%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">PRs reviewed same-day</div><div class="rc-kpi-val">Yes</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar2/Developer_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar2/P2_Developer_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--teal-lt);color:var(--teal)">F</div>
+          <div class="rc-info"><div class="rc-role">Fresher</div><div class="rc-pillar">Pillar 2 · 91-day ramp · Reports to: Dev Lead</div></div>
+          <span class="badge green">Ramping</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Ramp gate progress</div><div class="rc-kpi-val">Day 45 / 91</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Certs on track</div><div class="rc-kpi-val">1 of 2 done</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Daily check-in logged</div><div class="rc-kpi-val">Yes</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar2/Fresher_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar2/P2_Fresher_Cadence_v3.html" target="_blank">Cadence v3</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PILLAR 3 -->
+  <div class="pillar-section">
+    <div class="pillar-header p3">
+      <div class="ph-icon">🏛️</div>
+      <div class="ph-name p3">Pillar 3</div>
+      <div class="ph-desc">Admin, Finance & HR · Operations Engine · Health: <strong style="color:var(--slate)">A</strong></div>
+      <div class="ph-links">
+        <a class="ph-link accent" href="Pillar3/Pillar3-Admin-Processes.html" target="_blank">Process Bible</a>
+      </div>
+    </div>
+    <div class="role-grid">
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--slate-lt);color:var(--slate)">ADM</div>
+          <div class="rc-info"><div class="rc-role">Admin Head / COO</div><div class="rc-pillar">Pillar 3 · Ops owner · Reports to: CEO</div></div>
+          <span class="badge green">Healthy</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Open roles in hire</div><div class="rc-kpi-val">3</div><div class="rc-kpi-dot" style="background:var(--amber)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Tool renewals upcoming</div><div class="rc-kpi-val">0 this month</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">CEO calendar protected</div><div class="rc-kpi-val">Yes</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar3/AdminHead_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar3/P3_AdminHead_Cadence.html" target="_blank">Cadence</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--slate-lt);color:var(--slate)">FIN</div>
+          <div class="rc-info"><div class="rc-role">Finance Lead</div><div class="rc-pillar">Pillar 3 · P&L + invoicing · Reports to: Admin Head</div></div>
+          <span class="badge green">On track</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Cash runway</div><div class="rc-kpi-val">14 months</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Gross margin</div><div class="rc-kpi-val">61%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Collections rate</div><div class="rc-kpi-val">94%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Invoices outstanding</div><div class="rc-kpi-val">2</div><div class="rc-kpi-dot" style="background:var(--amber)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar3/Finance_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar3/P3_Finance_Cadence.html" target="_blank">Cadence</a>
+        </div>
+      </div>
+      <div class="role-card">
+        <div class="rc-top">
+          <div class="rc-avatar" style="background:var(--slate-lt);color:var(--slate)">HR</div>
+          <div class="rc-info"><div class="rc-role">HR Manager</div><div class="rc-pillar">Pillar 3 · Talent · Reports to: Admin Head</div></div>
+          <span class="badge green">Healthy</span>
+        </div>
+        <div class="rc-kpis">
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Attrition YTD</div><div class="rc-kpi-val">0%</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Open roles being filled</div><div class="rc-kpi-val">3 active</div><div class="rc-kpi-dot" style="background:var(--amber)"></div></div>
+          <div class="rc-kpi-row"><div class="rc-kpi-label">Onboarding pipeline</div><div class="rc-kpi-val">1 fresher Day 45</div><div class="rc-kpi-dot" style="background:var(--green)"></div></div>
+        </div>
+        <div class="rc-footer">
+          <a class="rc-link primary" href="Pillar3/HR_Command_Center.html" target="_blank">Command Center</a>
+          <a class="rc-link" href="Pillar3/P3_HR_Cadence.html" target="_blank">Cadence</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+  PILLAR 1
+══════════════════════ -->
+<div class="page" id="tab-p1">
+  <div class="sh"><div class="sh-label">Pillar 1 · Revenue Engine</div><div class="sh-desc">Partner Alliance & GTM · CEO expects: ≥60% ARR partner-sourced · Pipeline 3× target · Friday report no-chase</div><div class="sh-line"></div></div>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Revenue Engine KPIs — This Week</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--coral)">58%</div><div style="font-size:9px;color:var(--muted)">Partner ARR<br/>(target ≥60%)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--yellow)">2.8×</div><div style="font-size:9px;color:var(--muted)">Pipeline coverage<br/>(floor 3×)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--yellow)">3.2</div><div style="font-size:9px;color:var(--muted)">SDR meetings/wk<br/>(floor 4)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">0</div><div style="font-size:9px;color:var(--muted)">SOW floor breaches<br/>(must be 0)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">91%</div><div style="font-size:9px;color:var(--muted)">MDF utilised<br/>(target 100%)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">3.2%</div><div style="font-size:9px;color:var(--muted)">Sequence reply rate<br/>(target ≥3%)</div></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Cross-Pillar Handoffs</div>
+      <div style="font-size:11px;color:var(--muted);line-height:2">
+        <span style="color:var(--coral)">P1 → P2:</span> Signed SOW to DH within 24hr<br/>
+        <span style="color:var(--coral)">P1 → P3:</span> SOW to Finance same day as sign<br/>
+        <span style="color:var(--coral)">P1 → CEO:</span> Friday revenue report by 5pm<br/>
+        <span style="color:var(--teal)">P2 → P1:</span> CSAT-to-expansion signal monthly<br/>
+        <span style="color:var(--teal)">P2 → P1:</span> Delivery risk that affects renewal
+      </div>
+    </div>
+  </div>
+  <div style="background:var(--surface);border:1px solid rgba(255,77,46,.2);border-radius:10px;padding:16px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:10px">Pillar 1 Docs</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="rc-link primary" href="Pillar1/Pillar1-Partner_Alliance-GTM-Processes-v2.html" target="_blank">P1 Process Bible (48 processes)</a>
+      <a class="rc-link" href="CEO/04_DataSkate_GTM_Strategy_v2.html" target="_blank">GTM Strategy</a>
+      <a class="rc-link" href="Pillar1/P1_VPAlliances_Cadence_v3.html" target="_blank">VP Alliances Cadence</a>
+      <a class="rc-link" href="Pillar1/P1_AllianceMgr_Cadence_v3.html" target="_blank">Alliance Mgr Cadence</a>
+      <a class="rc-link" href="Pillar1/P1_HeadOfGTM_Cadence_v3.html" target="_blank">Head of GTM Cadence</a>
+      <a class="rc-link" href="Pillar1/P1_SDR_BDR_Cadence_v3.html" target="_blank">SDR/BDR Cadence</a>
+      <a class="rc-link" href="Pillar1/21_SDR_BDR_Outbound_Playbook.html" target="_blank">SDR Outbound Playbook</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+  PILLAR 2
+══════════════════════ -->
+<div class="page" id="tab-p2">
+  <div class="sh"><div class="sh-label">Pillar 2 · Delivery Engine</div><div class="sh-desc">Delivery & CoE · CEO expects: CSAT ≥4.2 · 0 ARB violations · Friday 5pm DH briefing</div><div class="sh-line"></div></div>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Delivery Engine KPIs — This Week</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">4.3</div><div style="font-size:9px;color:var(--muted)">CSAT avg<br/>(floor ≥4.2)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">88%</div><div style="font-size:9px;color:var(--muted)">On-time delivery<br/>(target ≥85%)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--yellow)">74%</div><div style="font-size:9px;color:var(--muted)">Utilisation<br/>(floor ≥76%)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--amber)">1</div><div style="font-size:9px;color:var(--muted)">Red accounts<br/>(target 0)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">0</div><div style="font-size:9px;color:var(--muted)">ARB violations<br/>(must be 0)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">6</div><div style="font-size:9px;color:var(--muted)">Active projects<br/>(all tracked)</div></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Cross-Pillar Handoffs</div>
+      <div style="font-size:11px;color:var(--muted);line-height:2">
+        <span style="color:var(--teal)">P2 ← P1:</span> SOW brief from VP within 24hr<br/>
+        <span style="color:var(--teal)">P2 → P3:</span> Invoice trigger when milestone hit<br/>
+        <span style="color:var(--teal)">P2 → CEO:</span> Friday 5pm briefing — non-negotiable<br/>
+        <span style="color:var(--teal)">P2 → P1:</span> Expansion signal when CSAT ≥4.4<br/>
+        <span style="color:var(--coral)">P1 → P2:</span> Complex scoping brief pre-proposal
+      </div>
+    </div>
+  </div>
+  <div style="background:var(--surface);border:1px solid rgba(0,201,167,.2);border-radius:10px;padding:16px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:10px">Pillar 2 Docs</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="rc-link primary" href="Pillar2/Pillar2-Delivery-Processes.html" target="_blank">P2 Process Bible</a>
+      <a class="rc-link" href="Pillar2/P2_DH_Cadence_v3.html" target="_blank">DH/SA Cadence</a>
+      <a class="rc-link" href="Pillar2/P2_PracticeHead_Cadence_v3.html" target="_blank">Practice Head Cadence</a>
+      <a class="rc-link" href="Pillar2/P2_DevLead_Cadence_v3.html" target="_blank">Dev Lead Cadence</a>
+      <a class="rc-link" href="Pillar2/P2_PM_Cadence_v3.html" target="_blank">PM Cadence</a>
+      <a class="rc-link" href="Pillar2/P2_Developer_Cadence_v3.html" target="_blank">Developer Cadence</a>
+      <a class="rc-link" href="Pillar2/P2_Fresher_Cadence_v3.html" target="_blank">Fresher Cadence</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+  PILLAR 3
+══════════════════════ -->
+<div class="page" id="tab-p3">
+  <div class="sh"><div class="sh-label">Pillar 3 · Operations Engine</div><div class="sh-desc">Admin, Finance & HR · CEO expects: Monthly P&L · Payroll accurate · Headcount plan current</div><div class="sh-line"></div></div>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:20px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px">Operations Engine KPIs — This Month</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">14mo</div><div style="font-size:9px;color:var(--muted)">Cash runway<br/>(target ≥12mo)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">61%</div><div style="font-size:9px;color:var(--muted)">Gross margin<br/>(floor ≥60%)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">0%</div><div style="font-size:9px;color:var(--muted)">Attrition YTD<br/>(target &lt;15%)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--amber)">3</div><div style="font-size:9px;color:var(--muted)">Open roles<br/>(in active hire)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">94%</div><div style="font-size:9px;color:var(--muted)">Collections rate<br/>(target ≥90%)</div></div>
+        <div style="text-align:center;padding:12px;background:var(--surface2);border-radius:8px"><div style="font-family:'Bebas Neue',cursive;font-size:26px;color:var(--green)">100%</div><div style="font-size:9px;color:var(--muted)">Payroll accuracy<br/>(must be 100%)</div></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">Cross-Pillar Handoffs</div>
+      <div style="font-size:11px;color:var(--muted);line-height:2">
+        <span style="color:var(--slate)">P3 → CEO:</span> Monthly P&L by day 5<br/>
+        <span style="color:var(--slate)">P3 ← P1:</span> SOW for invoicing same day<br/>
+        <span style="color:var(--slate)">P3 ← P2:</span> Milestone completion → invoice<br/>
+        <span style="color:var(--slate)">P3 → ALL:</span> Payroll on time, every month<br/>
+        <span style="color:var(--slate)">P3 → CEO:</span> Headcount plan quarterly
+      </div>
+    </div>
+  </div>
+  <div style="background:var(--surface);border:1px solid rgba(74,111,165,.2);border-radius:10px;padding:16px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:10px">Pillar 3 Docs</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <a class="rc-link primary" href="Pillar3/Pillar3-Admin-Processes.html" target="_blank">P3 Process Bible</a>
+      <a class="rc-link" href="Pillar3/P3_AdminHead_Cadence.html" target="_blank">Admin Head Cadence</a>
+      <a class="rc-link" href="Pillar3/P3_Finance_Cadence.html" target="_blank">Finance Lead Cadence</a>
+      <a class="rc-link" href="Pillar3/P3_HR_Cadence.html" target="_blank">HR Manager Cadence</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+  ALL DOCS
+══════════════════════ -->
+<div class="page" id="tab-docs">
+  <div class="sh"><div class="sh-label">Complete Document Library</div><div class="sh-desc">Every file in the DataSkate operating system — organised by type and pillar</div><div class="sh-line"></div></div>
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:10px">CEO & Cross-Org Layer</div>
+    <div class="doc-grid">
+      <div class="doc-card" style="border-color:rgba(245,158,11,.2)">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">CEO Command Center</div>
+        <div class="dc-desc">Live dashboard. Revenue engine, delivery health, partner ranking, board prep, valuation journey. Opens every morning.</div>
+        <div class="dc-meta"><span>Updated weekly</span><span>·</span><span>CEO only</span></div>
+        <a class="dc-open" href="CEO/CEO_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">CEO Cadence v3</div>
+        <div class="dc-desc">Daily, weekly, monthly, quarterly tasks for CEO. Owns vs supports table, cross-pillar triggers, 90-day org build milestones.</div>
+        <div class="dc-meta"><span>Daily reference</span><span>·</span><span>CEO</span></div>
+        <a class="dc-open" href="CEO/CEO_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type raci">RACI</span>
+        <div class="dc-title">RACI Matrix v3</div>
+        <div class="dc-desc">80+ processes. 14 roles. 3 pillars. Who is Responsible, Accountable, Consulted, Informed for every process. Filterable by category.</div>
+        <div class="dc-meta"><span>All roles</span><span>·</span><span>All pillars</span></div>
+        <a class="dc-open" href="CEO/DataSkate_RACI_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type strategy">Org</span>
+        <div class="dc-title">Org Structure v2</div>
+        <div class="dc-desc">Visual org chart. 3 pillars. Reporting lines. Role descriptions. KPIs per role. Review trigger at $8M ARR.</div>
+        <div class="dc-meta"><span>All roles</span><span>·</span><span>Strategy reference</span></div>
+        <a class="dc-open" href="CEO/01_DataSkate_Org_Structure_v2.html" target="_blank">→ Open</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:10px">Pillar 1 — Partner Alliance & GTM</div>
+    <div class="doc-grid">
+      <div class="doc-card" style="border-color:rgba(255,77,46,.15)">
+        <span class="dc-type process">Process</span>
+        <div class="dc-title">P1 Process Bible v2</div>
+        <div class="dc-desc">48 processes across Partner, Revenue, GTM, and Enablement. RACI, revenue targets, GTM motions, cadence overview. Tabbed navigation.</div>
+        <div class="dc-meta"><span>48 processes</span><span>·</span><span>4 P1 roles</span></div>
+        <a class="dc-open" href="Pillar1/Pillar1-Partner_Alliance-GTM-Processes-v2.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type strategy">Strategy</span>
+        <div class="dc-title">GTM Strategy v2</div>
+        <div class="dc-desc">Full go-to-market playbook. Partner motions, outbound model, ICP definition, content strategy, revenue model math.</div>
+        <div class="dc-meta"><span>CEO + VP Alliances</span></div>
+        <a class="dc-open" href="CEO/04_DataSkate_GTM_Strategy_v2.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">VP Alliances Command Center</div>
+        <div class="dc-desc">Partner health, pipeline, deals, AE acquisition, MDF utilisation, weekly to-do list. Revenue engine health at a glance.</div>
+        <div class="dc-meta"><span>VP Alliances</span><span>·</span><span>Weekly update</span></div>
+        <a class="dc-open" href="Pillar1/VP_Alliances_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">VP Alliances Cadence v3</div>
+        <div class="dc-desc">Daily/weekly/monthly/quarterly tasks. Receives section, owns vs supports, cross-pillar handoffs, 90-day ramp.</div>
+        <div class="dc-meta"><span>VP Alliances</span></div>
+        <a class="dc-open" href="Pillar1/P1_VPAlliances_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Alliance Mgr / AE Command Center</div>
+        <div class="dc-desc">Active deal tracker, daily actions, partner AE relationship health, handoff log, SOW floor compliance.</div>
+        <div class="dc-meta"><span>Alliance Mgr / AE</span></div>
+        <a class="dc-open" href="Pillar1/Alliance_Mgr_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">Alliance Mgr Cadence v3</div>
+        <div class="dc-desc">Lead-to-SOW flow, daily deal actions, AE cultivation, collateral requests, win/loss debrief, 90-day ramp.</div>
+        <div class="dc-meta"><span>Alliance Mgr / AE</span></div>
+        <a class="dc-open" href="Pillar1/P1_AllianceMgr_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Head of GTM Command Center</div>
+        <div class="dc-desc">Outbound KPIs, content calendar health, SDR management dashboard, brand metrics, weekly GTM report tracker.</div>
+        <div class="dc-meta"><span>Head of GTM</span></div>
+        <a class="dc-open" href="Pillar1/Head_GTM_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">Head of GTM Cadence v3</div>
+        <div class="dc-desc">3-block daily structure, content production, SDR management, GTM reporting, 90-day ramp with hiring gates.</div>
+        <div class="dc-meta"><span>Head of GTM</span></div>
+        <a class="dc-open" href="Pillar1/P1_HeadOfGTM_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">SDR / BDR Command Center</div>
+        <div class="dc-desc">Daily activity targets, sequence performance, meetings booked vs floor, reply rate, prospect brief log.</div>
+        <div class="dc-meta"><span>SDR / BDR</span></div>
+        <a class="dc-open" href="Pillar1/SDR_BDR_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">SDR / BDR Cadence v3</div>
+        <div class="dc-desc">AM/Mid/PM blocks, KPI floor table with ramp targets, cross-dept handoffs, 90-day ramp. Links to full Playbook.</div>
+        <div class="dc-meta"><span>SDR / BDR</span></div>
+        <a class="dc-open" href="Pillar1/P1_SDR_BDR_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:20px">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:10px">Pillar 2 — Delivery & CoE</div>
+    <div class="doc-grid">
+      <div class="doc-card" style="border-color:rgba(0,201,167,.15)">
+        <span class="dc-type process">Process</span>
+        <div class="dc-title">P2 Process Bible</div>
+        <div class="dc-desc">Full delivery process bible. D-series (design/build) and E-series (enablement/CoE). RACI, SLAs, decision gates, cross-pillar refs.</div>
+        <div class="dc-meta"><span>6 P2 roles</span></div>
+        <a class="dc-open" href="Pillar2/Pillar2-Delivery-Processes.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Delivery Head Command Center</div>
+        <div class="dc-desc">All-project CSAT view, utilisation, ARB gate status, red account tracker, cross-pillar signal feed, Friday briefing checklist.</div>
+        <div class="dc-meta"><span>Delivery Head / SA</span></div>
+        <a class="dc-open" href="Pillar2/DH_SA_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">DH/SA Cadence v3</div>
+        <div class="dc-meta"><span>Delivery Head</span></div>
+        <a class="dc-open" href="Pillar2/P2_DH_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Practice Head Command Center</div>
+        <div class="dc-meta"><span>Practice Head ×4</span></div>
+        <a class="dc-open" href="Pillar2/PracticeHead_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">Practice Head Cadence v3</div>
+        <div class="dc-meta"><span>Practice Head</span></div>
+        <a class="dc-open" href="Pillar2/P2_PracticeHead_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Dev Lead Command Center</div>
+        <div class="dc-meta"><span>Dev Lead</span></div>
+        <a class="dc-open" href="Pillar2/DevLead_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type cadence">Cadence</span>
+        <div class="dc-title">Dev Lead Cadence v3</div>
+        <div class="dc-meta"><span>Dev Lead</span></div>
+        <a class="dc-open" href="Pillar2/P2_DevLead_Cadence_v3.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Project Manager Command Center</div>
+        <div class="dc-meta"><span>Project Manager</span></div>
+        <a class="dc-open" href="Pillar2/PM_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Developer Command Center</div>
+        <div class="dc-meta"><span>Developer</span></div>
+        <a class="dc-open" href="Pillar2/Developer_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Fresher Command Center</div>
+        <div class="dc-meta"><span>Fresher · 91-day ramp</span></div>
+        <a class="dc-open" href="Pillar2/Fresher_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--slate);margin-bottom:10px">Pillar 3 — Admin, Finance & HR</div>
+    <div class="doc-grid">
+      <div class="doc-card" style="border-color:rgba(74,111,165,.2)">
+        <span class="dc-type process">Process</span>
+        <div class="dc-title">P3 Process Bible</div>
+        <div class="dc-desc">Admin, Finance, HR processes. Hiring, payroll, invoicing, vendor management, compliance, reporting cadences.</div>
+        <div class="dc-meta"><span>3 P3 roles</span></div>
+        <a class="dc-open" href="Pillar3/Pillar3-Admin-Processes.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Admin Head Command Center</div>
+        <div class="dc-meta"><span>Admin Head / COO</span></div>
+        <a class="dc-open" href="Pillar3/AdminHead_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">Finance Lead Command Center</div>
+        <div class="dc-meta"><span>Finance Lead</span></div>
+        <a class="dc-open" href="Pillar3/Finance_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+      <div class="doc-card">
+        <span class="dc-type dashboard">Dashboard</span>
+        <div class="dc-title">HR Manager Command Center</div>
+        <div class="dc-meta"><span>HR Manager</span></div>
+        <a class="dc-open" href="Pillar3/HR_Command_Center.html" target="_blank">→ Open</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════
+  ALERTS
+══════════════════════ -->
+<div class="page" id="tab-alerts">
+  <div class="sh"><div class="sh-label">Active Alerts — CEO Action Required</div><div class="sh-sub">3 alerts this week</div><div class="sh-line"></div></div>
+  <div class="alert-feed gap">
+    <div class="alert-item red">
+      <div class="ai-icon">🔴</div>
+      <div class="ai-body">
+        <div class="ai-title">SOW $72K awaiting CEO signature <span class="ai-tag" style="background:var(--amber-lt);color:var(--amber)">CEO Action</span></div>
+        <div class="ai-sub">TechCorp APAC · MuleSoft integration · VP Alliances submitted 18 hours ago. SLA is 24 hours. Review scope, price, delivery risk. Sign or return with questions.</div>
+      </div>
+      <div class="ai-time">18h ago</div>
+    </div>
+    <div class="alert-item red">
+      <div class="ai-icon">🔴</div>
+      <div class="ai-body">
+        <div class="ai-title">Deal stuck >5 days — CEO executive email needed <span class="ai-tag" style="background:var(--coral-lt);color:var(--coral)">P1</span></div>
+        <div class="ai-sub">FinServe Ltd · $45K Workato · Procurement hold. VP Alliances has escalated. One CEO email to client CFO breaks this kind of logjam — VP cannot match that leverage.</div>
+      </div>
+      <div class="ai-time">3d ago</div>
+    </div>
+    <div class="alert-item amber">
+      <div class="ai-icon">🟡</div>
+      <div class="ai-body">
+        <div class="ai-title">Informatica — zero referrals this quarter, QBR not done <span class="ai-tag" style="background:var(--coral-lt);color:var(--coral)">P1</span></div>
+        <div class="ai-sub">5th-ranked partner. 0 referrals, 0% MDF, QBR overdue. VP Alliances cannot fix exec-level disengagement alone. CEO should reach out to Informatica CRO this week.</div>
+      </div>
+      <div class="ai-time">This week</div>
+    </div>
+    <div class="alert-item amber">
+      <div class="ai-icon">🟡</div>
+      <div class="ai-body">
+        <div class="ai-title">Utilisation at 74% — 2pts below 76% floor <span class="ai-tag" style="background:var(--teal-lt);color:var(--teal)">P2</span></div>
+        <div class="ai-sub">Delivery Head needs to investigate bench time and adjust sprint planning. CEO should raise in Wednesday delivery pulse and ask for root cause + plan.</div>
+      </div>
+      <div class="ai-time">This week</div>
+    </div>
+    <div class="alert-item amber">
+      <div class="ai-icon">🟡</div>
+      <div class="ai-body">
+        <div class="ai-title">DH 1:1 overdue — 28 days since last session <span class="ai-tag" style="background:var(--amber-lt);color:var(--amber)">CEO</span></div>
+        <div class="ai-sub">Monthly 1:1 with Delivery Head should be 30-min non-ops session. About the person, career, blockers. Admin Head to schedule in CEO calendar this week.</div>
+      </div>
+      <div class="ai-time">3d overdue</div>
+    </div>
+    <div class="alert-item blue">
+      <div class="ai-icon">🔵</div>
+      <div class="ai-body">
+        <div class="ai-title">SDR meetings at 3.2/wk vs 4/wk floor — entering week 3 <span class="ai-tag" style="background:var(--coral-lt);color:var(--coral)">P1</span></div>
+        <div class="ai-sub">Head of GTM is aware and adjusting sequences. Not yet CEO-level — but if 4th consecutive week below floor, VP Alliances should present a plan. Monitor for now.</div>
+      </div>
+      <div class="ai-time">Monitor</div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <span>DataSkate · Master Operating Hub · Q2 2026 · Single entry point for all 14 roles and 3 pillars</span>
+  <span id="footerDate"></span>
+</footer>
+
+<script>
+function tab(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.snav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+const d=new Date();
+const ds=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+document.getElementById('footerDate').textContent='Last updated: '+ds;
+</script>
+</body>
+</html>

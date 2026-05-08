@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Practice Head · Cadence v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;
+  --role-color:#0D7A6B;--role-lt:#E6F5F2;--role-dk:#044038;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.diagram{margin-bottom:32px}
+.diagram-title{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:12px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid #E5E7EB}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--teal-lt);color:var(--teal-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid #E5E7EB;overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--teal);border-color:var(--teal);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.info-box{background:#F0FDF4;border:1px solid #A7F3D0;border-radius:10px;padding:14px 18px;margin-bottom:28px}
+.info-title{font-size:11px;font-weight:600;margin-bottom:6px}
+.info-body{font-size:12px;line-height:1.7}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="PracticeHead_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Practice Head Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 2 · Delivery &amp; CoE · Cadence v3</div>
+    <div class="role-name">Practice Head</div>
+    <div class="role-sub">Non-billable · Practice P&L owner · Standards authority · Reports to: Delivery Head · Non-billable — practice P&L owner</div>
+    <div class="kpi-bar"><span class="kpi-chip">CSAT ≥4.2 all projects</span><span class="kpi-chip">0 ARB violations</span><span class="kpi-chip">≥75% pod utilisation</span><span class="kpi-chip">Friday AM roll-up — hard deadline</span></div>
+  </div>
+  <div style="font-size:10px;color:rgba(255,255,255,.3);text-align:right;line-height:1.8">Primary KPI<br/><span style="color:rgba(255,255,255,.7);font-size:12px;font-weight:500">Practice CSAT ≥4.2 · 0 ARB violations · Dev Lead pods ≥75% utilisation</span></div>
+</header>
+<main>
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+  <span style="margin-left:8px;font-size:10px;color:var(--muted)">· <span style="background:var(--role-lt);color:var(--role-dk);padding:1px 6px;border-radius:4px;font-weight:500">D02</span> = process reference · checkboxes reset on reload</span>
+</div>
+<div class="diagram section">
+  <div class="diagram-title">Practice Head — role in the delivery system</div>
+  <svg viewBox="0 0 700 120" width="100%" xmlns="http://www.w3.org/2000/svg">
+    <rect x="270" y="5" width="160" height="40" rx="7" fill="#044038"/>
+    <text x="350" y="21" text-anchor="middle" fill="#fff" font-size="10" font-weight="700">Practice Head</text>
+    <text x="350" y="35" text-anchor="middle" fill="rgba(255,255,255,.7)" font-size="9">Reports to Delivery Head</text>
+    <line x1="350" y1="45" x2="350" y2="62" stroke="#E5E7EB" stroke-width="1.5"/>
+    <line x1="100" y1="62" x2="600" y2="62" stroke="#E5E7EB" stroke-width="1.5"/>
+    <rect x="20" y="72" width="150" height="42" rx="6" fill="#E6F5F2" stroke="#0D7A6B" stroke-width="1.2"/>
+    <text x="95" y="90" text-anchor="middle" fill="#044038" font-size="9" font-weight="700">C02 Practice Standards</text>
+    <text x="95" y="104" text-anchor="middle" fill="#044038" font-size="9">Own · DH-approved · Current</text>
+    <rect x="185" y="72" width="150" height="42" rx="6" fill="#E6F5F2" stroke="#0D7A6B" stroke-width="1.2"/>
+    <text x="260" y="90" text-anchor="middle" fill="#044038" font-size="9" font-weight="700">D07 QA Gate</text>
+    <text x="260" y="104" text-anchor="middle" fill="#044038" font-size="9">Sign-off before UAT opens</text>
+    <rect x="350" y="72" width="150" height="42" rx="6" fill="#E6F5F2" stroke="#0D7A6B" stroke-width="1.2"/>
+    <text x="425" y="90" text-anchor="middle" fill="#044038" font-size="9" font-weight="700">Friday AM Roll-up</text>
+    <text x="425" y="104" text-anchor="middle" fill="#044038" font-size="9">Hard deadline → DH</text>
+    <rect x="515" y="72" width="165" height="42" rx="6" fill="#044038"/>
+    <text x="597" y="90" text-anchor="middle" fill="#fff" font-size="9" font-weight="700">Capacity + Skill-match</text>
+    <text x="597" y="104" text-anchor="middle" fill="rgba(255,255,255,.8)" font-size="9">+ Elasticity → DH Friday AM</text>
+  </svg>
+</div>
+<div class="section"><div class="sec-title">📥 What you receive — reports and data that land on your desk</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Escalated blockers from Dev Leads — unresolvable at 4hr tier <span class="proc-ref">E02</span></div>
+            <div class="task-sub">Must resolve or escalate to DH within 24hr of receiving.</div><div class="task-tool">🛠 Slack direct from Dev Lead</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Velocity drop flags from Dev Leads — >30% drop flagged same day <span class="proc-ref">E08</span></div>
+            <div class="task-tool">🛠 Slack + Jira burn-down</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Pod summaries from all Dev Leads — arrive Thursday EOD <span class="proc-ref">E13</span></div>
+            <div class="task-sub">Review before Friday AM. Any velocity, quality, or morale flags → act same week.</div><div class="task-tool">🛠 Notion pod summary template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">QA sign-off submissions from Dev Leads — review before UAT opens (Gate 2) <span class="proc-ref">D07</span></div>
+            <div class="task-tool">🛠 Notion QA sign-off template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Accelerator proposals from Dev Leads — review within 1 week <span class="proc-ref">C04</span></div>
+            <div class="task-tool">🛠 Notion C04 proposal template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">C08 maturity score inputs from Dev Leads <span class="proc-ref">C08</span></div>
+            <div class="task-tool">🛠 Notion C08 template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Secondary practice readiness data from Dev Leads — feeds R04 capability breadth map <span class="proc-ref">R04</span></div>
+            <div class="task-tool">🛠 Notion R04 template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">⚡ What you do — operational cadence</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Available for Dev Lead escalations — respond same day, resolve or escalate to DH within 24hr <span class="proc-ref">E02</span></div>
+            <div class="task-tool">🛠 Slack</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Spot-check 1 live project PR history — standards adherence <span class="proc-ref">D06</span></div>
+            <div class="task-tool">🛠 GitHub / Bitbucket PR history</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review all pod summaries (arrive Thursday) — flag any velocity, quality, or morale issues <span class="proc-ref">E13</span></div>
+            <div class="task-tool">🛠 Notion pod summaries</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review and sign off QA submissions before UAT opens — Gate 2 <span class="proc-ref">D07</span></div>
+            <div class="task-tool">🛠 Notion QA sign-off</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Technical scoping on any discovery calls with VP Alliances this week <span class="proc-ref">D01</span></div>
+            <div class="task-tool">🛠 Zoom · Google Docs SOW template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review practice cert compliance vs partner tier requirements — anyone behind? <span class="proc-ref">P02</span></div>
+            <div class="task-tool">🛠 Notion cert dashboard · Partner portal</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Attrition risk scoring for all team members — any ≥3 signals? <span class="proc-ref">P05</span></div>
+            <div class="task-tool">🛠 Notion people health template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Conduct or nominate presenter for P07 knowledge sharing session <span class="proc-ref">P07</span></div>
+            <div class="task-tool">🛠 Zoom · Notion session log</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">2× LinkedIn posts — 1 technical practice insight, 1 practice leadership content <span class="proc-ref">G01</span></div>
+            <div class="task-tool">🛠 LinkedIn</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Review and update practice dev standards (C02) — any platform releases requiring update? <span class="proc-ref">C02</span></div>
+            <div class="task-tool">🛠 Notion C02 practice standards doc</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Capability breadth scoring for all Dev Leads and Developers (R04) <span class="proc-ref">R04</span></div>
+            <div class="task-tool">🛠 Notion R04 scoring template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Stay interviews with all team members — 30 min each (P11) <span class="proc-ref">P11</span></div>
+            <div class="task-tool">🛠 Google Meet · Notion stay interview template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Speak at or attend 1 community event in primary practice <span class="proc-ref">G03</span></div>
+            <div class="task-tool">🛠 Salesforce User Group · MuleSoft Meetup</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">📤 What you send up — reporting obligations you own</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--teal-lt);color:var(--teal-dk)">Daily</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Immediate escalations to DH — P1 incident, resignation received, CSAT <3.5 <span class="proc-ref">E03/E04</span></div>
+            <div class="task-tool">🛠 Slack / phone direct to DH</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Escalated blockers resolved or passed to DH within 24hr of receiving from Dev Lead <span class="proc-ref">E02</span></div>
+            <div class="task-tool">🛠 Slack</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">FRIDAY AM: Practice roll-up to DH — all pods RAG, utilisation, cert compliance, people flags, wins <span class="proc-ref">E13</span></div>
+            <div class="task-sub">Hard deadline. DH synthesises all practice roll-ups into Friday 5pm CEO briefing.</div><div class="task-tool">🛠 Notion practice roll-up template → Slack to DH</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">FRIDAY AM: Capacity + skill-match score per assignment + elasticity indicator <span class="proc-ref">R01</span></div>
+            <div class="task-sub">Skill-match: 1=specialist, 2=trained, 3=cross-trained. Elasticity: how many more SOWs this practice can absorb.</div><div class="task-tool">🛠 Notion capacity template → DH</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Attrition risk scores — people health report to DH <span class="proc-ref">P05</span></div>
+            <div class="task-tool">🛠 Notion people health report</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">C08 maturity scores — to DH by Friday before first Monday of month <span class="proc-ref">C08</span></div>
+            <div class="task-tool">🛠 Notion C08 scoring template</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Capability breadth scores (R04) — secondary practice readiness per team member to DH <span class="proc-ref">R04</span></div>
+            <div class="task-tool">🛠 Notion R04 map</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Stay interview findings summary to DH — patterns and actions (P11) <span class="proc-ref">P11</span></div>
+            <div class="task-tool">🛠 Notion stay interview summary</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div></div></div></div></div>
+<div class="section"><div class="sec-title">🌱 Self-improvement & personal brand</div><div class="freq-grid"><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FDF0ED;color:#E8472A">Monthly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">2× LinkedIn — 1 technical practice insight, 1 practice leadership post <span class="proc-ref">G01</span></div>
+            <div class="task-tool">🛠 LinkedIn</div>
+          </div>
+          <span class="tb2" style="background:var(--teal-lt);color:var(--teal-dk)">Must</span>
+        </div><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Community engagement — answer 2+ forum questions in primary practice <span class="proc-ref">G02</span></div>
+            <div class="task-tool">🛠 Trailblazer Community · Anypoint Exchange</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div><div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#FFFBEB;color:#D97706">Quarterly</span></div><div class="freq-body"><div class="task">
+          <div class="cb" onclick="tog(this)"></div>
+          <div class="task-body">
+            <div class="task-title">Speak at or attend 1 community or industry event <span class="proc-ref">G03</span></div>
+            <div class="task-tool">🛠 User groups · Platform summits</div>
+          </div>
+          <span class="tb2" style="background:#EEF1F7;color:var(--slate-dk)">Good</span>
+        </div></div></div></div></div>
+<div class="info-box" style="background:#FEF2F2;border-color:#FECACA;margin:0 40px 32px">
+  <div class="info-title" style="color:#B91C1C">Must NOT do</div>
+  <div class="info-body" style="color:#7F1D1D">✕ Write production code — you are non-billable; your value is in practice leadership, not code output.<br/>✕ Publish practice standards without DH approval (C02).<br/>✕ Allow UAT to open without your QA sign-off (Gate 2).<br/>✕ Allow attrition risk scores ≥3 to sit unaddressed for more than 2 weeks.<br/>✕ Miss the Friday AM roll-up and capacity submission — DH cannot brief CEO without it.<br/></div>
+</div>
+</main>
+<footer>
+  <span>DataSkate · Practice Head Cadence · v3 · Q2 2026 · Pillar 2</span>
+  <a href="Pillar2-Delivery-Processes.html" target="_blank" style="font-size:10px;color:var(--teal,#00C9A7);text-decoration:none;font-weight:700">📖 P2 Process Bible →</a>
+</footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

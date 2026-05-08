@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate · Admin Head / COO · Cadence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;--amber:#D97706;--amber-lt:#FFFBEB;--amber-md:#FCD34D;--amber-dk:#92400E;--teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;--slate:#2A3550;--slate-dk:#141C2E;--slate-lt:#EEF1F7;--coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B1C0A;--border:#E5E7EB;--role-color:#92400E;--role-lt:#FFFBEB;--role-dk:#78350F;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+header{background:var(--ink);color:#fff;padding:28px 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.45);margin-bottom:6px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff;line-height:1.2}
+.role-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.7)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid var(--border)}
+.legend-label{font-size:11px;color:var(--muted);margin-right:4px}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--amber-lt);color:var(--amber-dk)}
+.t-good{background:#EEF1F7;color:var(--slate-dk)}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.freq-head{padding:10px 14px;display:flex;align-items:center;gap:8px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB;cursor:default}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--amber);border-color:var(--amber);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:500;vertical-align:middle;margin-left:3px}
+.briefing-box{background:var(--white);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:28px}
+.bb-header{background:var(--ink);padding:14px 20px}
+.bb-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--amber);margin-bottom:2px}
+.bb-sub{font-size:11px;color:rgba(255,255,255,.4)}
+.bb-row{display:grid;grid-template-columns:120px 1fr 80px;gap:12px;padding:10px 20px;border-bottom:1px solid var(--border);font-size:12px;align-items:start}
+.bb-row:last-child{border-bottom:none}
+.bb-domain{font-weight:600;color:var(--ink)}
+.bb-format{color:var(--muted);line-height:1.4}
+.rag-g{display:inline-block;padding:1px 7px;border-radius:10px;background:#F0FDF4;color:#14532D;font-size:10px;font-weight:600}
+.rag-a{display:inline-block;padding:1px 7px;border-radius:10px;background:#FFFBEB;color:#92400E;font-size:10px;font-weight:600}
+.rag-r{display:inline-block;padding:1px 7px;border-radius:10px;background:#FDF0ED;color:#9B1C0A;font-size:10px;font-weight:600}
+.cross-table{width:100%;border-collapse:collapse;font-size:12px}
+.cross-table th{background:var(--slate-lt);color:var(--slate-dk);padding:8px 10px;text-align:left;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.cross-table td{padding:8px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+.cross-table tr:last-child td{border-bottom:none}
+.not-box{background:var(--coral-lt);border:1px solid var(--coral-dk);border-radius:12px;padding:16px 20px;margin-top:28px}
+.not-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--coral-dk);margin-bottom:10px}
+.not-item{display:flex;gap:8px;font-size:12px;color:var(--coral-dk);margin-bottom:7px;line-height:1.4}
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="AdminHead_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Admin Head Command Center</a></div>
+<header>
+  <div>
+    <div class="role-tag">Pillar 3 · Administration · Cadence</div>
+    <div class="role-name">Admin Head / COO</div>
+    <div class="role-sub">All internal operations · HR · Finance · Legal · Tools · Enablement · Reports to: CEO · Friday 3pm briefing — non-negotiable</div>
+    <div class="kpi-bar"><span class="kpi-chip">Friday 3pm CEO briefing</span><span class="kpi-chip">DSO ≤30 days</span><span class="kpi-chip">0 unsigned MSAs</span><span class="kpi-chip">Audit pack in 48hr</span></div>
+  </div>
+</header>
+<main>
+<div class="legend">
+  <span class="legend-label">Task tiers:</span>
+  <span class="tb t-must">Must</span><span class="tb t-good">Good to do</span><span class="tb t-nice">Nice to do</span><span class="tb t-self">Self-improvement</span><span class="tb t-brand">Personal brand</span><span class="tb t-cross">Cross-dept handoff</span>
+</div>
+
+<!-- WHAT YOU RECEIVE -->
+<div class="section"><div class="sec-title">📥 What you receive — reports and signals that land on your desk</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">Daily</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Legal flags — any unsigned MSA, NDA expiry, or contract issue flagged by VP Alliances or PM <span class="proc-ref">L01/L02</span></div><div class="task-tool">🛠 Notion legal tracker</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Finance overdue alerts — any invoice passing Day 15 triggers Admin Head awareness <span class="proc-ref">F02</span></div><div class="task-tool">🛠 Accounting tool dashboard</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Tool provisioning status — any new hire onboarding in progress, T01 checklist completion <span class="proc-ref">T01</span></div><div class="task-tool">🛠 Notion T01 checklist</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">P0 signals — breach, senior resignation, legal threat: received any time, any channel</div><div class="task-sub">If received: CEO notified within 1 hour. Not Friday.</div><div class="task-tool">🛠 Slack / phone</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Friday noon — from team</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">EC ramp + cert RAG — 5-line update on all ramps in progress and certs in flight <span class="proc-ref">E04</span></div><div class="task-sub">Hard deadline: Friday 12pm from EC</div><div class="task-tool">🛠 Notion / Slack from EC</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">HR pipeline RAG — open roles, interviews in progress, any attrition signal <span class="proc-ref">H01–H03</span></div><div class="task-sub">Hard deadline: Friday 12pm from HR Manager</div><div class="task-tool">🛠 Notion / Slack from HR</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Finance DSO + invoice RAG — issued this week, collected, overdue, any flag <span class="proc-ref">F01/F02</span></div><div class="task-sub">Hard deadline: Friday 12pm from Finance Lead</div><div class="task-tool">🛠 Notion / Slack from Finance</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Monthly</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Finance monthly close report — P&amp;L summary, DSO actual, costs vs budget <span class="proc-ref">F03</span></div><div class="task-sub">By 3rd of following month from Finance Lead</div><div class="task-tool">🛠 Finance report → Admin Head synthesises for CEO</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">HR compliance update — any statutory filing, POSH, employee file status <span class="proc-ref">L07</span></div><div class="task-tool">🛠 Notion HR compliance tracker</div></div><span class="tb2 t-good">Good</span></div>
+</div></div>
+</div></div>
+
+<!-- WHAT YOU DO -->
+<div class="section"><div class="sec-title">⚡ What you do — operational cadence</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">Daily</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Review legal tracker — any unsigned contract or NDA expiry approaching in 30 days <span class="proc-ref">L01/L02</span></div><div class="task-tool">🛠 Notion legal folder · 5 min</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Check finance dashboard — DSO average, any invoice crossing Day 15 today <span class="proc-ref">F02</span></div><div class="task-tool">🛠 Accounting tool · 5 min</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Respond to HR or Finance escalations same day — no overnight delay on hiring or payment issues</div><div class="task-tool">🛠 Slack / direct</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Any SOW received from VP Alliances — route to legal review same day <span class="proc-ref">L01</span></div><div class="task-tool">🛠 Email → retained counsel</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Read 1 article — compliance, HR, finance, or ops improvement</div><div class="task-tool">🛠 Newsletter / Feedly · 10 min</div></div><span class="tb2 t-self">Self</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Weekly</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">FRIDAY 12–3pm: Receive team reports → synthesise → send CEO briefing by 3pm <span class="proc-ref">F06</span></div><div class="task-sub">Non-negotiable. 5 sections. RAG per domain. One ask max.</div><div class="task-tool">🛠 Notion briefing template → email to CEO</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">HR sync — open roles update, interview pipeline, any attrition flag <span class="proc-ref">H01–H03</span></div><div class="task-sub">Tue or Wed · 20 min</div><div class="task-tool">🛠 Notion hiring tracker · Slack/Meet with HR</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Finance check — invoices issued this week, DSO trend, any Day 30+ overdue escalation <span class="proc-ref">F01/F02</span></div><div class="task-sub">Thu · 15 min with Finance Lead</div><div class="task-tool">🛠 Finance dashboard</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Tool provisioning check — any new hire starting next week? T01 on track for D-2? <span class="proc-ref">T01</span></div><div class="task-tool">🛠 Notion T01 checklist · HR confirms start date</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Partner compliance check — any cert count at risk of dropping below tier threshold? <span class="proc-ref">L03</span></div><div class="task-sub">Cross-check EC cert tracker with partner minimums</div><div class="task-tool">🛠 EC cert report + L03 tracker</div></div><span class="tb2 t-good">Good</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:var(--slate-dk)">Monthly</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Receive Finance close report by 3rd — review P&amp;L, DSO, variance. Synthesise for CEO. <span class="proc-ref">F03/F06</span></div><div class="task-tool">🛠 Finance report → CEO monthly financial briefing section</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Review open legal items — any NDA renewal, partner agreement review, DPA status <span class="proc-ref">L02/L03/L04</span></div><div class="task-tool">🛠 Notion legal tracker monthly review</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Tool cost per head calculation — any licence waste? Any tool underused? <span class="proc-ref">F05</span></div><div class="task-tool">🛠 Accounting tool + tool admin dashboards</div></div><span class="tb2 t-good">Good</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">1:1 with CEO — ops health, headcount decisions, any strategic internal change <span class="proc-ref">F06</span></div><div class="task-sub">First week of month · 30 min</div><div class="task-tool">🛠 Google Meet · structured agenda</div></div><span class="tb2 t-good">Good</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Internal ops retrospective — what broke this month? What needs a process fix?</div><div class="task-tool">🛠 Notion ops log · 20 min solo review</div></div><span class="tb2 t-nice">Nice</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Earn 1 relevant cert or complete 1 course — HR, finance, compliance, ops leadership</div><div class="task-tool">🛠 SHRM / ACCA / Coursera</div></div><span class="tb2 t-self">Self</span></div>
+</div></div>
+</div></div>
+
+<!-- WHAT YOU SEND UP -->
+<div class="section"><div class="sec-title">📤 What you send up — CEO briefing format and obligations</div>
+<div class="briefing-box">
+  <div class="bb-header"><div class="bb-title">Friday 3pm CEO Briefing — fixed 5-section format · max 1 page · one ask</div><div class="bb-sub">Sent every Friday by 3pm without exception. CEO reads in under 3 minutes. Admin Head acts on Amber before sending. CEO only sees Red requires action.</div></div>
+  <div class="bb-row"><div class="bb-domain">1. HEADCOUNT</div><div class="bb-format">Hired / leaving / open roles / risk signal. RAG. Example: <span class="rag-g">GREEN</span> 2 roles in process, on track. OR <span class="rag-r">RED</span> Senior Dev Lead resigned — P10 (P2) KT activated, replacement H01 filed.</div><div></div></div>
+  <div class="bb-row"><div class="bb-domain">2. FINANCE</div><div class="bb-format">Invoices issued / collected / overdue / DSO / cash. RAG. Example: <span class="rag-a">AMBER</span> Client X invoice Day 22 — Admin Head chasing. No CEO action yet. OR <span class="rag-r">RED</span> DSO 38 days — CEO call to Client Y exec requested.</div><div></div></div>
+  <div class="bb-row"><div class="bb-domain">3. COMPLIANCE</div><div class="bb-format">Open legal items / breach flags / audit triggers. RAG. Example: <span class="rag-g">GREEN</span> All MSAs signed, DPAs current. OR <span class="rag-a">AMBER</span> Partner NDA renewal due in 30 days — Admin Head coordinating.</div><div></div></div>
+  <div class="bb-row"><div class="bb-domain">4. ENABLEMENT</div><div class="bb-format">Ramps on track / certs in flight / passes this week. RAG. Example: <span class="rag-g">GREEN</span> 2 ramps on track. 1 cert passed (Priya, Salesforce Admin). OR <span class="rag-r">RED</span> D91 gate failure — [Name] not billable. DH notified. Margin impact flagged.</div><div></div></div>
+  <div class="bb-row"><div class="bb-domain">5. FLAGS &amp; ASKS</div><div class="bb-format">Max 1 CEO decision needed. Everything else Admin Head resolves. Example: "Need CEO approval on salary band increase for Dev Lead hire — band is 12% above current max."</div><div></div></div>
+</div>
+
+<div style="margin-top:16px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:16px 20px">
+<div style="font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px">P0 Escalation — bypasses Friday briefing entirely</div>
+<table style="width:100%;font-size:12px;border-collapse:collapse">
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Data breach detected</td><td style="padding:7px 10px;color:var(--muted)">Admin Head calls CEO within 1 hour. Not Slack. Phone call.</td></tr>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Senior resignation (Practice Head or above)</td><td style="padding:7px 10px;color:var(--muted)">Admin Head notifies CEO same hour. CEO decides on counter-offer.</td></tr>
+<tr style="border-bottom:1px solid var(--border)"><td style="padding:7px 10px;font-weight:600">Regulator contact or legal threat</td><td style="padding:7px 10px;color:var(--muted)">Admin Head notifies CEO and retains counsel same day.</td></tr>
+<tr><td style="padding:7px 10px;font-weight:600">Any event where 7-day delay causes material harm</td><td style="padding:7px 10px;color:var(--muted)">Admin Head judgement call. When in doubt — call CEO.</td></tr>
+</table>
+</div>
+</div>
+
+<!-- CROSS DEPT -->
+<div class="section"><div class="sec-title">Cross-Department Handoffs Admin Head Owns</div>
+<table class="cross-table">
+<thead><tr><th>Trigger</th><th>Admin Head Action</th><th>Receives from</th><th>Sends to</th><th>Tool</th></tr></thead>
+<tbody>
+<tr><td>DH submits hiring need</td><td>Draft role brief within 24hr, coordinate CEO salary approval, hand to HR</td><td>Delivery Head</td><td>HR Manager + CEO</td><td>Notion hiring brief</td></tr>
+<tr><td>New SOW from VP Alliances</td><td>Route to external legal counsel same day. Track signature. Trigger D01 (P2) when countersigned.</td><td>VP Alliances</td><td>External counsel + Finance (invoice schedule)</td><td>DocuSign + Notion legal tracker</td></tr>
+<tr><td>Invoice trigger from PM</td><td>Admin Head is accountable if Finance misses SLA. Monitors daily. Does not chase PM directly.</td><td>System alert if missed</td><td>Finance Lead (if SLA missed: Admin Head escalates)</td><td>Accounting tool dashboard</td></tr>
+<tr><td>Invoice Day 30+ unpaid</td><td>Admin Head contacts client finance lead directly. Briefs CEO if still unpaid at Day 37.</td><td>Finance Lead</td><td>Client finance lead · CEO</td><td>Email / phone</td></tr>
+<tr><td>New hire offer countersigned</td><td>Trigger T01 (tools), EC onboarding pack, Finance payroll setup — all same day.</td><td>HR Manager (DocuSign notification)</td><td>EC + Finance Lead</td><td>Notion task triggers</td></tr>
+<tr><td>Employee last day</td><td>T02 revocation checklist run end of day. Finance final payroll confirmed within 7 days.</td><td>HR Manager</td><td>Finance Lead + all systems admins</td><td>T02 checklist · Notion</td></tr>
+</tbody>
+</table></div>
+
+<div class="not-box">
+<div class="not-title">Admin Head Must NOT Do These</div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Define hiring specs or training content — DH defines what to hire and how to train. Admin Head executes.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Make technical interview decisions — DH decides technical fit on every hire.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Send raw data to CEO — synthesise first. CEO sees signal and one ask, not spreadsheets.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Manage delivery team performance — that is DH and Practice Head territory.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Wait for Friday to inform CEO of a data breach, senior resignation, or legal threat — P0 = same hour.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Sign SOWs or legal documents — coordinate and track only. CEO signs above $50K.</div></div>
+</div>
+</main>
+<footer><span>DataSkate · Admin Head / COO Cadence · Q2 2026</span><span>Pillar 3 · Reports to CEO · Friday 3pm briefing is the primary output</span></footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

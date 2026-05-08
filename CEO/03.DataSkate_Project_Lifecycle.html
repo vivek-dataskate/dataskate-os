@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate — Project Lifecycle</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-md:#F5C4B3;--coral-dk:#9B1C0A;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-md:#9FD8CF;--teal-dk:#044038;
+  --slate:#2A3550;--slate-lt:#EEF1F7;--slate-md:#B0BBCF;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-md:#FCD34D;
+  --purple:#6D28D9;--purple-lt:#EDE9FE;--purple-md:#C4B5FD;
+  --ink:#111827;--muted:#6B7280;--border:#E5E7EB;
+  --white:#FFFFFF;--bg:#F8F7F4;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+
+/* HEADER */
+header{background:var(--ink);padding:44px 56px 38px;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;border-radius:50%;background:var(--teal);opacity:.1}
+header::after{content:'';position:absolute;bottom:-40px;left:180px;width:200px;height:200px;border-radius:50%;background:var(--coral);opacity:.08}
+.logo{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-md);margin-bottom:12px}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,44px);font-weight:800;color:#fff;line-height:1.1;position:relative;z-index:1}
+header h1 span{color:var(--coral)}
+.header-sub{margin-top:10px;font-size:13px;color:rgba(255,255,255,.4);font-weight:300;position:relative;z-index:1}
+
+/* STAGE NAV */
+.stage-nav{background:var(--white);border-bottom:1px solid var(--border);padding:0 56px;display:flex;gap:0;overflow-x:auto;position:sticky;top:0;z-index:100}
+.snav-item{padding:14px 18px;font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;display:flex;align-items:center;gap:8px}
+.snav-item:hover{color:var(--ink)}
+.snav-item.active{color:var(--ink);border-bottom-color:var(--coral)}
+.snav-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* MAIN LAYOUT */
+.main{padding:0 56px 72px}
+
+/* STAGE SECTION */
+.stage{padding:48px 0 40px;border-bottom:1px solid var(--border);animation:fadeUp .4s ease both}
+.stage:last-child{border-bottom:none}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.stage-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:28px}
+.stage-num{font-family:'Syne',sans-serif;font-size:13px;font-weight:800;width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff}
+.stage-meta{flex:1}
+.stage-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--ink);line-height:1.1}
+.stage-sub{font-size:13px;color:var(--muted);margin-top:4px;font-weight:300}
+.stage-duration{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:11px;font-weight:500;padding:3px 10px;border-radius:20px;background:var(--slate-lt);color:var(--slate)}
+
+/* STAGE BODY GRID */
+.stage-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.stage-grid.wide{grid-template-columns:1fr 1fr}
+.stage-grid.full{grid-template-columns:1fr}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px}
+.card-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card-title .ctdot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* ROLE PILLS inside cards */
+.role-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;margin:2px}
+.rt-ceo   {background:#FEF3C7;color:#92400E}
+.rt-ally  {background:var(--coral-lt);color:var(--coral-dk)}
+.rt-dh    {background:var(--teal-lt);color:var(--teal-dk)}
+.rt-pl    {background:var(--teal-lt);color:var(--teal-dk)}
+.rt-pm    {background:var(--purple-lt);color:var(--purple)}
+.rt-sd    {background:#DBEAFE;color:#1E40AF}
+.rt-dev   {background:#F1F5F9;color:#334155}
+.rt-adm   {background:var(--slate-lt);color:var(--slate)}
+.rt-hr    {background:var(--slate-lt);color:var(--slate)}
+.rt-fin   {background:#DCFCE7;color:#166534}
+
+/* ACTIVITY LIST */
+.act-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.act-item{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.5}
+.act-icon{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;font-weight:700;margin-top:1px}
+.act-text b{font-weight:500}
+.act-text{color:var(--ink)}
+.act-owner{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* GATE CARD */
+.gate-card{background:var(--ink);border-radius:12px;padding:18px 20px;border:none}
+.gate-card .card-title{color:var(--teal-md)}
+.gate-list{display:flex;flex-direction:column;gap:10px}
+.gate-item{display:flex;align-items:flex-start;gap:12px}
+.gate-badge{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.gb-pass{background:var(--teal);color:#fff}
+.gb-warn{background:var(--amber);color:#fff}
+.gb-block{background:var(--coral);color:#fff}
+.gate-txt{font-size:12px;color:rgba(255,255,255,.7);line-height:1.6}
+.gate-txt b{color:#fff;font-weight:500}
+
+/* DELIVERABLE LIST */
+.del-list{display:flex;flex-direction:column;gap:6px}
+.del-item{display:flex;align-items:center;gap:8px;font-size:12px;padding:6px 10px;border-radius:8px}
+.del-item.done{background:var(--teal-lt);color:var(--teal-dk)}
+.del-item.doc {background:var(--purple-lt);color:var(--purple)}
+.del-item.warn{background:var(--amber-lt);color:var(--amber)}
+.del-sym{font-family:'Syne',sans-serif;font-weight:700;font-size:12px;width:18px;text-align:center;flex-shrink:0}
+
+/* OWNER BLOCK */
+.owner-block{background:var(--coral-lt);border-radius:10px;padding:14px 16px;margin-top:16px}
+.ob-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--coral);margin-bottom:8px}
+.ob-roles{display:flex;flex-wrap:wrap;gap:4px}
+
+/* ESCALATION CARD */
+.esc-card{background:#FFF7ED;border:1px solid #FED7AA;border-radius:12px;padding:18px 20px}
+.esc-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);margin-bottom:12px}
+.esc-list{display:flex;flex-direction:column;gap:8px}
+.esc-item{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#7C2D12;line-height:1.6}
+.esc-lv{font-family:'Syne',sans-serif;font-weight:700;font-size:10px;padding:2px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;background:var(--amber);color:#fff}
+
+/* TIMELINE BAR */
+.timeline-bar{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px 24px;margin-bottom:32px}
+.tl-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.tl-track{display:flex;gap:0;border-radius:8px;overflow:hidden}
+.tl-seg{display:flex;align-items:center;justify-content:center;flex-direction:column;padding:10px 4px;font-size:10px;font-weight:500;text-align:center;gap:3px;transition:opacity .2s}
+.tl-seg span{font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.s1{background:var(--coral);color:#fff;flex:1.2}
+.s2{background:#c73d22;color:#fff;flex:1}
+.s3{background:var(--teal);color:#fff;flex:2.5}
+.s4{background:#0a6558;color:#fff;flex:1.5}
+.s5{background:#085041;color:#fff;flex:1.5}
+.s6{background:var(--slate);color:#fff;flex:1}
+.s7{background:#1e2d45;color:#fff;flex:1.5}
+.tl-labels{display:flex;margin-top:8px;font-size:10px;color:var(--muted)}
+.tl-label{text-align:center}
+
+/* FOOTER */
+footer{background:var(--ink);padding:28px 56px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.f-note{font-size:12px;color:rgba(255,255,255,.35);line-height:1.6;max-width:500px}
+.f-meta{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal-md)}
+
+@media(max-width:768px){
+  .stage-grid{grid-template-columns:1fr}
+  .stage-grid.wide{grid-template-columns:1fr}
+  header,.main{padding-left:20px;padding-right:20px}
+  .stage-nav{padding:0 20px}
+  footer{padding:24px 20px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DataSkate · Project Lifecycle</div>
+  <h1>From partner referral<br/><span>to CSAT.</span></h1>
+  <p class="header-sub">End-to-end lifecycle · 7 stages · every role · every gate · every deliverable</p>
+</header>
+
+<!-- STAGE NAV -->
+<div class="stage-nav">
+  <div class="snav-item active" onclick="scrollTo('s1')"><span class="snav-dot" style="background:var(--coral)"></span>1. Lead</div>
+  <div class="snav-item" onclick="scrollTo('s2')"><span class="snav-dot" style="background:#c73d22"></span>2. Qualify</div>
+  <div class="snav-item" onclick="scrollTo('s3')"><span class="snav-dot" style="background:var(--teal)"></span>3. Scope & SOW</div>
+  <div class="snav-item" onclick="scrollTo('s4')"><span class="snav-dot" style="background:#0a6558"></span>4. Kick-off</div>
+  <div class="snav-item" onclick="scrollTo('s5')"><span class="snav-dot" style="background:#085041"></span>5. Delivery</div>
+  <div class="snav-item" onclick="scrollTo('s6')"><span class="snav-dot" style="background:var(--slate)"></span>6. Go-Live</div>
+  <div class="snav-item" onclick="scrollTo('s7')"><span class="snav-dot" style="background:#1e2d45"></span>7. Post Go-Live</div>
+</div>
+
+<div class="main">
+
+  <!-- TIMELINE BAR -->
+  <div class="timeline-bar" style="margin-top:40px">
+    <div class="tl-title">Typical end-to-end duration by project type</div>
+    <div class="tl-track">
+      <div class="tl-seg s1"><span>Lead</span>1–3d</div>
+      <div class="tl-seg s2"><span>Qualify</span>2–5d</div>
+      <div class="tl-seg s3"><span>Scope & SOW</span>SMB 3–7d · MM 7–14d</div>
+      <div class="tl-seg s4"><span>Kick-off</span>3–5d</div>
+      <div class="tl-seg s5"><span>Delivery</span>SMB 4–8wk · MM 8–16wk</div>
+      <div class="tl-seg s6"><span>Go-Live</span>1wk</div>
+      <div class="tl-seg s7"><span>Hypercare</span>2wk</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STAGE 1: LEAD RECEIVED
+  ══════════════════════════════════════ -->
+  <div class="stage" id="s1">
+    <div class="stage-header">
+      <div class="stage-num" style="background:var(--coral)">01</div>
+      <div class="stage-meta">
+        <div class="stage-title">Lead Received</div>
+        <div class="stage-sub">A partner AE refers a prospect or an inbound enquiry comes in — the revenue motion starts here</div>
+        <span class="stage-duration">⏱ 1–3 days</span>
+      </div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:var(--coral)"></span>How leads arrive</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">SF</div>
+            <div><div class="act-text"><b>Salesforce AE referral</b> — highest value. AE intro-emails DS to a prospect they are co-selling with.</div><div class="act-owner">Owner: Alliance Mgr/AE responds within 24hr</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">P</div>
+            <div><div class="act-text"><b>Partner portal lead</b> — MuleSoft, Informatica, Workato, Boomi CAMs pass leads via partner portal or email.</div><div class="act-owner">Owner: Alliance Mgr/AE logs in CRM same day</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">IB</div>
+            <div><div class="act-text"><b>Inbound (AppExchange, LinkedIn, website)</b> — prospect finds DS independently. Lower volume at this stage.</div><div class="act-owner">Owner: Alliance Mgr/AE responds within 24hr</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">CS</div>
+            <div><div class="act-text"><b>Client referral</b> — happy client refers another company. Highest close rate of all lead types.</div><div class="act-owner">Owner: VP Alliances tracks and credits source</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:var(--coral)"></span>Actions in this stage</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">1</div>
+            <div class="act-text">Log lead in CRM within 24hr — source, contact, platform, rough size. <div class="act-owner">Alliance Mgr/AE</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">2</div>
+            <div class="act-text">Acknowledge prospect with a same-day response confirming receipt and next step. <div class="act-owner">Alliance Mgr/AE</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">3</div>
+            <div class="act-text">Notify VP Alliances — check if above $25K threshold (mid-market needs VP on first call). <div class="act-owner">Alliance Mgr/AE</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">4</div>
+            <div class="act-text">Register deal in partner portal immediately — do not wait until close. <div class="act-owner">Alliance Mgr/AE</div></div>
+          </li>
+        </ul>
+        <div class="owner-block">
+          <div class="ob-label">Roles active</div>
+          <div class="ob-roles">
+            <span class="role-tag rt-ally">VP Alliances</span>
+            <span class="role-tag rt-ally">Alliance Mgr/AE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card gate-card">
+        <div class="card-title">Stage exit — must be true before moving to qualify</div>
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Lead logged in CRM</b> with source, platform, contact name, and estimated deal size</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Deal registered</b> in partner portal (Salesforce, MuleSoft etc.)</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Prospect acknowledged</b> — first response sent within 24hr</div></div>
+          <div class="gate-item"><span class="gate-badge gb-warn">Check</span><div class="gate-txt">If estimated SOW is below <b>$5K SMB or $25K MM</b> — flag to VP Alliances before proceeding. Do not qualify below minimum.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STAGE 2: QUALIFY
+  ══════════════════════════════════════ -->
+  <div class="stage" id="s2">
+    <div class="stage-header">
+      <div class="stage-num" style="background:#c73d22">02</div>
+      <div class="stage-meta">
+        <div class="stage-title">Discovery & Qualification</div>
+        <div class="stage-sub">Determine if this is a real opportunity, the right size, and the right fit for DS's practices</div>
+        <span class="stage-duration">⏱ 2–5 days</span>
+      </div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#c73d22"></span>Qualification checklist (BANT)</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">B</div>
+            <div><div class="act-text"><b>Budget</b> — can they spend $5K+ (SMB) or $25K+ (MM)? Do they have budget approval or is it informal?</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">A</div>
+            <div><div class="act-text"><b>Authority</b> — who signs the SOW? Is the decision-maker in the room or do we need to get there?</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">N</div>
+            <div><div class="act-text"><b>Need</b> — is this a DS practice fit? (Salesforce, MuleSoft, Informatica, Workato, Boomi) Does it need our skills?</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">T</div>
+            <div><div class="act-text"><b>Timeline</b> — when do they want to start? Is there urgency or is this exploratory?</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#c73d22"></span>Discovery call agenda</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">1</div>
+            <div class="act-text">Understand current state — what platform, what pain, what broke? <div class="act-owner">Alliance Mgr/AE leads. Practice Lead joins for MM.</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">2</div>
+            <div class="act-text">Define desired outcome — what does success look like in 90 days? <div class="act-owner">Alliance Mgr/AE asks. Practice Lead validates feasibility.</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">3</div>
+            <div class="act-text">Surface constraints — budget range, timeline, internal resources available. <div class="act-owner">Alliance Mgr/AE</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--coral-lt);color:var(--coral)">4</div>
+            <div class="act-text">Confirm next step — agree a date for scoping call and SOW. <div class="act-owner">Alliance Mgr/AE closes the call</div></div>
+          </li>
+        </ul>
+        <div class="owner-block">
+          <div class="ob-label">Roles active</div>
+          <div class="ob-roles">
+            <span class="role-tag rt-ally">VP Alliances</span>
+            <span class="role-tag rt-ally">Alliance Mgr/AE</span>
+            <span class="role-tag rt-pl">Practice Lead (MM only)</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card gate-card">
+        <div class="card-title">Stage exit — qualify or disqualify</div>
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-badge gb-pass">Qualify</span><div class="gate-txt">BANT passes all four criteria — move to scoping</div></div>
+          <div class="gate-item"><span class="gate-badge gb-warn">Nurture</span><div class="gate-txt">Budget or timeline not confirmed — <b>park and follow up in 30 days.</b> Do not spend scoping time on unconfirmed budget.</div></div>
+          <div class="gate-item"><span class="gate-badge gb-block">Disqualify</span><div class="gate-txt">Below SOW minimum, wrong platform, or no decision-maker access — <b>log reason in CRM and close.</b> Do not proceed.</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt">Update CRM with discovery notes and qualification status before moving forward</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STAGE 3: SCOPE & SOW
+  ══════════════════════════════════════ -->
+  <div class="stage" id="s3">
+    <div class="stage-header">
+      <div class="stage-num" style="background:var(--teal)">03</div>
+      <div class="stage-meta">
+        <div class="stage-title">Scoping & SOW</div>
+        <div class="stage-sub">Define exactly what will be built, by whom, in how long, and at what price — no ambiguity</div>
+        <span class="stage-duration">⏱ SMB 3–7 days · Mid-Market 7–14 days</span>
+      </div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:var(--teal)"></span>Scoping activities</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">S</div>
+            <div class="act-text">Technical scoping call — Practice Lead walks through current architecture, integration points, data volumes, user counts. <div class="act-owner">Practice Lead leads · Delivery Head/SA joins for complex MM</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">A</div>
+            <div class="act-text">Solution approach defined — Delivery Head/SA signs off on the proposed architecture before SOW is written. This is the pre-ARB check. <div class="act-owner">Delivery Head/SA</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">E</div>
+            <div class="act-text">Effort estimation — Practice Lead estimates story points / days. Sr Dev input for technical complexity. <div class="act-owner">Practice Lead + Sr Dev</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">R</div>
+            <div class="act-text">Resource plan — which team members will be assigned. Confirm availability against current project load. <div class="act-owner">Delivery Head/SA + PM</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:var(--teal)"></span>SOW components (mandatory)</div>
+        <div class="del-list">
+          <div class="del-item done"><span class="del-sym">✓</span>Scope statement — what IS included in plain language</div>
+          <div class="del-item done"><span class="del-sym">✓</span>Out of scope — explicit list of what is NOT included</div>
+          <div class="del-item done"><span class="del-sym">✓</span>Deliverables — named outputs, not activities</div>
+          <div class="del-item done"><span class="del-sym">✓</span>Timeline — start date, milestone dates, go-live date</div>
+          <div class="del-item done"><span class="del-sym">✓</span>Fixed price or T&M — stated clearly with payment milestones</div>
+          <div class="del-item done"><span class="del-sym">✓</span>Assumptions — dependencies on client side (access, data, SMEs)</div>
+          <div class="del-item done"><span class="del-sym">✓</span>Change control clause — what happens if scope changes</div>
+          <div class="del-item warn"><span class="del-sym">!</span>Min $5K SMB / $25K MM — RevOps enforces, VP Alliances approves</div>
+        </div>
+        <div class="owner-block" style="background:var(--teal-lt)">
+          <div class="ob-label" style="color:var(--teal)">Roles active</div>
+          <div class="ob-roles">
+            <span class="role-tag rt-ally">VP Alliances</span>
+            <span class="role-tag rt-dh">Delivery Head/SA</span>
+            <span class="role-tag rt-pl">Practice Lead</span>
+            <span class="role-tag rt-pm">Project Mgr</span>
+            <span class="role-tag rt-fin">Finance Lead</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card gate-card">
+        <div class="card-title">Stage exit — SOW sign-off gates</div>
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Delivery Head/SA approves</b> solution approach before SOW is sent to client — no exceptions</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>CEO approves</b> SOWs above $50K before client signature</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Legal reviews</b> MSA in place before SOW is countersigned</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Finance Lead</b> adds to revenue forecast and invoicing schedule</div></div>
+          <div class="gate-item"><span class="gate-badge gb-block">Block</span><div class="gate-txt">Do not start any delivery work before SOW is <b>countersigned by client</b> — even if client says "just get started"</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STAGE 4: KICK-OFF
+  ══════════════════════════════════════ -->
+  <div class="stage" id="s4">
+    <div class="stage-header">
+      <div class="stage-num" style="background:#0a6558">04</div>
+      <div class="stage-meta">
+        <div class="stage-title">Project Kick-off</div>
+        <div class="stage-sub">Set the tone, align on process, and unblock all dependencies before a single line of code is written</div>
+        <span class="stage-duration">⏱ 3–5 days</span>
+      </div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#0a6558"></span>Kick-off meeting agenda</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">1</div>
+            <div class="act-text">Introductions — client team meets DS team. PM, Practice Lead, Sr Dev introduced. <div class="act-owner">PM facilitates</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">2</div>
+            <div class="act-text">SOW walkthrough — review scope, out-of-scope, and assumptions with client. Confirm shared understanding. <div class="act-owner">PM + Practice Lead</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">3</div>
+            <div class="act-text">Communication cadence agreed — weekly status call day/time, Slack channel or email, escalation path. <div class="act-owner">PM locks in and sends calendar invites</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">4</div>
+            <div class="act-text">Access provisioning checklist handed to client — Salesforce org, MuleSoft env, data files, SME availability. <div class="act-owner">Practice Lead defines · PM chases</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">5</div>
+            <div class="act-text">Sprint 1 backlog confirmed — first two weeks of work defined, story points agreed. <div class="act-owner">Practice Lead + Sr Dev</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#0a6558"></span>ARB gate (Architecture Review Board)</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">A</div>
+            <div class="act-text"><b>Delivery Head/SA runs the ARB</b> — formal review of solution design before build begins. Internal DS meeting, not client-facing. <div class="act-owner">Delivery Head/SA chairs · Practice Lead presents</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">R</div>
+            <div class="act-text">Reference architecture reviewed — does the proposed design follow DS standards? Naming conventions, error handling, logging, security. <div class="act-owner">Delivery Head/SA + Practice Lead + Sr Dev</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">O</div>
+            <div class="act-text">Output: ARB sign-off document — written approval or list of changes required before build can start. <div class="act-owner">Delivery Head/SA signs off</div></div>
+          </li>
+        </ul>
+        <div class="owner-block" style="background:var(--teal-lt)">
+          <div class="ob-label" style="color:var(--teal)">Roles active</div>
+          <div class="ob-roles">
+            <span class="role-tag rt-dh">Delivery Head/SA</span>
+            <span class="role-tag rt-pl">Practice Lead</span>
+            <span class="role-tag rt-pm">Project Mgr</span>
+            <span class="role-tag rt-sd">Sr Dev</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card gate-card">
+        <div class="card-title">Stage exit — before build starts</div>
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>ARB signed off</b> by Delivery Head/SA — solution design approved</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>All access provisioned</b> — dev org, integration endpoints, test data available</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Jira board set up</b> with Sprint 1 backlog, story points, assignees</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Communication cadence</b> confirmed and calendar invites sent</div></div>
+          <div class="gate-item"><span class="gate-badge gb-block">Block</span><div class="gate-txt">No access = no build. <b>PM escalates to client sponsor</b> if access not received within 3 business days of kick-off</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STAGE 5: DELIVERY
+  ══════════════════════════════════════ -->
+  <div class="stage" id="s5">
+    <div class="stage-header">
+      <div class="stage-num" style="background:#085041">05</div>
+      <div class="stage-meta">
+        <div class="stage-title">Delivery (Build Sprints)</div>
+        <div class="stage-sub">The execution engine — structured, standards-governed, and transparent to the client at all times</div>
+        <span class="stage-duration">⏱ SMB 4–8 weeks · Mid-Market 8–16 weeks</span>
+      </div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#085041"></span>Sprint rhythm (every 2 weeks)</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">M</div>
+            <div class="act-text"><b>Monday — Sprint planning</b>: Practice Lead breaks backlog into tasks. Sr Dev estimates. Freshers assigned to low-risk items. <div class="act-owner">Practice Lead + Sr Dev</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">D</div>
+            <div class="act-text"><b>Daily — Standup (15 min)</b>: what did I do, what will I do, any blockers. PM listens. Blockers escalated same day. <div class="act-owner">Practice Lead runs · PM logs blockers</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">PR</div>
+            <div class="act-text"><b>Continuous — PR review</b>: every pull request reviewed by Sr Dev before merge. No direct commits to main branch. <div class="act-owner">Sr Dev mandatory · Practice Lead for complex PRs</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">W</div>
+            <div class="act-text"><b>Weekly — Client status call</b>: PM presents progress, risks, next steps. 30 min max. Status report sent same day. <div class="act-owner">PM facilitates · Practice Lead answers technical Qs</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">E</div>
+            <div class="act-text"><b>End of sprint — Demo + review</b>: show working functionality to client. Capture feedback. Adjust next sprint if needed. <div class="act-owner">Practice Lead demos · PM manages client expectations</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#085041"></span>Quality standards — non-negotiable</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">C</div>
+            <div class="act-text"><b>Coding standards</b>: DS naming conventions, error handling patterns, and logging standards applied on every file. <div class="act-owner">Defined by Delivery Head/SA · enforced by Practice Lead</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">V</div>
+            <div class="act-text"><b>Version control</b>: Git branching strategy — feature branches, PR to dev, promote to staging, never direct to prod. <div class="act-owner">Practice Lead sets up · Sr Dev enforces</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">T</div>
+            <div class="act-text"><b>Unit testing</b>: Developer writes unit tests for every component built. Minimum coverage defined by Delivery Head/SA per practice. <div class="act-owner">Dev/Fresher writes · Sr Dev reviews</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--teal-lt);color:var(--teal)">D</div>
+            <div class="act-text"><b>Documentation</b>: every flow, API, and integration documented as built — not retrospectively. <div class="act-owner">Dev/Fresher documents · Practice Lead reviews</div></div>
+          </li>
+        </ul>
+        <div class="esc-card" style="margin-top:14px">
+          <div class="esc-title">Escalation paths</div>
+          <div class="esc-list">
+            <div class="esc-item"><span class="esc-lv">L1</span>Technical blocker → Practice Lead resolves same day</div>
+            <div class="esc-item"><span class="esc-lv">L2</span>Scope creep request → PM logs, VP Alliances prices change, CEO approves if >20% uplift</div>
+            <div class="esc-item"><span class="esc-lv">L3</span>Client unhappy with delivery → Delivery Head/SA joins next call within 24hr</div>
+            <div class="esc-item"><span class="esc-lv">L4</span>Project at risk → CEO informed, VP Alliances manages partner relationship</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card gate-card">
+        <div class="card-title">Delivery stage gates</div>
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-badge gb-pass">Per PR</span><div class="gate-txt"><b>Code review</b> by Sr Dev — no code merges without review. Practice Lead for high-risk changes.</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Per Sprint</span><div class="gate-txt"><b>Sprint demo</b> to client — working functionality shown, feedback captured, Jira updated</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Weekly</span><div class="gate-txt"><b>Status report</b> sent to client by PM — RAG status, progress %, risks, next steps</div></div>
+          <div class="gate-item"><span class="gate-badge gb-warn">Mid-project</span><div class="gate-txt"><b>Delivery Head/SA checkpoint</b> on projects over 8 weeks — architectural drift check at midpoint</div></div>
+          <div class="gate-item"><span class="gate-badge gb-block">Block</span><div class="gate-txt">No promotion to staging or UAT environment without <b>Practice Lead sign-off</b> that sprint is complete</div></div>
+        </div>
+        <div style="margin-top:14px">
+          <div class="ob-label" style="color:rgba(255,255,255,.4)">Roles active in delivery</div>
+          <div class="ob-roles" style="margin-top:8px">
+            <span class="role-tag rt-dh">Delivery Head/SA</span>
+            <span class="role-tag rt-pl">Practice Lead</span>
+            <span class="role-tag rt-pm">Project Mgr</span>
+            <span class="role-tag rt-sd">Sr Dev</span>
+            <span class="role-tag rt-dev">Dev / Fresher</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STAGE 6: GO-LIVE
+  ══════════════════════════════════════ -->
+  <div class="stage" id="s6">
+    <div class="stage-header">
+      <div class="stage-num" style="background:var(--slate)">06</div>
+      <div class="stage-meta">
+        <div class="stage-title">QA, UAT & Go-Live</div>
+        <div class="stage-sub">Three formal checkpoints before anything touches production — no exceptions</div>
+        <span class="stage-duration">⏱ 1 week</span>
+      </div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:var(--slate)"></span>QA phase (DS internal)</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">1</div>
+            <div class="act-text">Test plan executed against all scope items. Practice Lead signs test coverage is complete. <div class="act-owner">Practice Lead + Sr Dev</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">2</div>
+            <div class="act-text">Defect triage — severity 1 and 2 defects fixed before UAT. Severity 3 logged for post-go-live. <div class="act-owner">Practice Lead triages · Dev/Fresher fixes</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">3</div>
+            <div class="act-text">Regression testing — confirm existing functionality not broken by new changes. <div class="act-owner">Sr Dev + Fresher (good use of fresher time)</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">4</div>
+            <div class="act-text">Delivery Head/SA reviews final build against ARB-approved architecture. Final internal sign-off. <div class="act-owner">Delivery Head/SA</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:var(--slate)"></span>UAT (client-side)</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">U</div>
+            <div class="act-text">UAT environment set up and access given to client's SMEs. PM manages client schedule. <div class="act-owner">PM co-ordinates · Practice Lead supports</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">S</div>
+            <div class="act-text">UAT scripts provided to client — step-by-step test cases matched to agreed scope. <div class="act-owner">Practice Lead writes scripts</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">F</div>
+            <div class="act-text">UAT feedback consolidated by PM. In-scope bugs fixed within 48hr. Out-of-scope items logged as change requests. <div class="act-owner">PM manages · Practice Lead fixes</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">✓</div>
+            <div class="act-text"><b>Client UAT sign-off</b> — written confirmation (email or form) that UAT is complete and client approves go-live. <div class="act-owner">PM collects · VP Alliances notified</div></div>
+          </li>
+        </ul>
+        <div class="owner-block" style="background:var(--slate-lt)">
+          <div class="ob-label" style="color:var(--slate)">Roles active</div>
+          <div class="ob-roles">
+            <span class="role-tag rt-dh">Delivery Head/SA</span>
+            <span class="role-tag rt-pl">Practice Lead</span>
+            <span class="role-tag rt-pm">Project Mgr</span>
+            <span class="role-tag rt-sd">Sr Dev</span>
+            <span class="role-tag rt-dev">Dev / Fresher</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card gate-card">
+        <div class="card-title">Go-live gates — all must pass</div>
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Delivery Head/SA internal sign-off</b> — architecture matches ARB approval, standards met</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Zero Sev-1 or Sev-2 defects</b> open at time of go-live</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Client UAT sign-off</b> received in writing — email acceptable</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Rollback plan documented</b> — if go-live fails, what is the recovery path and who executes?</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Finance milestone triggered</b> — PM notifies Finance Lead to issue milestone invoice on go-live day</div></div>
+          <div class="gate-item"><span class="gate-badge gb-block">Block</span><div class="gate-txt">No go-live without all five above. If client pressures to skip — <b>VP Alliances manages the conversation, not the PM.</b></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       STAGE 7: POST GO-LIVE
+  ══════════════════════════════════════ -->
+  <div class="stage" id="s7">
+    <div class="stage-header">
+      <div class="stage-num" style="background:#1e2d45">07</div>
+      <div class="stage-meta">
+        <div class="stage-title">Hypercare, CSAT & Expansion</div>
+        <div class="stage-sub">The project ends but the client relationship does not — this stage determines repeat business and referrals</div>
+        <span class="stage-duration">⏱ 2 weeks hypercare + ongoing relationship</span>
+      </div>
+    </div>
+
+    <div class="stage-grid">
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#1e2d45"></span>2-week hypercare period</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">H</div>
+            <div class="act-text">Practice Lead and Sr Dev remain available for production issues. SLA: Sev-1 response within 2hr, Sev-2 within 8hr. <div class="act-owner">Practice Lead + Sr Dev on standby</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">C</div>
+            <div class="act-text">Daily check-in with client for first 5 business days — short call or message to confirm system is stable. <div class="act-owner">PM</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">D</div>
+            <div class="act-text">Final documentation handover — architecture docs, runbook, admin guide delivered to client. <div class="act-owner">Practice Lead + Sr Dev finalize</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">T</div>
+            <div class="act-text">Knowledge transfer session — train client admin / super-users if not already done during UAT. <div class="act-owner">Practice Lead runs · Sr Dev supports</div></div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="ctdot" style="background:#1e2d45"></span>CSAT, retro & expansion</div>
+        <ul class="act-list">
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">S</div>
+            <div class="act-text"><b>CSAT survey sent within 72hr of go-live</b> — 5 questions max. Target ≥4.2/5. PM sends, VP Alliances reviews result. <div class="act-owner">PM sends · Delivery Head/SA action plan if &lt;4</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">R</div>
+            <div class="act-text"><b>Internal retrospective</b> — what went well, what did not, what changes to process or standards. Feeds back into CoE. <div class="act-owner">PM facilitates · Delivery Head/SA updates CoE playbook</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--slate)">W</div>
+            <div class="act-text"><b>Win logged to partner</b> — VP Alliances updates deal in partner portal. Case study briefing started. <div class="act-owner">VP Alliances + GTM Coordinator</div></div>
+          </li>
+          <li class="act-item">
+            <div class="act-icon" style="background:var(--slate-lt);color:var(--coral)">$</div>
+            <div class="act-text"><b>Expansion conversation</b> — VP Alliances sets a 30-day check-in call to discuss phase 2, managed services, or adjacent practice upsell. <div class="act-owner">VP Alliances leads · PM introduces</div></div>
+          </li>
+        </ul>
+        <div class="owner-block" style="background:var(--slate-lt)">
+          <div class="ob-label" style="color:var(--slate)">Roles active</div>
+          <div class="ob-roles">
+            <span class="role-tag rt-ally">VP Alliances</span>
+            <span class="role-tag rt-dh">Delivery Head/SA</span>
+            <span class="role-tag rt-pl">Practice Lead</span>
+            <span class="role-tag rt-pm">Project Mgr</span>
+            <span class="role-tag rt-sd">Sr Dev</span>
+            <span class="role-tag rt-fin">Finance Lead</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card gate-card">
+        <div class="card-title">Project close — checklist</div>
+        <div class="gate-list">
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>CSAT collected</b> within 72hr — logged in CRM against this project</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Final invoice issued</b> by Finance Lead — all milestones billed and collected</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Win logged in partner portal</b> — revenue attributed to correct partner source</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Internal retro done</b> — findings documented by PM and shared with Delivery Head/SA</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Required</span><div class="gate-txt"><b>Case study initiated</b> — PM briefs GTM Coordinator with project details and outcomes</div></div>
+          <div class="gate-item"><span class="gate-badge gb-pass">Expansion</span><div class="gate-txt"><b>30-day check-in scheduled</b> by VP Alliances — every completed project is a pipeline entry for phase 2</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="f-meta">DataSkate · Project Lifecycle v1.0 · Q2 2026</div>
+  <div class="f-note">7 stages · 4 mandatory quality gates · every role defined per stage · no project moves forward without stage exit criteria met. Applies to all five practices: Salesforce/Agentforce · MuleSoft · Informatica · Workato · Boomi</div>
+</footer>
+
+<script>
+function scrollTo(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.snav-item').forEach((item,i)=>{
+    item.classList.toggle('active', item.getAttribute('onclick').includes(id));
+  });
+}
+
+// Highlight active nav on scroll
+const stages = ['s1','s2','s3','s4','s5','s6','s7'];
+const navItems = document.querySelectorAll('.snav-item');
+const observer = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const idx = stages.indexOf(e.target.id);
+      navItems.forEach((n,i)=>n.classList.toggle('active',i===idx));
+    }
+  });
+},{threshold:0.3});
+stages.forEach(id=>{const el=document.getElementById(id);if(el)observer.observe(el)});
+</script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DataSkate · Finance Lead · Cadence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;--border:#E5E7EB;--role-color:#92400E;--role-lt:#FFFBEB;--role-dk:#92400E;--amber:#D97706;--amber-lt:#FFFBEB;--amber-dk:#92400E;--teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;--coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B1C0A;--green:#15803D;--green-lt:#F0FDF4;--green-dk:#14532D;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+header{background:var(--ink);color:#fff;padding:28px 40px;}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:5px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff}
+.role-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.65)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid var(--border);font-size:11px;color:var(--muted)}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--amber-lt);color:var(--amber-dk)}
+.t-good{background:#EEF1F7;color:#141C2E}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color)}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.freq-head{padding:10px 14px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--amber);border-color:var(--amber);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:600;margin-left:3px}
+.report-box{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.rb-hdr{background:var(--ink);padding:13px 18px}
+.rb-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--amber)}
+.rb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.rb-row{padding:10px 18px;border-bottom:1px solid var(--border);font-size:12px;display:grid;grid-template-columns:140px 1fr;gap:12px}
+.rb-row:last-child{border-bottom:none}
+.rb-label{font-weight:600;color:var(--ink)}
+.rb-val{color:var(--muted);line-height:1.5}
+.alert{border-radius:10px;padding:11px 14px;font-size:12px;line-height:1.5;border-left:3px solid;margin-top:16px}
+.alert-g{background:var(--green-lt);border-color:var(--green);color:var(--green-dk)}
+.alert-r{background:var(--coral-lt);border-color:var(--coral);color:var(--coral-dk)}
+.alert-a{background:var(--amber-lt);border-color:var(--amber);color:var(--amber-dk)}
+.ladder-box{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.lad-hdr{background:var(--amber-lt);padding:11px 18px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;color:var(--amber-dk);letter-spacing:.06em;text-transform:uppercase}
+.lad-row{padding:9px 18px;border-bottom:1px solid var(--border);font-size:12px;display:grid;grid-template-columns:80px 1fr auto;gap:12px;align-items:start}
+.lad-row:last-child{border-bottom:none}
+.lad-day{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--amber-dk)}
+.lad-who{font-size:10px;padding:1px 8px;border-radius:10px;background:var(--amber-lt);color:var(--amber-dk);white-space:nowrap;margin-top:2px;display:inline-block}
+.not-box{background:var(--coral-lt);border:1px solid var(--coral-dk);border-radius:12px;padding:14px 18px;margin-top:20px}
+.not-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--coral-dk);margin-bottom:8px}
+.not-item{display:flex;gap:8px;font-size:12px;color:var(--coral-dk);margin-bottom:6px;line-height:1.4}
+footer{background:var(--ink);padding:14px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="Finance_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">Finance Command Center</a></div>
+<header>
+  <div class="role-tag">Pillar 3 · Finance &amp; Invoicing · Cadence</div>
+  <div class="role-name">Finance Lead</div>
+  <div class="role-sub">Invoicing · Collections · Payroll · Monthly close · SOX controls · Reports to Admin Head · DSO ≤30 days is the primary KPI</div>
+  <div class="kpi-bar">
+    <span class="kpi-chip">Invoice ≤24hr of PM trigger</span>
+    <span class="kpi-chip">DSO target ≤30 days</span>
+    <span class="kpi-chip">Monthly close by 3rd</span>
+    <span class="kpi-chip">Zero late payroll runs</span>
+    <span class="kpi-chip">Friday 12pm financial RAG</span>
+  </div>
+</header>
+<main>
+<div class="legend">Task tiers: &nbsp;<span class="tb t-must">Must</span>&nbsp;<span class="tb t-good">Good</span>&nbsp;<span class="tb t-nice">Nice</span>&nbsp;<span class="tb t-self">Self</span>&nbsp;<span class="tb t-cross">Cross-dept</span></div>
+
+<!-- WHAT YOU RECEIVE -->
+<div class="section"><div class="sec-title">📥 What you receive</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">Invoice triggers</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">PM invoice trigger — milestone, client, amount per SOW, evidence attached <span class="proc-ref">F01</span></div><div class="task-sub">Must arrive within 24hr of client milestone sign-off. Finance issues within 24hr of receiving.</div><div class="task-tool">🛠 Notion task from PM · D13 (P2) webhook</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">System alert if PM misses 24hr trigger — escalate to Admin Head, not to PM directly <span class="proc-ref">F01</span></div><div class="task-sub">Finance does not chase PM. Finance tells Admin Head. Admin Head addresses PM.</div><div class="task-tool">🛠 Notion overdue alert</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Headcount / payroll</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">New hire payroll setup — notification D-5 before start date with bank details and salary <span class="proc-ref">F04</span></div><div class="task-sub">Received from Admin Head on offer countersign</div><div class="task-tool">🛠 Secure form from new hire · Notion notification</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Exit payroll notification — last day confirmed, final settlement due within 7 days <span class="proc-ref">H06</span></div><div class="task-sub">Received from Admin Head on exit confirmation</div><div class="task-tool">🛠 Notion exit task from Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">HR headcount changes each month — leaves, new starts, exits for payroll accuracy <span class="proc-ref">F04</span></div><div class="task-sub">Received from HR Manager by payroll cut-off date</div><div class="task-tool">🛠 Notion monthly payroll confirmation from HR</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Reimbursements &amp; expenses</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Cert reimbursement task from EC — employee, cert, amount, receipt <span class="proc-ref">E03</span></div><div class="task-sub">Pay within 5 business days of receiving</div><div class="task-tool">🛠 Notion task from EC</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Contractor invoices — received by agreed cut-off date each month <span class="proc-ref">F04</span></div><div class="task-sub">Finance holds payment if invoice is late — does not chase contractor without Admin Head direction</div><div class="task-tool">🛠 Email / accounting tool</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+</div></div>
+
+<!-- WHAT YOU DO -->
+<div class="section"><div class="sec-title">⚡ What you do</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">Daily</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Check invoice trigger queue — any PM trigger received today that needs an invoice issued within 24hr <span class="proc-ref">F01</span></div><div class="task-tool">🛠 Accounting tool + Notion · 5 min</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Check DSO dashboard — any invoice crossing Day 15 today? Trigger first chase same day. <span class="proc-ref">F02</span></div><div class="task-tool">🛠 Accounting tool overdue view · 5 min</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Log any payment received — mark invoice paid, update DSO tracker, note date <span class="proc-ref">F01</span></div><div class="task-tool">🛠 Accounting tool · on bank notification</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Weekly</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">FRIDAY by 12pm: Send financial RAG to Admin Head — invoices out, collected, DSO, overdue, any flag</div><div class="task-sub">5 lines max. RAG per domain. Admin Head uses for CEO 3pm briefing.</div><div class="task-tool">🛠 Accounting tool summary → Slack to Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Collections ladder check — any invoice at Day 22, 30, 37? Execute correct escalation step. <span class="proc-ref">F02</span></div><div class="task-sub">Day 22 = second email. Day 30 = flag to Admin Head. Day 37 = brief CEO via Admin Head.</div><div class="task-tool">🛠 Accounting tool · overdue aging report</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Cert reimbursements — any claims from EC pending more than 3 days? Process by Day 5. <span class="proc-ref">E03</span></div><div class="task-tool">🛠 Notion reimbursement queue</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Payroll prep — D-3 before pay date: lock payroll, confirm headcount with HR, send to Admin Head for approval <span class="proc-ref">F04</span></div><div class="task-tool">🛠 Payroll tool · Admin Head approves before release</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Monthly</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Monthly close — books closed end of month. Report to Admin Head by 3rd. <span class="proc-ref">F03</span></div><div class="task-sub">P&amp;L summary · DSO actual · cost vs budget · cash position. 1 page.</div><div class="task-tool">🛠 Accounting tool month-end close · Notion report template</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">SOX controls evidence update — quarterly. Segregation of duties, access log, invoice matching evidence. <span class="proc-ref">L05</span></div><div class="task-tool">🛠 Notion SOX controls folder · quarterly</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Tool cost per head report — cost of each tool divided by active users. Any tool over threshold? <span class="proc-ref">F05</span></div><div class="task-sub">Monthly calculation. Flag outliers to Admin Head.</div><div class="task-tool">🛠 Accounting tool + tool admin dashboards</div></div><span class="tb2 t-good">Good</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Finance process improvement — is there any invoice, payment, or reporting step that can be automated?</div><div class="task-tool">🛠 Notion ops log</div></div><span class="tb2 t-nice">Nice</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">1 finance article or course — accounting, GAAP/Ind AS, tax, fintech tools</div><div class="task-tool">🛠 ICAI / Coursera / CFI</div></div><span class="tb2 t-self">Self</span></div>
+</div></div>
+</div></div>
+
+<!-- COLLECTIONS LADDER -->
+<div class="section"><div class="sec-title">💰 Collections escalation ladder — execute without asking</div>
+<div class="ladder-box">
+  <div class="lad-hdr">Invoice unpaid — Finance executes this ladder automatically</div>
+  <div class="lad-row"><div><div class="lad-day">Day 15</div><span class="lad-who">Finance</span></div><div style="font-size:12px;line-height:1.5">Polite email to client billing contact. Reference invoice number. Attach PDF. Confirm bank details. CC: nobody yet.</div><div style="font-size:10px;color:var(--muted)">Accounting tool auto-flag</div></div>
+  <div class="lad-row"><div><div class="lad-day">Day 22</div><span class="lad-who">Finance</span></div><div style="font-size:12px;line-height:1.5">Follow-up email. CC client project lead. Notify Admin Head. Tone: firm, professional, not aggressive.</div><div style="font-size:10px;color:var(--muted)">Notify Admin Head same day</div></div>
+  <div class="lad-row"><div><div class="lad-day">Day 30</div><span class="lad-who">Admin Head</span></div><div style="font-size:12px;line-height:1.5">Finance flags to Admin Head. Admin Head contacts client finance lead directly. Finance does not escalate beyond Admin Head — Admin Head owns Day 30+.</div><div style="font-size:10px;color:var(--muted)">Finance brief Admin Head · then Admin Head takes over</div></div>
+  <div class="lad-row"><div><div class="lad-day">Day 37</div><span class="lad-who">Admin Head → CEO</span></div><div style="font-size:12px;line-height:1.5">If still unpaid, Admin Head briefs CEO. CEO decides: call client exec, or escalate to legal. Finance provides Admin Head with full invoice history and correspondence for the brief.</div><div style="font-size:10px;color:var(--muted)">Finance prepares brief pack for Admin Head</div></div>
+  <div class="lad-row"><div><div class="lad-day">Day 45</div><span class="lad-who">CEO</span></div><div style="font-size:12px;line-height:1.5">CEO client exec call — once only. Finance takes back collections after this call. If still unpaid after CEO call, Admin Head engages retained counsel (L01). Finance provides legal pack.</div><div style="font-size:10px;color:var(--muted)">Finance supports. CEO acts.</div></div>
+</div>
+</div>
+
+<!-- WHAT YOU SEND UP -->
+<div class="section"><div class="sec-title">📤 What you send up</div>
+<div class="report-box">
+  <div class="rb-hdr"><div class="rb-title">Friday 12pm Financial RAG — to Admin Head · 5 lines · no raw data · RAG per domain</div><div class="rb-sub">Admin Head uses this to populate the Finance section of the Friday 3pm CEO briefing.</div></div>
+  <div class="rb-row"><div class="rb-label">Invoices this week</div><div class="rb-val">Issued: £X · Collected: £Y · Overdue: list any invoice by day count. DSO average: X days vs 30-day target.</div></div>
+  <div class="rb-row"><div class="rb-label">DSO status</div><div class="rb-val">GREEN (≤30d) / AMBER (31–37d, Admin Head managing) / RED (&gt;38d average or Day 45+ single invoice — Admin Head include in CEO briefing).</div></div>
+  <div class="rb-row"><div class="rb-label">Payroll</div><div class="rb-val">On track / completed this month. Any adjustment needed (new hire, exit, adjustment)?</div></div>
+  <div class="rb-row"><div class="rb-label">Cost vs budget</div><div class="rb-val">On track / over by X%. Any unexpected cost this week.</div></div>
+  <div class="rb-row"><div class="rb-label">Flags &amp; asks</div><div class="rb-val">Anything needing Admin Head decision. If none — "No flags."</div></div>
+</div>
+<div class="report-box">
+  <div class="rb-hdr"><div class="rb-title">Monthly close report — to Admin Head by 3rd of month · 1 page</div><div class="rb-sub">Admin Head synthesises into Finance section of monthly CEO briefing.</div></div>
+  <div class="rb-row"><div class="rb-label">Revenue</div><div class="rb-val">Recognised this month vs target. Variance %.</div></div>
+  <div class="rb-row"><div class="rb-label">Cash &amp; DSO</div><div class="rb-val">Cash position. DSO actual for month. Open invoices by age.</div></div>
+  <div class="rb-row"><div class="rb-label">Costs</div><div class="rb-val">Operating costs vs budget. Top 3 variances explained.</div></div>
+  <div class="rb-row"><div class="rb-label">Payroll</div><div class="rb-val">Total payroll this month. PF/ESI/TDS filed? Any issue?</div></div>
+  <div class="rb-row"><div class="rb-label">Controls</div><div class="rb-val">SOX controls evidence updated? Any gap? (L05)</div></div>
+</div>
+<div class="alert alert-r"><strong>Bypass Friday — notify Admin Head same day:</strong> Invoice unpaid at Day 30 (Admin Head must take over) · Any payment received that doesn't match an invoice · Payroll system error detected · SOX control breach identified.</div>
+</div>
+
+<div class="not-box">
+<div class="not-title">Finance Lead Must NOT Do These</div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Chase PM for invoice triggers — the system alerts. Finance escalates to Admin Head if PM misses SLA.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Issue invoices without PM milestone confirmation — issuing against unconfirmed milestones is a compliance and relationship risk.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Contact client directly after Day 30 — Admin Head takes over collections at Day 30. Finance supports.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Approve own expenses — Admin Head approves Finance Lead expenses. Segregation of duties.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Make tool purchase decisions — Admin Head approves all tools. Finance pays and tracks.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Release payroll without Admin Head approval — D-3 lock and review is mandatory before any payroll run.</div></div>
+</div>
+</main>
+<footer><span>DataSkate · Finance Lead Cadence · Q2 2026</span><span>Pillar 3 · Reports to Admin Head · DSO ≤30 days is the primary KPI</span></footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

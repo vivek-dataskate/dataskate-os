@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>DataSkate · HR Manager · Cadence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--ink:#111827;--bg:#F9FAFB;--white:#fff;--muted:#9CA3AF;--border:#E5E7EB;--role-color:#9B1C0A;--role-lt:#FDF0ED;--role-dk:#9B1C0A;--amber:#D97706;--amber-lt:#FFFBEB;--amber-dk:#92400E;--teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;--coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B1C0A;--green:#15803D;--green-lt:#F0FDF4;--green-dk:#14532D;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+header{background:var(--ink);color:#fff;padding:28px 40px;}
+.role-tag{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.4);margin-bottom:5px}
+.role-name{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:#fff}
+.role-sub{font-size:12px;color:rgba(255,255,255,.45);margin-top:4px}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.kpi-chip{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.65)}
+main{max-width:1100px;margin:0 auto;padding:32px 40px}
+.legend{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:20px;padding:10px 14px;background:var(--white);border-radius:8px;border:1px solid var(--border);font-size:11px;color:var(--muted)}
+.tb{font-size:9px;padding:2px 8px;border-radius:10px}
+.t-must{background:var(--amber-lt);color:var(--amber-dk)}
+.t-good{background:#EEF1F7;color:#141C2E}
+.t-nice{background:#FFFBEB;color:#D97706}
+.t-self{background:#EDE9FE;color:#6D28D9}
+.t-brand{background:#FDF0ED;color:#E8472A}
+.t-cross{background:#E6F5F2;color:#0D7A6B}
+.section{margin-bottom:32px}
+.sec-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--ink);margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid var(--role-color);display:flex;align-items:center;gap:8px}
+.freq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.freq-col{background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.freq-head{padding:10px 14px;border-bottom:1px solid #F3F4F6}
+.freq-badge{font-size:10px;font-weight:500;padding:2px 10px;border-radius:20px}
+.freq-body{padding:8px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 6px;border-bottom:1px solid #F9FAFB}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid #D1D5DB;flex-shrink:0;margin-top:2px;cursor:pointer;transition:all .15s}
+.cb.checked{background:var(--amber);border-color:var(--amber);position:relative}
+.cb.checked::after{content:'✓';position:absolute;top:-1px;left:2px;font-size:10px;color:#fff;font-weight:700}
+.task-body{flex:1}
+.task-title{font-size:12px;color:var(--ink);line-height:1.4}
+.task-sub{font-size:10px;color:var(--muted);margin-top:2px}
+.task-tool{font-size:10px;color:#6B7280;margin-top:3px}
+.tb2{font-size:9px;padding:1px 7px;border-radius:10px;flex-shrink:0;margin-top:3px;white-space:nowrap}
+.proc-ref{font-size:9px;padding:1px 6px;border-radius:4px;background:var(--role-lt);color:var(--role-dk);font-weight:600;margin-left:3px}
+.report-box{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px}
+.rb-hdr{background:var(--ink);padding:13px 18px}
+.rb-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--amber)}
+.rb-sub{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.rb-row{padding:10px 18px;border-bottom:1px solid var(--border);font-size:12px;display:grid;grid-template-columns:140px 1fr;gap:12px}
+.rb-row:last-child{border-bottom:none}
+.rb-label{font-weight:600;color:var(--ink)}
+.rb-val{color:var(--muted);line-height:1.5}
+.alert{border-radius:10px;padding:11px 14px;font-size:12px;line-height:1.5;border-left:3px solid;margin-top:16px}
+.alert-g{background:var(--green-lt);border-color:var(--green);color:var(--green-dk)}
+.alert-r{background:var(--coral-lt);border-color:var(--coral);color:var(--coral-dk)}
+.alert-a{background:var(--amber-lt);border-color:var(--amber);color:var(--amber-dk)}
+.not-box{background:var(--coral-lt);border:1px solid var(--coral-dk);border-radius:12px;padding:14px 18px;margin-top:20px}
+.not-title{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--coral-dk);margin-bottom:8px}
+.not-item{display:flex;gap:8px;font-size:12px;color:var(--coral-dk);margin-bottom:6px;line-height:1.4}
+footer{background:var(--ink);padding:14px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:40px}
+</style>
+</head>
+<body>
+<div style="background:#09090E;padding:8px 40px;display:flex;gap:16px;align-items:center;border-bottom:1px solid #1E2235;position:sticky;top:0;z-index:999"><a href="../DataSkate_Master_CommandCenter.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#F59E0B;text-decoration:none">⌂ Master Hub</a><span style="color:#1E2235;font-size:14px">·</span><a href="HR_Command_Center.html" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none">HR Command Center</a></div>
+<header>
+  <div class="role-tag">Pillar 3 · HR &amp; Talent · Cadence</div>
+  <div class="role-name">HR Manager</div>
+  <div class="role-sub">Sourcing · Screening · Compliance · Day 1 readiness · Reports to Admin Head · DH defines what to hire — HR executes</div>
+  <div class="kpi-bar">
+    <span class="kpi-chip">Longlist in 5 business days</span>
+    <span class="kpi-chip">Candidate response ≤24hr</span>
+    <span class="kpi-chip">Day 1 — 100% tools live</span>
+    <span class="kpi-chip">Zero statutory filing delays</span>
+    <span class="kpi-chip">Friday 12pm pipeline report</span>
+  </div>
+</header>
+<main>
+<div class="legend">Task tiers: &nbsp;<span class="tb t-must">Must</span>&nbsp;<span class="tb t-good">Good</span>&nbsp;<span class="tb t-nice">Nice</span>&nbsp;<span class="tb t-self">Self</span>&nbsp;<span class="tb t-brand">Brand</span>&nbsp;<span class="tb t-cross">Cross-dept</span></div>
+
+<!-- WHAT YOU RECEIVE -->
+<div class="section"><div class="sec-title">📥 What you receive</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">On hiring trigger</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Approved role brief from Admin Head — DH spec, salary band, seniority, cert requirements <span class="proc-ref">H01</span></div><div class="task-sub">Clock starts on 5-day longlist SLA from receipt</div><div class="task-tool">🛠 Notion role brief · Slack from Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">DH technical requirements — specific stack, cert level, seniority detail <span class="proc-ref">H01</span></div><div class="task-sub">HR uses this for screen criteria only — not to make technical decisions</div><div class="task-tool">🛠 Notion brief · DH notes</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">During hiring pipeline</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">DH shortlist decision — approved 3–5 candidates to interview, with notes on why <span class="proc-ref">H02</span></div><div class="task-sub">Received within 48hr of longlist submission</div><div class="task-tool">🛠 Notion longlist review · Slack from DH</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">DH hire/no-hire decision — within 48hr of technical round <span class="proc-ref">H03</span></div><div class="task-sub">HR communicates to candidate within 48hr of DH decision</div><div class="task-tool">🛠 Notion interview tracker · Slack from DH</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Reference check responses — 2 references per selected candidate <span class="proc-ref">H04</span></div><div class="task-sub">Before offer is sent</div><div class="task-tool">🛠 Email / phone · logged in Notion personnel file</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Ongoing / compliance</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Resignation received from any employee <span class="proc-ref">H06</span></div><div class="task-sub">Notify Admin Head same hour for senior roles. Same day for all others.</div><div class="task-tool">🛠 In person or email → escalate to Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Annual compliance triggers — PF/ESI filing, POSH annual report, audit schedule <span class="proc-ref">L07</span></div><div class="task-tool">🛠 Calendar reminders · Notion compliance tracker</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+</div></div>
+
+<!-- WHAT YOU DO -->
+<div class="section"><div class="sec-title">⚡ What you do</div>
+<div class="freq-grid">
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:var(--amber-lt);color:var(--amber-dk)">Daily — when roles are open</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Source new profiles — LinkedIn Recruiter, Naukri, referrals. Min 5 new profiles reviewed per open role. <span class="proc-ref">H02</span></div><div class="task-tool">🛠 LinkedIn Recruiter · Naukri</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Respond to all candidate messages within 24hr — no candidate left waiting <span class="proc-ref">H03</span></div><div class="task-tool">🛠 Email / LinkedIn · calendar invites via Google Cal</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Update hiring pipeline in Notion — status of every candidate in every stage <span class="proc-ref">H02/H03</span></div><div class="task-tool">🛠 Notion hiring tracker</div></div><span class="tb2 t-must">Must</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Weekly</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">FRIDAY by 12pm: Send hiring pipeline + attrition RAG to Admin Head</div><div class="task-sub">Open roles · stage · timeline · any attrition signal or exit in progress</div><div class="task-tool">🛠 Notion tracker → Slack to Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">DH longlist submitted within 5 days of brief — self-check on SLA <span class="proc-ref">H02</span></div><div class="task-sub">If behind: flag to Admin Head same day, not Friday</div><div class="task-tool">🛠 Notion brief receipt date vs today</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Schedule any pending technical rounds within 3 days of DH shortlist approval <span class="proc-ref">H03</span></div><div class="task-tool">🛠 Google Calendar · DH availability check</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Check Day 1 readiness for any hire starting next week — T01 complete by D-2? <span class="proc-ref">H05</span></div><div class="task-tool">🛠 Notion T01 checklist · Admin Head confirms</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Pulse check — any team member showing disengagement signals? Report to Admin Head. <span class="proc-ref">H06</span></div><div class="task-sub">Informal observation. If yes: flag to Admin Head, not to the team member's line manager directly.</div><div class="task-tool">🛠 Observation · Slack DM to Admin Head</div></div><span class="tb2 t-good">Good</span></div>
+</div></div>
+<div class="freq-col"><div class="freq-head"><span class="freq-badge" style="background:#EEF1F7;color:#141C2E">Monthly / compliance</span></div><div class="freq-body">
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">PF/ESI/TDS filing check — all statutory obligations current for this month <span class="proc-ref">L07</span></div><div class="task-sub">Coordinate with Finance Lead for TDS and salary data</div><div class="task-tool">🛠 Government portal + Finance</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Employee file audit — spot check 2–3 files for completeness (offer, NDA, signed policies) <span class="proc-ref">L07</span></div><div class="task-tool">🛠 Notion personnel files</div></div><span class="tb2 t-good">Good</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Annual POSH: confirm ICC constituted, report filed by Jan 31 each year <span class="proc-ref">L07</span></div><div class="task-tool">🛠 Calendar annual reminder · file with Admin Head</div></div><span class="tb2 t-must">Must</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">HR process improvement — identify 1 thing to make hiring faster or compliance cleaner</div><div class="task-tool">🛠 Notion HR retrospective note</div></div><span class="tb2 t-nice">Nice</span></div>
+<div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Complete 1 HR course or read 2 articles on hiring, employment law, or talent strategy</div><div class="task-tool">🛠 SHRM / LinkedIn Learning / NASSCOM</div></div><span class="tb2 t-self">Self</span></div>
+</div></div>
+</div></div>
+
+<!-- WHAT YOU SEND UP -->
+<div class="section"><div class="sec-title">📤 What you send up — Friday 12pm report</div>
+<div class="report-box">
+  <div class="rb-hdr"><div class="rb-title">Friday 12pm Report to Admin Head — HR Pipeline + Attrition RAG · 5 lines max</div><div class="rb-sub">Admin Head uses this to build the Headcount section of the Friday 3pm CEO briefing. Late = incomplete CEO briefing.</div></div>
+  <div class="rb-row"><div class="rb-label">Open roles</div><div class="rb-val">Role · stage (sourcing / shortlisted / interviews / offer) · days open · on track / at risk.</div></div>
+  <div class="rb-row"><div class="rb-label">Pipeline this week</div><div class="rb-val">Interviews held · decisions pending · offers sent / accepted / declined.</div></div>
+  <div class="rb-row"><div class="rb-label">Attrition signal</div><div class="rb-val">Any resignation received or at-risk signal observed this week. If none — "No attrition signal."</div></div>
+  <div class="rb-row"><div class="rb-label">Compliance status</div><div class="rb-val">Statutory filings current · any employee file gap · any POSH flag. If clean — "Compliance clear."</div></div>
+  <div class="rb-row"><div class="rb-label">Flags &amp; asks</div><div class="rb-val">Anything needing Admin Head decision (e.g. DH not reviewing longlist · role open 3 weeks). If none — "No flags."</div></div>
+</div>
+<div class="alert alert-r"><strong>Bypass Friday for these — notify Admin Head same hour:</strong> Any senior resignation (Practice Head or above) · Any statutory compliance breach discovered · Any candidate harassment complaint received.</div>
+<div class="alert alert-a"><strong>Bypass Friday for these — notify Admin Head same day:</strong> Role open &gt;3 weeks with no approved shortlist · Candidate accepted offer elsewhere because of slow feedback · Day 1 readiness failure (tool not live).</div>
+</div>
+
+<div class="not-box">
+<div class="not-title">HR Manager Must NOT Do These</div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Make technical hire/no-hire decisions — DH decides technical fit. HR decides process fit.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Post roles or source against an unapproved brief — wait for Admin Head approval before any outreach.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Communicate salary offers without Admin Head and CEO approval — pre-approved band only.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Conduct performance management independently — HR supports and documents. Line managers own.</div></div>
+<div class="not-item"><span style="font-weight:700;flex-shrink:0">✕</span><div>Wait for Friday to tell Admin Head about a resignation — same hour for senior, same day for all.</div></div>
+</div>
+</main>
+<footer><span>DataSkate · HR Manager Cadence · Q2 2026</span><span>Pillar 3 · Reports to Admin Head · DH defines what to hire, HR executes</span></footer>
+<script>function tog(el){el.classList.toggle('checked')}</script>
+</body>
+</html>

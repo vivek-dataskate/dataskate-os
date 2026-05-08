@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>DataSkate — RACI Matrix v3</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-md:#F5C4B3;--coral-dk:#9B2513;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-md:#9FD8CF;--teal-dk:#044038;
+  --slate:#2A3550;--slate-lt:#EEF1F7;--slate-md:#B0BBCF;--slate-dk:#141C2E;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-dk:#92400E;
+  --indigo:#4F46E5;--indigo-lt:#EEF2FF;--indigo-dk:#3730A3;
+  --ink:#111827;--muted:#6B7280;--border:#E5E7EB;--white:#FFFFFF;--bg:#F8F7F4;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh}
+header{background:var(--ink);padding:32px 40px;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:var(--coral);opacity:.1}
+.logo{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:10px}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(20px,3vw,36px);font-weight:800;color:#fff;line-height:1.1;position:relative;z-index:1}
+header h1 span{color:var(--coral)}
+.header-meta{margin-top:8px;font-size:12px;color:rgba(255,255,255,.35);line-height:1.7;max-width:500px}
+.header-counts{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px}
+.hcount{font-size:10px;padding:3px 10px;border-radius:20px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6)}
+
+.controls{background:var(--white);border-bottom:2px solid var(--border);padding:12px 40px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;position:sticky;top:0;z-index:100}
+.legend{display:flex;gap:12px;flex-wrap:wrap}
+.leg{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:5px;font-size:10px;font-weight:700;font-family:'Syne',sans-serif;flex-shrink:0}
+.pill-R{background:#FDE8E4;color:#9B1C0A}
+.pill-A{background:#EDE9FE;color:#4C1D95}
+.pill-C{background:#D1FAE5;color:#064E3B}
+.pill-I{background:#F1F5F9;color:#334155}
+.divider{width:1px;height:24px;background:var(--border);flex-shrink:0}
+.filters{display:flex;gap:5px;flex-wrap:wrap}
+.fbtn{padding:4px 12px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:all .15s}
+.fbtn:hover{border-color:var(--ink);color:var(--ink)}
+.fbtn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.table-wrap{overflow-x:auto;padding:24px 40px 60px}
+table{width:100%;border-collapse:collapse;font-size:11px;min-width:1100px}
+
+/* PILLAR GROUP HEADER */
+tr.grp-head td{padding:7px 12px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--white)}
+tr.grp-head.g-p1 td{background:var(--coral-dk)}
+tr.grp-head.g-p2 td{background:var(--teal-dk)}
+tr.grp-head.g-p3 td{background:var(--slate-dk)}
+tr.grp-head.g-cx td{background:#374151}
+
+/* SEC HEADER ROW */
+tr.sec-head td{padding:8px 12px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--white)}
+tr.sec-head.s-p1 td{background:var(--coral);opacity:.9}
+tr.sec-head.s-p2 td{background:var(--teal);opacity:.9}
+tr.sec-head.s-p3 td{background:var(--slate)}
+tr.sec-head.s-cx td{background:#4B5563}
+
+/* COL HEADERS */
+thead tr th{
+  padding:7px 6px;font-family:'Syne',sans-serif;font-size:9px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);border-bottom:2px solid var(--border);
+  white-space:nowrap;text-align:center;background:var(--bg);position:sticky;top:49px;z-index:50
+}
+thead tr th:first-child{text-align:left;min-width:240px;position:sticky;top:49px;left:0;z-index:60;background:var(--bg);padding-left:12px}
+.pillar-bar{height:3px;border-radius:1px;margin-top:3px}
+
+/* PILLAR COLOR TOPS */
+th.h-ceo{border-top:3px solid var(--amber)}
+th.h-p1{border-top:3px solid var(--coral)}
+th.h-p2{border-top:3px solid var(--teal)}
+th.h-p3{border-top:3px solid var(--slate)}
+
+/* DATA ROWS */
+tbody tr.data-row td{
+  padding:7px 8px;border-bottom:1px solid var(--border);
+  text-align:center;vertical-align:middle;background:var(--white);transition:background .1s
+}
+tbody tr.data-row td:first-child{text-align:left;position:sticky;left:0;z-index:10;background:var(--white);padding-left:12px;font-size:11px;line-height:1.4}
+tbody tr.data-row:hover td{background:#F9FAFB}
+tbody tr.data-row:hover td:first-child{background:#F9FAFB}
+
+.cell{display:flex;gap:2px;justify-content:center;flex-wrap:wrap}
+.hidden{display:none}
+
+/* PILLAR COLUMN GROUPS */
+.col-ceo{background:rgba(217,119,6,.04)}
+.col-p1{background:rgba(232,71,42,.03)}
+.col-p2{background:rgba(13,122,107,.03)}
+.col-p3{background:rgba(42,53,80,.03)}
+
+/* ROLE PILL TAGS IN HEADER */
+.role-pillar{font-size:7px;color:var(--muted);display:block;margin-top:1px;text-transform:none;letter-spacing:0;font-weight:400}
+
+footer{background:var(--ink);padding:16px 40px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-top:24px}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">DataSkate · Operations</div>
+  <h1>RACI <span>Matrix</span> v3</h1>
+  <div class="header-meta">All 14 roles · 3 pillars · 80+ processes mapped. R = Responsible (does the work) · A = Accountable (owns the outcome) · C = Consulted (input required before acting) · I = Informed (kept in loop)</div>
+  <div class="header-counts">
+    <span class="hcount">14 Roles</span>
+    <span class="hcount">3 Pillars</span>
+    <span class="hcount">80+ Processes</span>
+    <span class="hcount">8 Categories</span>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="legend">
+    <span class="leg"><span class="pill pill-R">R</span> Responsible — does the work</span>
+    <span class="leg"><span class="pill pill-A">A</span> Accountable — owns outcome</span>
+    <span class="leg"><span class="pill pill-C">C</span> Consulted — input required</span>
+    <span class="leg"><span class="pill pill-I">I</span> Informed — kept in loop</span>
+  </div>
+  <div class="divider"></div>
+  <div class="filters" id="filters"></div>
+</div>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+  <th>Process / Activity</th>
+  <!-- CEO -->
+  <th class="h-ceo">CEO</th>
+  <!-- Pillar 1 -->
+  <th class="h-p1">VP<br/>Alliances</th>
+  <th class="h-p1">Alliance<br/>Mgr/AE</th>
+  <th class="h-p1">Head of<br/>GTM</th>
+  <th class="h-p1">SDR/<br/>BDR</th>
+  <!-- Pillar 2 -->
+  <th class="h-p2">Delivery<br/>Head/SA</th>
+  <th class="h-p2">Practice<br/>Head</th>
+  <th class="h-p2">Dev<br/>Lead</th>
+  <th class="h-p2">Project<br/>Mgr</th>
+  <th class="h-p2">Developer</th>
+  <th class="h-p2">Fresher</th>
+  <!-- Pillar 3 -->
+  <th class="h-p3">Admin<br/>Head</th>
+  <th class="h-p3">HR<br/>Manager</th>
+  <th class="h-p3">Finance<br/>Lead</th>
+</tr>
+</thead>
+<tbody id="tbody"></tbody>
+</table>
+</div>
+
+<footer>
+  <span>DataSkate · RACI Matrix v3 · 14 roles · 3 pillars · 80+ processes</span>
+  <span>Col index: 0=CEO 1=VP 2=AE 3=GTM 4=SDR 5=DH 6=PH 7=DL 8=PM 9=Dev 10=Fresh 11=Admin 12=HR 13=Finance</span>
+</footer>
+
+<script>
+// Col index: 0=CEO, 1=VP Alliances, 2=Alliance Mgr/AE, 3=Head of GTM, 4=SDR/BDR,
+//            5=Delivery Head/SA, 6=Practice Head, 7=Dev Lead, 8=Project Mgr,
+//            9=Developer, 10=Fresher, 11=Admin Head, 12=HR Manager, 13=Finance Lead
+const COLS = 14;
+
+const sections = [
+  // ── PILLAR 1: Partner Alliance & GTM ──────────────────────────────────────
+  { grp:'p1', grpLabel:'PILLAR 1 — Partner Alliance & GTM', id:'partner', label:'P1A · Partner Relationship & Ecosystem', cls:'s-p1',
+    rows:[
+      {a:'Partner tier strategy & annual plan (5 partners)',        r:[1],    ac:[0],   c:[3,5],   i:[11,13]},
+      {a:'Partner QBR — quarterly business review (exec-to-exec)',  r:[1],    ac:[0],   c:[2],     i:[13]},
+      {a:'Partner PDM / GTM lead relationship — weekly',            r:[1],    ac:[1],   c:[2],     i:[0]},
+      {a:'AE / CAM relationship — individual AE cultivation',       r:[2],    ac:[1],   c:[],      i:[0]},
+      {a:'AE acquisition map — identify 10 AEs per partner',        r:[2],    ac:[1],   c:[3],     i:[0]},
+      {a:'Deal registration in partner portal (same-day)',          r:[2],    ac:[1],   c:[],      i:[0,13]},
+      {a:'MDF request & utilisation — all 5 partners',              r:[1,3],  ac:[0],   c:[],      i:[13]},
+      {a:'Partner tier compliance — hitting program thresholds',    r:[1],    ac:[0],   c:[2],     i:[11]},
+      {a:'New partner evaluation & onboarding decision',            r:[1],    ac:[0],   c:[5,3],   i:[11,13]},
+      {a:'AppExchange listing & content maintenance',               r:[3],    ac:[1],   c:[5],     i:[0]},
+      {a:'Certification roadmap per partner program',               r:[1],    ac:[1],   c:[5,6],   i:[0,12]},
+      {a:'Partner AE activation — 90-day success track',            r:[2,3],  ac:[1],   c:[],      i:[0]},
+      {a:'Named account list from partner AE — monthly',            r:[2],    ac:[1],   c:[3],     i:[4]},
+    ]
+  },
+  { id:'revenue', label:'P1B · Sales & SOW — Lead to Contract', cls:'s-p1',
+    rows:[
+      {a:'Inbound lead qualification (<4hr response)',              r:[2],    ac:[1],   c:[],      i:[0]},
+      {a:'SDR outbound reply routing to AE (<1hr)',                 r:[4],    ac:[3],   c:[],      i:[2]},
+      {a:'Discovery & scoping call (BANT + pain)',                  r:[2,5],  ac:[1],   c:[5],     i:[8]},
+      {a:'Prospect brief to AE before every booked meeting',        r:[4],    ac:[3],   c:[],      i:[2]},
+      {a:'SOW creation & pricing',                                  r:[2],    ac:[1],   c:[5,13],  i:[0]},
+      {a:'SOW minimum enforcement ($5K SMB / $25K MM)',             r:[1],    ac:[0],   c:[13],    i:[5]},
+      {a:'SOW above $50K — final CEO approval',                     r:[1],    ac:[0],   c:[5,13],  i:[]},
+      {a:'Contract & MSA sign-off',                                 r:[13],   ac:[0],   c:[1],     i:[5]},
+      {a:'Revenue forecasting to CEO (weekly)',                     r:[1],    ac:[0],   c:[13],    i:[5]},
+      {a:'CRM hygiene — all activity logged same day',              r:[2],    ac:[1],   c:[],      i:[0,13]},
+      {a:'Pipeline review — VP + AE weekly Monday',                 r:[1,2],  ac:[1],   c:[],      i:[0]},
+      {a:'Existing client expansion / upsell motion',               r:[2,8],  ac:[1],   c:[5],     i:[0]},
+      {a:'Win/loss debrief → objection guide update',               r:[2],    ac:[1],   c:[3],     i:[0]},
+    ]
+  },
+  { id:'gtm', label:'P1C · GTM, Content & Brand', cls:'s-p1',
+    rows:[
+      {a:'Outbound ICP definition & sequence strategy',             r:[3],    ac:[1],   c:[2],     i:[4,0]},
+      {a:'Prospect list building — Apollo/Clay 60+/week',           r:[4],    ac:[3],   c:[],      i:[1]},
+      {a:'Cold email sequences — Instantly management',             r:[4],    ac:[3],   c:[3],     i:[1]},
+      {a:'Cold calling — 15–20 dials/day',                         r:[4],    ac:[3],   c:[],      i:[1]},
+      {a:'Qualifying call — 5 questions before booking',            r:[4],    ac:[3],   c:[],      i:[1]},
+      {a:'SDR weekly review & sequence coaching',                   r:[3],    ac:[3],   c:[],      i:[1]},
+      {a:'Outbound KPI report (weekly to VP Alliances)',            r:[3],    ac:[3],   c:[],      i:[1]},
+      {a:'CEO LinkedIn content — draft, schedule, analytics',       r:[3],    ac:[3],   c:[0],     i:[1]},
+      {a:'VP Alliances LinkedIn content — draft + approve',         r:[3],    ac:[1],   c:[],      i:[]},
+      {a:'Case study & win story — research + write',               r:[3],    ac:[1],   c:[2,8],   i:[0]},
+      {a:'Co-marketing decks & one-pagers for active deals',        r:[3],    ac:[1],   c:[2,5],   i:[0]},
+      {a:'Partner webinar / event — production & logistics',        r:[3],    ac:[1],   c:[],      i:[0]},
+      {a:'CEO newsletter (Beehiiv) — draft + CEO approval',         r:[3],    ac:[0],   c:[],      i:[]},
+      {a:'Content calendar — weekly plan, weekly execution',        r:[3],    ac:[3],   c:[1],     i:[0]},
+      {a:'Competitive intelligence — market + competitor tracking', r:[3],    ac:[1],   c:[5],     i:[0]},
+      {a:'ICP review with VP Alliances (monthly)',                  r:[1,3],  ac:[1],   c:[2,4],   i:[0]},
+      {a:'Sequence audit & rewrite (reply rate <2%)',               r:[4],    ac:[3],   c:[],      i:[1]},
+    ]
+  },
+
+  // ── PILLAR 2: Delivery & CoE ───────────────────────────────────────────────
+  { grp:'p2', grpLabel:'PILLAR 2 — Delivery & CoE', id:'delivery', label:'P2A · Project Delivery', cls:'s-p2',
+    rows:[
+      {a:'Project kick-off & client onboarding (D01)',              r:[8],    ac:[5],   c:[1,6],   i:[0]},
+      {a:'Solution architecture design — ARB gate (D03)',           r:[5],    ac:[5],   c:[6,7],   i:[8,0]},
+      {a:'Sprint planning & task breakdown',                        r:[7],    ac:[6],   c:[9],     i:[5]},
+      {a:'Feature development — daily delivery',                    r:[9,10], ac:[7],   c:[6],     i:[8]},
+      {a:'Code review gate — every pull request',                   r:[7],    ac:[6],   c:[5],     i:[]},
+      {a:'Integration design & platform standards',                 r:[5,7],  ac:[6],   c:[5],     i:[8]},
+      {a:'Test plan creation & execution sign-off',                 r:[7],    ac:[5],   c:[9],     i:[8]},
+      {a:'QA execution & defect triage',                            r:[7,9],  ac:[5],   c:[],      i:[8]},
+      {a:'UAT co-ordination with client (D08)',                     r:[8],    ac:[5],   c:[7],     i:[0]},
+      {a:'Go-live sign-off — DH hard gate (E01)',                   r:[5,6],  ac:[5],   c:[8],     i:[0,1]},
+      {a:'Post go-live hypercare — 2 weeks (E07)',                  r:[7,9],  ac:[8],   c:[],      i:[5]},
+      {a:'Client status report — every Friday (D12)',               r:[8],    ac:[5],   c:[7],     i:[0,1]},
+      {a:'Delivery escalation management (E10)',                    r:[5],    ac:[0],   c:[8,6],   i:[1]},
+      {a:'Retrospective facilitation (E13)',                        r:[8],    ac:[5],   c:[7],     i:[]},
+      {a:'CSAT collection & action plan (E08)',                     r:[8],    ac:[5],   c:[7],     i:[0,1]},
+      {a:'SOW-to-delivery handoff receipt (D01)',                   r:[5,8],  ac:[5],   c:[1],     i:[0]},
+      {a:'Harvest hours logging — daily, all billable staff',       r:[9,10,7],ac:[6],  c:[],      i:[8]},
+      {a:'Budget burn alert at 70% threshold (E12)',                r:[8],    ac:[5],   c:[13],    i:[0]},
+    ]
+  },
+  { id:'coe', label:'P2B · CoE & Quality Standards', cls:'s-p2',
+    rows:[
+      {a:'Coding standards definition & documentation',             r:[5],    ac:[5],   c:[6,7],   i:[0]},
+      {a:'Standards enforcement across all practices',              r:[5],    ac:[5],   c:[6],     i:[0]},
+      {a:'Technology & tooling selection (ARB)',                    r:[5],    ac:[0],   c:[6],     i:[13]},
+      {a:'CoE playbook & template maintenance',                     r:[5],    ac:[5],   c:[6],     i:[]},
+      {a:'Reusable accelerator / IP library',                       r:[5],    ac:[5],   c:[6,7],   i:[0]},
+      {a:'Reference architecture per practice',                     r:[5],    ac:[5],   c:[6],     i:[]},
+      {a:'Utilisation tracking — ≥76% target (E11)',                r:[8],    ac:[5],   c:[13],    i:[0]},
+      {a:'Practice capability deck — strategy doc',                 r:[5],    ac:[0],   c:[1],     i:[11]},
+      {a:'Delivery maturity model — quarterly review',              r:[5],    ac:[5],   c:[6],     i:[0]},
+    ]
+  },
+  { id:'enablement', label:'P2C · Enablement & Training', cls:'s-p2',
+    rows:[
+      {a:'91-day fresher ramp program — design',                    r:[5],    ac:[5],   c:[12],    i:[0]},
+      {a:'91-day fresher ramp program — administer daily',          r:[12],   ac:[11],  c:[7,5],   i:[0]},
+      {a:'Certification roadmap per role — define',                 r:[5],    ac:[5],   c:[12],    i:[0]},
+      {a:'Certification sponsorship & reimbursement approval',      r:[11],   ac:[0],   c:[12,13], i:[7]},
+      {a:'Training calendar & LMS management',                      r:[12],   ac:[11],  c:[5],     i:[]},
+      {a:'Cert exam booking & pass/fail tracking',                  r:[12],   ac:[11],  c:[],      i:[5,7]},
+      {a:'Internal knowledge sharing sessions',                     r:[5,6],  ac:[5],   c:[12],    i:[]},
+      {a:'Sales enablement kit — AE collateral, objection guide',   r:[3],    ac:[1],   c:[2,5],   i:[0]},
+    ]
+  },
+
+  // ── PILLAR 3: Admin, Finance & HR ─────────────────────────────────────────
+  { grp:'p3', grpLabel:'PILLAR 3 — Admin, Finance & HR', id:'hr', label:'P3A · HR & Talent Acquisition', cls:'s-p3',
+    rows:[
+      {a:'Role brief & cert spec — define before hiring',           r:[5,1],  ac:[5],   c:[0],     i:[12]},
+      {a:'Job description creation',                                r:[12],   ac:[11],  c:[5,1],   i:[0]},
+      {a:'Recruiting & candidate sourcing',                         r:[12],   ac:[11],  c:[],      i:[0]},
+      {a:'Technical interview & assessment',                        r:[5,6],  ac:[5],   c:[12],    i:[0]},
+      {a:'HR / culture & values interview',                         r:[12],   ac:[11],  c:[],      i:[0]},
+      {a:'Offer letter & employment contract',                      r:[12],   ac:[11],  c:[13,0],  i:[]},
+      {a:'Onboarding — Day 1 to 31 logistics',                      r:[12],   ac:[11],  c:[5],     i:[7]},
+      {a:'Performance review process — administer',                 r:[12],   ac:[11],  c:[5,6],   i:[0]},
+      {a:'Compensation bands — define & maintain',                  r:[13],   ac:[0],   c:[12,5],  i:[]},
+      {a:'Attrition & retention planning',                          r:[12],   ac:[11],  c:[5,1],   i:[0]},
+      {a:'Fresher pipeline — college partnerships',                 r:[12],   ac:[11],  c:[0],     i:[5]},
+      {a:'Payroll processing — monthly',                            r:[13],   ac:[11],  c:[12],    i:[0]},
+    ]
+  },
+  { id:'finance', label:'P3B · Finance & Operations', cls:'s-p3',
+    rows:[
+      {a:'Monthly P&L reporting to CEO',                            r:[13],   ac:[0],   c:[],      i:[1,5,11]},
+      {a:'Invoicing & collections — per SOW schedule',              r:[13],   ac:[0],   c:[1,8],   i:[5]},
+      {a:'Headcount budget — request, review, approve',             r:[13],   ac:[0],   c:[11,5],  i:[]},
+      {a:'Tool stack selection & annual renewals',                  r:[11],   ac:[0],   c:[1,5],   i:[]},
+      {a:'Vendor contract management',                              r:[13],   ac:[0],   c:[1,11],  i:[]},
+      {a:'Partner portal billing & MDF cost tracking',              r:[13],   ac:[11],  c:[1],     i:[]},
+      {a:'Cert & training budget tracking',                         r:[13],   ac:[11],  c:[12,5],  i:[]},
+      {a:'Legal — MSA & SOW review',                                r:[13],   ac:[0],   c:[1],     i:[5]},
+      {a:'Legal — NDA & compliance management',                     r:[13],   ac:[0],   c:[11],    i:[]},
+      {a:'Quarterly finance actuals vs forecast report',            r:[13],   ac:[0],   c:[],      i:[1,5,11]},
+    ]
+  },
+  { id:'admin', label:'P3C · Admin & Executive Coordination', cls:'s-p3',
+    rows:[
+      {a:'CEO calendar management — strategic time protection',     r:[11],   ac:[11],  c:[0],     i:[]},
+      {a:'Board meeting logistics & materials coordination',        r:[11],   ac:[0],   c:[13],    i:[]},
+      {a:'Internal team event & retreat planning',                  r:[11],   ac:[11],  c:[12],    i:[0]},
+      {a:'Tool access provisioning for new hires',                  r:[11],   ac:[11],  c:[12],    i:[5]},
+      {a:'Office / remote work policy — define & enforce',          r:[11],   ac:[0],   c:[12],    i:[]},
+    ]
+  },
+
+  // ── CROSS-PILLAR & STRATEGIC ───────────────────────────────────────────────
+  { grp:'cx', grpLabel:'CROSS-PILLAR & STRATEGIC', id:'cross', label:'CX · Cross-Pillar & Strategic Decisions', cls:'s-cx',
+    rows:[
+      {a:'Annual org & headcount plan',                             r:[0],    ac:[0],   c:[1,5,11],i:[12,13]},
+      {a:'Valuation & investor narrative',                          r:[0],    ac:[0],   c:[13,1],  i:[]},
+      {a:'Board / investor quarterly update deck',                  r:[0],    ac:[0],   c:[13,11], i:[]},
+      {a:'New practice launch — commercial validation + approval',  r:[0],    ac:[0],   c:[5,1],   i:[11,13]},
+      {a:'SOW above $50K — CEO final approval',                     r:[1],    ac:[0],   c:[5,13],  i:[]},
+      {a:'Partner tier upgrade strategy',                           r:[1],    ac:[0],   c:[5],     i:[11]},
+      {a:'Competitive & market positioning strategy',               r:[1],    ac:[0],   c:[5,3],   i:[11]},
+      {a:'Culture & values — stewardship',                          r:[0],    ac:[0],   c:[11,12], i:[1,5]},
+      {a:'P1 → P2 handoff quality review (P47)',                    r:[1,5],  ac:[0],   c:[2,8],   i:[13]},
+      {a:'P2 → P1 expansion signal — CSAT to upsell',              r:[5,8],  ac:[0],   c:[2,1],   i:[3]},
+      {a:'P2 → P3 SOW + invoice schedule on signature',            r:[1,2],  ac:[0],   c:[13],    i:[8]},
+      {a:'All-hands — monthly company pulse',                       r:[0],    ac:[0],   c:[11],    i:[]},
+    ]
+  },
+];
+
+function mkPill(type){
+  return `<span class="pill pill-${type}">${type}</span>`;
+}
+
+function buildCell(rowData, colIdx){
+  const isR = rowData.r  && rowData.r.includes(colIdx);
+  const isA = rowData.ac && rowData.ac.includes(colIdx);
+  const isC = rowData.c  && rowData.c.includes(colIdx);
+  const isI = rowData.i  && rowData.i.includes(colIdx);
+  const pills = [];
+  if(isR) pills.push(mkPill('R'));
+  if(isA) pills.push(mkPill('A'));
+  if(isC) pills.push(mkPill('C'));
+  if(isI) pills.push(mkPill('I'));
+  return pills.length ? `<div class="cell">${pills.join('')}</div>` : '';
+}
+
+const tbody = document.getElementById('tbody');
+let html = '';
+let lastGrp = null;
+
+sections.forEach(sec => {
+  // Insert pillar group header on first encounter
+  if(sec.grp && sec.grp !== lastGrp){
+    html += `<tr class="grp-head g-${sec.grp}" data-sec="${sec.id}"><td colspan="${COLS+1}">${sec.grpLabel}</td></tr>`;
+    lastGrp = sec.grp;
+  }
+  html += `<tr class="sec-head ${sec.cls}" data-sec="${sec.id}"><td colspan="${COLS+1}">${sec.label}</td></tr>`;
+  sec.rows.forEach(row => {
+    const cells = Array.from({length:COLS},(_,i)=>i).map(i=>`<td>${buildCell(row,i)}</td>`).join('');
+    html += `<tr class="data-row" data-sec="${sec.id}"><td>${row.a}</td>${cells}</tr>`;
+  });
+});
+
+tbody.innerHTML = html;
+
+// Filter buttons
+const secDefs = [
+  {id:'all',      label:'All'},
+  {id:'partner',  label:'P1 — Partner'},
+  {id:'revenue',  label:'P1 — Sales'},
+  {id:'gtm',      label:'P1 — GTM'},
+  {id:'delivery', label:'P2 — Delivery'},
+  {id:'coe',      label:'P2 — CoE'},
+  {id:'enablement',label:'P2 — Enablement'},
+  {id:'hr',       label:'P3 — HR'},
+  {id:'finance',  label:'P3 — Finance'},
+  {id:'admin',    label:'P3 — Admin'},
+  {id:'cross',    label:'Cross-Pillar'},
+];
+
+const filtersEl = document.getElementById('filters');
+secDefs.forEach(def => {
+  const b = document.createElement('button');
+  b.className = 'fbtn' + (def.id==='all'?' active':'');
+  b.textContent = def.label;
+  b.onclick = () => {
+    document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    document.querySelectorAll('.data-row,.sec-head,.grp-head').forEach(r=>{
+      if(def.id==='all') r.classList.remove('hidden');
+      else r.classList.toggle('hidden', r.dataset.sec !== def.id);
+    });
+  };
+  filtersEl.appendChild(b);
+});
+</script>
+</body>
+</html>

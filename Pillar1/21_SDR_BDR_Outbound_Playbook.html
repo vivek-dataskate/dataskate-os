@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>DataSkate · SDR/BDR Outbound Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --coral:#E8472A;--coral-lt:#FDF0ED;--coral-dk:#9B1C0A;
+  --teal:#0D7A6B;--teal-lt:#E6F5F2;--teal-dk:#044038;
+  --amber:#D97706;--amber-lt:#FFFBEB;--amber-dk:#92400E;
+  --purple:#6D28D9;--purple-lt:#EDE9FE;--purple-dk:#4C1D95;
+  --blue:#1D4ED8;--blue-lt:#EFF6FF;
+  --green:#15803D;--green-lt:#F0FDF4;
+  --slate:#2A3550;--slate-lt:#EEF1F7;--slate-dk:#141C2E;
+  --ink:#111827;--muted:#6B7280;--border:#E5E7EB;--white:#fff;--bg:#F8F7F4
+}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--ink);padding:44px 52px 36px;position:relative;overflow:hidden}
+header::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:var(--coral);opacity:.1}
+header::after{content:'';position:absolute;bottom:-40px;left:220px;width:200px;height:200px;border-radius:50%;background:var(--purple);opacity:.08}
+.logo{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px}
+header h1{font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,46px);font-weight:800;color:#fff;line-height:1.1;position:relative;z-index:1}
+header h1 span{color:var(--coral)}
+.header-sub{font-size:13px;color:rgba(255,255,255,.45);margin-top:8px;max-width:680px;line-height:1.6}
+.kpi-bar{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.kpi-chip{padding:5px 14px;border-radius:20px;font-size:11px;font-weight:600;background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.15)}
+
+/* NAV */
+.page-nav{background:var(--white);border-bottom:2px solid var(--border);padding:0 52px;display:flex;gap:0;overflow-x:auto;position:sticky;top:0;z-index:100;scrollbar-width:none}
+.page-nav::-webkit-scrollbar{display:none}
+.pnav{padding:13px 16px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;margin-bottom:-2px}
+.pnav:hover{color:var(--ink)}
+.pnav.active{color:var(--coral);border-bottom-color:var(--coral)}
+
+main{padding:36px 52px 80px;max-width:1200px}
+.sec{padding:48px 0 40px;border-bottom:1px solid var(--border)}
+.sec:last-child{border-bottom:none}
+.sec-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--coral);margin-bottom:6px}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(18px,2.5vw,28px);font-weight:800;color:var(--ink);margin-bottom:6px;line-height:1.2}
+.sec-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6;max-width:700px}
+
+/* ROLE CARD */
+.role-overview{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
+.ro-card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:20px}
+.ro-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.ro-item{display:flex;align-items:flex-start;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;line-height:1.5}
+.ro-item:last-child{border-bottom:none}
+.ro-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ro-val{color:var(--ink)}
+.ro-note{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* FLOW */
+.flow{display:flex;align-items:stretch;gap:0;margin-bottom:28px;flex-wrap:nowrap;overflow-x:auto}
+.flow-step{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px 18px;min-width:150px;flex:1}
+.flow-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--coral);line-height:1}
+.flow-title{font-size:12px;font-weight:600;color:var(--ink);margin-top:6px;margin-bottom:4px}
+.flow-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.flow-arrow{display:flex;align-items:center;padding:0 6px;color:var(--coral);font-size:20px;flex-shrink:0}
+.flow-owner{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;margin-top:8px;display:inline-block}
+
+/* ICP TABLE */
+.icp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.icp-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.icp-head{padding:12px 16px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.icp-body{padding:12px 16px;font-size:12px;line-height:1.8}
+.icp-body li{margin-left:14px;margin-bottom:3px}
+.icp-signal{background:var(--teal-lt);border-radius:6px;padding:4px 8px;font-size:10px;font-weight:600;color:var(--teal-dk);margin-right:4px;margin-bottom:4px;display:inline-block}
+
+/* SEQUENCE STEPS */
+.seq-container{margin-bottom:28px}
+.seq-step{display:flex;gap:14px;margin-bottom:0}
+.seq-line-wrap{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:40px}
+.seq-circle{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:12px;font-weight:800;color:#fff;flex-shrink:0}
+.seq-connector{flex:1;width:2px;background:var(--border);min-height:20px}
+.seq-content{flex:1;background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px}
+.seq-meta{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.seq-day{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.seq-type{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px}
+.type-email{background:#DBEAFE;color:#1E40AF}
+.type-li{background:#EDE9FE;color:#5B21B6}
+.type-call{background:#D1FAE5;color:#065F46}
+.type-vm{background:var(--amber-lt);color:var(--amber-dk)}
+.seq-subject{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:8px}
+.seq-body{font-size:12px;color:var(--ink);line-height:1.8;background:var(--bg);border-radius:7px;padding:12px 14px;border-left:3px solid var(--coral)}
+.seq-note{font-size:11px;color:var(--muted);margin-top:8px;font-style:italic}
+.seq-stat{font-size:10px;font-weight:600;padding:2px 8px;border-radius:6px;background:var(--green-lt);color:var(--green);margin-top:8px;display:inline-block}
+
+/* OBJECTION TABLE */
+.obj-table{width:100%;border-collapse:collapse;font-size:12px;background:var(--white);border-radius:12px;overflow:hidden;border:1px solid var(--border);margin-bottom:28px}
+.obj-table th{background:var(--slate);color:#fff;padding:10px 14px;text-align:left;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.obj-table td{padding:12px 14px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.6}
+.obj-table tr:last-child td{border-bottom:none}
+.obj-table tr:nth-child(even) td{background:#FAFAFA}
+.obj{color:var(--red,#DC2626);font-weight:600}
+
+/* HANDOFF */
+.handoff-flow{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.hf-step{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.hf-num{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;line-height:1}
+.hf-title{font-size:12px;font-weight:600;margin:6px 0 4px}
+.hf-sub{font-size:11px;color:var(--muted);line-height:1.5}
+.hf-owner{font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:8px;display:inline-block}
+
+/* CADENCE CARDS */
+.cadence-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.cad-col{background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.cad-head{padding:10px 14px;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:7px;background:var(--coral-lt);color:var(--coral-dk)}
+.cad-badge{font-size:9px;padding:2px 7px;border-radius:8px;background:var(--coral);color:#fff;font-weight:600}
+.cad-body{padding:10px 12px}
+.task{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px;line-height:1.5}
+.task:last-child{border-bottom:none}
+.cb{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;margin-top:2px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;background:var(--white)}
+.cb.checked{border-color:var(--teal);background:var(--teal)}
+.cb.checked::after{content:'✓';color:#fff;font-size:10px;font-weight:700}
+.tb{font-size:10px;font-weight:600;padding:1px 6px;border-radius:7px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.t-must{background:#FEE2E2;color:#991B1B}
+.t-good{background:#DBEAFE;color:#1E40AF}
+.t-self{background:#EDE9FE;color:#5B21B6}
+.t-tool{background:var(--teal-lt);color:var(--teal-dk)}
+.task-body{flex:1}
+.task-title{color:var(--ink)}
+.task-tool{font-size:10px;color:var(--teal);margin-top:1px;font-weight:500}
+
+/* KPI TARGETS */
+.kpi-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:28px}
+.kpi-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center}
+.kpi-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--coral)}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.4}
+.kpi-note{font-size:10px;color:var(--teal);margin-top:4px;font-weight:600}
+
+/* TOOL STACK */
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.tool-card{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:16px}
+.tool-tag{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:8px}
+.tool-name{font-size:14px;font-weight:700;color:var(--ink);margin-bottom:6px}
+.tool-use{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:8px}
+.tool-cost{font-size:10px;font-weight:600;color:var(--green);padding:2px 7px;background:var(--green-lt);border-radius:6px;display:inline-block}
+
+/* ALERT */
+.alert{border-radius:10px;padding:16px 20px;margin-bottom:24px;border:1.5px solid}
+.alert-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.alert-body{font-size:12.5px;line-height:1.7}
+
+footer{background:var(--ink);padding:22px 52px;font-size:11px;color:rgba(255,255,255,.3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
+@media(max-width:900px){.role-overview,.icp-grid,.handoff-flow,.kpi-grid,.tool-grid,.cadence-grid{grid-template-columns:1fr 1fr}main,header,footer,.page-nav{padding-left:20px;padding-right:20px}.flow{flex-direction:column}}
+@media(max-width:560px){.role-overview,.icp-grid,.handoff-flow,.kpi-grid,.tool-grid,.cadence-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">DataSkate · Outbound Revenue Playbook</div>
+  <h1>SDR / BDR <span>Outbound Playbook</span></h1>
+  <div class="header-sub">The complete outbound motion — prospect sourcing, ICP definition, 9-touch sequences, 5-question qualifying call script, pain bucket framework, partner AE handoff protocol, daily cadence, KPIs, and tool stack. DataSkate generates pipeline <em>for</em> the partner AE — not the other way around.</div>
+  <div class="kpi-bar">
+    <span class="kpi-chip">60 prospects/week targeted</span>
+    <span class="kpi-chip">1 booked call per 15–20 contacted</span>
+    <span class="kpi-chip">Partner AE looped in at booking</span>
+    <span class="kpi-chip">CRM updated same day</span>
+    <span class="kpi-chip">Apollo + Clay + Instantly</span>
+  </div>
+</header>
+
+<div class="page-nav">
+  <div class="pnav active" onclick="nav('role')">Role & Mission</div>
+  <div class="pnav" onclick="nav('motion')">The Motion</div>
+  <div class="pnav" onclick="nav('icp')">ICP & Targeting</div>
+  <div class="pnav" onclick="nav('sourcing')">Prospect Sourcing</div>
+  <div class="pnav" onclick="nav('sequence')">9-Touch Sequence</div>
+  <div class="pnav" onclick="nav('objections')">Objection Handling</div>
+  <div class="pnav" onclick="nav('qualify')">Qualifying Script</div>
+  <div class="pnav" onclick="nav('handoff')">AE Handoff</div>
+  <div class="pnav" onclick="nav('cadence')">Daily Cadence</div>
+  <div class="pnav" onclick="nav('kpi')">KPIs & Targets</div>
+  <div class="pnav" onclick="nav('tools')">Tool Stack</div>
+</div>
+
+<main>
+
+<!-- ══════════════════════════
+  1. ROLE & MISSION
+══════════════════════════ -->
+<div class="sec" id="role">
+  <div class="sec-label">Section 01</div>
+  <div class="sec-title">SDR/BDR Role — Mission, Scope & What This Is NOT</div>
+  <div class="sec-sub">DataSkate doesn't wait for partner AEs to refer leads. DataSkate finds prospects, runs aggressive multi-touch outreach, gets them interested in MuleSoft/Salesforce implementation, then hands a warm, qualified, interested prospect directly to the partner AE. The SDR makes the AE's quota easier. That is the value exchange.</div>
+
+  <div class="alert" style="background:#FFF7ED;border-color:#FED7AA">
+    <div class="alert-title" style="color:#9A3412">The mindset shift — DataSkate is the demand generation engine FOR the partner AE</div>
+    <div class="alert-body" style="color:#7C2D12">
+      Old model: Wait for MuleSoft AE to refer a lead → respond within 24hrs → close.<br/>
+      <strong>New model: DataSkate SDR finds prospect → runs outreach → gets prospect interested → books 3-way call with MuleSoft AE → AE closes with DataSkate as SI.</strong><br/><br/>
+      The MuleSoft AE now has a reason to prioritise DataSkate above every other SI — because DataSkate is bringing THEM pipeline. This is the most powerful partner position possible.
+    </div>
+  </div>
+
+  <div class="role-overview">
+    <div class="ro-card">
+      <div class="ro-title">What the SDR/BDR Owns</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Prospect list building — Apollo, Clay, LinkedIn Sales Nav</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Email sequence writing and A/B testing — Instantly</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Sending all outbound emails, LinkedIn DMs, cold calls</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Qualifying interest — BANT lite before booking</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Booking the discovery call for Alliance Mgr/AE + Partner AE</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">CRM logging — every touch, every reply, every booking</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Daily activity reporting to VP Alliances</div></div></div>
+    </div>
+    <div class="ro-card">
+      <div class="ro-title">What the SDR/BDR Does NOT Own</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--slate)"></div><div><div class="ro-val">Discovery call execution</div><div class="ro-note">That's Alliance Mgr/AE + Partner AE</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--slate)"></div><div><div class="ro-val">SOW scoping or pricing</div><div class="ro-note">VP Alliances + Delivery Head</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--slate)"></div><div><div class="ro-val">Partner AE relationship management</div><div class="ro-note">VP Alliances + Alliance Mgr/AE own that</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--slate)"></div><div><div class="ro-val">Deal closing</div><div class="ro-note">Not the SDR's job — hand off and move on</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--slate)"></div><div><div class="ro-val">Content creation</div><div class="ro-note">GTM Coordinator owns that</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--slate)"></div><div><div class="ro-val">Making strategic decisions about which partners to prioritise</div><div class="ro-note">VP Alliances decides that</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  2. THE MOTION
+══════════════════════════ -->
+<div class="sec" id="motion">
+  <div class="sec-label">Section 02</div>
+  <div class="sec-title">The Full Outbound Motion — End to End</div>
+  <div class="sec-sub">From prospect identified to partner AE on the call. Every step owned, no gaps.</div>
+
+  <div class="flow">
+    <div class="flow-step">
+      <div class="flow-num">1</div>
+      <div class="flow-title">Partner AE Alignment</div>
+      <div class="flow-sub">VP Alliances agrees with MuleSoft AE: "We'll prospect into your territory. You show up on the call we book."</div>
+      <span class="flow-owner" style="background:var(--coral-lt);color:var(--coral-dk)">VP Alliances</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">2</div>
+      <div class="flow-title">ICP List Built</div>
+      <div class="flow-sub">SDR builds prospect list via Apollo/Clay. Filters: tech stack (MuleSoft/Salesforce signals), size, industry, title.</div>
+      <span class="flow-owner" style="background:var(--purple-lt);color:var(--purple-dk)">SDR/BDR</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">3</div>
+      <div class="flow-title">Sequence Launched</div>
+      <div class="flow-sub">9-touch sequence via Instantly — emails, LinkedIn DMs, calls over 18 days. DataSkate identity, not partner's.</div>
+      <span class="flow-owner" style="background:var(--purple-lt);color:var(--purple-dk)">SDR/BDR</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">4</div>
+      <div class="flow-title">Reply / Interest</div>
+      <div class="flow-sub">Prospect replies or engages. SDR qualifies: right title, real pain, willing to explore. Takes 5 min.</div>
+      <span class="flow-owner" style="background:var(--purple-lt);color:var(--purple-dk)">SDR/BDR</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">5</div>
+      <div class="flow-title">3-Way Call Booked</div>
+      <div class="flow-sub">SDR books discovery: Prospect + DataSkate Alliance Mgr/AE + MuleSoft AE. Framed as "bringing in our MuleSoft partner."</div>
+      <span class="flow-owner" style="background:var(--purple-lt);color:var(--purple-dk)">SDR/BDR</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">6</div>
+      <div class="flow-title">Handoff Briefing</div>
+      <div class="flow-sub">SDR sends 1-page brief to Alliance Mgr/AE and Partner AE before call: prospect context, pain stated, what was said.</div>
+      <span class="flow-owner" style="background:var(--purple-lt);color:var(--purple-dk)">SDR/BDR</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-num">7</div>
+      <div class="flow-title">Discovery Call</div>
+      <div class="flow-sub">Alliance Mgr/AE runs the call with MuleSoft AE. SDR does not attend — their job is done.</div>
+      <span class="flow-owner" style="background:var(--coral-lt);color:var(--coral-dk)">Alliance Mgr/AE</span>
+    </div>
+  </div>
+
+  <div class="alert" style="background:var(--teal-lt);border-color:var(--teal-dk)">
+    <div class="alert-title" style="color:var(--teal-dk)">Why the partner AE agrees to this arrangement</div>
+    <div class="alert-body" style="color:var(--teal-dk)">
+      MuleSoft AEs have quota pressure and not enough pipeline. DataSkate showing up and saying "we'll find you qualified prospects and book calls for you — you just need to show up" is an offer most AEs will say yes to immediately. The only thing DataSkate asks in return: the AE is on the call, and they register the deal through DataSkate. That's it. No cost to the AE. Pure upside. The VP Alliances has this conversation first — before a single prospect is contacted.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  3. ICP & TARGETING
+══════════════════════════ -->
+<div class="sec" id="icp">
+  <div class="sec-label">Section 03</div>
+  <div class="sec-title">Ideal Customer Profile — Who to Target and Why</div>
+  <div class="sec-sub">Specific enough to write a personalised email. Broad enough to have 10,000+ companies in the addressable universe.</div>
+
+  <div class="icp-grid">
+    <div class="icp-card">
+      <div class="icp-head" style="background:var(--coral-lt);color:var(--coral-dk)">Company Firmographics</div>
+      <div class="icp-body">
+        <ul>
+          <li><strong>Size:</strong> 200–5,000 employees (SMB-MM sweet spot)</li>
+          <li><strong>Revenue:</strong> $20M–$1B ARR</li>
+          <li><strong>Industry:</strong> Financial services, healthcare, retail, logistics, SaaS, manufacturing — any company with complex system integration needs</li>
+          <li><strong>Location:</strong> US primary · ANZ/UK secondary based on AE territory</li>
+          <li><strong>Structure:</strong> Has an IT/Engineering team but not big enough to build integrations in-house at scale</li>
+        </ul>
+      </div>
+    </div>
+    <div class="icp-card">
+      <div class="icp-head" style="background:var(--purple-lt);color:var(--purple-dk)">Target Titles (Decision Makers)</div>
+      <div class="icp-body">
+        <ul>
+          <li><strong>Primary:</strong> VP of IT, Director of IT, Head of Engineering</li>
+          <li><strong>Primary:</strong> CTO, CIO at SMB (&lt;500 employees)</li>
+          <li><strong>Primary:</strong> Director/VP of Integrations or Architecture</li>
+          <li><strong>Secondary:</strong> Head of Digital Transformation</li>
+          <li><strong>Secondary:</strong> Salesforce Admin/Architect (for referral to decision maker)</li>
+          <li><strong>Avoid:</strong> Junior IT staff, pure developers — they don't sign SOWs</li>
+        </ul>
+      </div>
+    </div>
+    <div class="icp-card">
+      <div class="icp-head" style="background:var(--teal-lt);color:var(--teal-dk)">Tech Stack Signals (Apollo/Clay)</div>
+      <div class="icp-body">
+        <strong>Strong buy signals — target immediately:</strong><br/>
+        <span class="icp-signal">MuleSoft detected</span>
+        <span class="icp-signal">Salesforce CRM user</span>
+        <span class="icp-signal">Informatica</span>
+        <span class="icp-signal">Workato</span>
+        <span class="icp-signal">Boomi</span><br/><br/>
+        <strong>Good signals — likely integration pain:</strong><br/>
+        <span class="icp-signal">SAP + Salesforce</span>
+        <span class="icp-signal">Oracle + Salesforce</span>
+        <span class="icp-signal">Multiple SaaS tools</span>
+        <span class="icp-signal">AWS/Azure + SFDC</span><br/><br/>
+        <strong>Intent signals:</strong><br/>
+        <span class="icp-signal">Hiring integration engineer</span>
+        <span class="icp-signal">Digital transformation project</span>
+        <span class="icp-signal">Recently funded</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="icp-grid">
+    <div class="icp-card">
+      <div class="icp-head" style="background:var(--amber-lt);color:var(--amber-dk)">Pain Points We Target</div>
+      <div class="icp-body">
+        <ul>
+          <li>Systems not talking to each other — data silos between Salesforce, ERP, and other tools</li>
+          <li>Manual data entry between platforms — staff doing what automation should do</li>
+          <li>MuleSoft/Salesforce purchased but not properly implemented — licence waste</li>
+          <li>Failed or stalled integration project — previous vendor let them down</li>
+          <li>Scaling fast but integrations can't keep up — engineering team overwhelmed</li>
+          <li>Compliance-driven integration requirements (HIPAA, GDPR, SOX)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="icp-card">
+      <div class="icp-head" style="background:var(--blue-lt);color:var(--blue)">Buying Triggers — When to Reach Out</div>
+      <div class="icp-body">
+        <ul>
+          <li>Company just raised a funding round (Series A/B) — growth = integration pain</li>
+          <li>New CTO/CIO/VP IT hire — first 90 days, wants to make an impact</li>
+          <li>Job posting for MuleSoft/Salesforce developer — they need help NOW</li>
+          <li>Company went through M&A — always creates integration chaos</li>
+          <li>New Salesforce licence signed — they need someone to implement it</li>
+          <li>MuleSoft contract renewal coming up — do they want to get more value first?</li>
+        </ul>
+      </div>
+    </div>
+    <div class="icp-card">
+      <div class="icp-head" style="background:#FEF2F2;color:#991B1B">Bad Fit — Do NOT Contact</div>
+      <div class="icp-body">
+        <ul>
+          <li>Companies below 50 employees — too small, can't afford SOW minimums</li>
+          <li>Companies with 50+ in-house integration engineers — they build internally</li>
+          <li>Pure Microsoft stack with no Salesforce/MuleSoft — wrong platform</li>
+          <li>Government / heavily regulated without procurement processes understood</li>
+          <li>Companies currently with another SI in active engagement — respect the relationship</li>
+          <li>Anyone that says "we have a preferred vendor" — move on, not worth fighting</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  4. PROSPECT SOURCING
+══════════════════════════ -->
+<div class="sec" id="sourcing">
+  <div class="sec-label">Section 04</div>
+  <div class="sec-title">Prospect Sourcing — Building the List Weekly</div>
+  <div class="sec-sub">SDR builds and refreshes the prospect list every week. Two sources: partner AE named accounts (highest priority) and self-sourced via Apollo/Clay (volume engine).</div>
+
+  <div class="role-overview">
+    <div class="ro-card">
+      <div class="ro-title">Source 1 — Partner AE Named Accounts (Priority)</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">VP Alliances asks MuleSoft AE: "Share your top 20 named accounts you're trying to get into"</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">SDR finds the right contact titles at those companies via Apollo/LinkedIn</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Personalises outreach specifically to that company + their known tech stack</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Email references the MuleSoft relationship early: "We partner with your MuleSoft team..."</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">Conversion rate: 3–5x higher than cold self-sourced. Always do these first.</div></div></div>
+    </div>
+    <div class="ro-card">
+      <div class="ro-title">Source 2 — Self-Sourced via Apollo + Clay (Volume)</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">Apollo filters: tech stack includes Salesforce/MuleSoft + 200–5000 employees + US + target titles</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">Clay enriches: pulls job postings, funding data, tech stack signals, LinkedIn activity</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">Prioritise by intent signal: hiring MuleSoft dev > recent funding > new exec hire</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">60 net-new prospects per week minimum into Instantly sequences</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">Verify emails in Apollo before loading — bounce rate must stay below 3%</div></div></div>
+    </div>
+  </div>
+
+  <div class="alert" style="background:var(--purple-lt);border-color:#C4B5FD">
+    <div class="alert-title" style="color:var(--purple-dk)">Clay enrichment workflow — the difference between a generic blast and a personalised sequence</div>
+    <div class="alert-body" style="color:var(--purple-dk)">
+      Apollo gives you the list. Clay makes it personal. Use Clay to pull: (1) recent LinkedIn posts by the prospect — what are they talking about? (2) Job postings — are they hiring integration engineers? (3) Tech stack — exactly which platforms are they running? (4) Company news — funding, M&amp;A, new product launches. Feed this into the first line of every email. "I saw [Company] just posted a MuleSoft developer role — we help companies like yours shortcut that hire entirely." That level of personalisation gets 3–4x the reply rate of generic outreach.
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  5. 9-TOUCH SEQUENCE
+══════════════════════════ -->
+<div class="sec" id="sequence">
+  <div class="sec-label">Section 05</div>
+  <div class="sec-title">9-Touch Outbound Sequence — 18 Days</div>
+  <div class="sec-sub">Multi-channel. Every touch has a specific job. Emails are short — under 100 words. The goal of every touch is ONE thing: get a reply or a booked call. Not to educate. Not to impress. To get a response.</div>
+
+  <div class="seq-container">
+
+    <!-- TOUCH 1 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--coral)">1</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 1</span>
+          <span class="seq-type type-email">Email</span>
+          <span style="font-size:11px;color:var(--muted)">First touch · Pattern interrupt · Personal</span>
+        </div>
+        <div class="seq-subject">Subject: MuleSoft + [Company] — quick question</div>
+        <div class="seq-body">
+          Hi [First Name],<br/><br/>
+          I noticed [Company] is running [Salesforce/MuleSoft/specific tech from Clay] — we're a certified MuleSoft SI that works alongside your MuleSoft account team to handle the implementation side they can't.<br/><br/>
+          Quick question: are you currently getting the ROI you expected from [platform]? Most teams we talk to aren't — usually a scoping or implementation problem, not a platform problem.<br/><br/>
+          Worth a 20-min call to compare notes?<br/><br/>
+          [Name] · DataSkate · MuleSoft Certified Partner
+        </div>
+        <div class="seq-note">Personalise line 1 using Clay data — specific tech, job posting, or company news. Never send generic version.</div>
+        <span class="seq-stat">Target open rate: 45–55% · Reply rate: 4–6%</span>
+      </div>
+    </div>
+
+    <!-- TOUCH 2 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--purple)">2</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 2</span>
+          <span class="seq-type type-li">LinkedIn</span>
+          <span style="font-size:11px;color:var(--muted)">Connection request · No pitch</span>
+        </div>
+        <div class="seq-subject">LinkedIn connection note</div>
+        <div class="seq-body">
+          Hi [First Name] — I work with a number of [industry] companies on their MuleSoft and Salesforce implementations. Would love to connect and share some of what's working.
+        </div>
+        <div class="seq-note">Send connection request same day as email. Do NOT pitch in the connection note. Just connect. Message comes after they accept.</div>
+      </div>
+    </div>
+
+    <!-- TOUCH 3 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--coral)">3</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 4</span>
+          <span class="seq-type type-email">Email</span>
+          <span style="font-size:11px;color:var(--muted)">Follow-up · New angle · Case study hook</span>
+        </div>
+        <div class="seq-subject">Subject: [Similar company] cut integration time by 60%</div>
+        <div class="seq-body">
+          [First Name] — following up on my note from Monday.<br/><br/>
+          We recently helped a [same industry] company with [similar size] cut their Salesforce-to-[ERP/system] integration time from 6 months to 6 weeks — and avoided a $200K+ custom build.<br/><br/>
+          Happy to share exactly how we did it. 20 minutes — worth it?
+        </div>
+        <div class="seq-note">Use a real anonymised case study. Industry match is critical — "similar company" must be believable. Get case studies from GTM Coordinator.</div>
+        <span class="seq-stat">Target reply rate from follow-up: 2–3%</span>
+      </div>
+    </div>
+
+    <!-- TOUCH 4 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--blue)">4</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 6</span>
+          <span class="seq-type type-call">Cold Call</span>
+          <span style="font-size:11px;color:var(--muted)">First call attempt · Reference the emails</span>
+        </div>
+        <div class="seq-subject">Call script — 30-second opener</div>
+        <div class="seq-body">
+          "Hi [First Name], this is [SDR name] from DataSkate — I sent you a couple of emails this week about your MuleSoft/Salesforce setup. I know you're busy, so I'll be quick — we help companies like yours get more out of [platform] without building an internal team. Is that something that's on your radar at all?"<br/><br/>
+          [If yes] "Great — I'd love to set up a 20-minute call with our alliance director and your MuleSoft account team. What does your calendar look like Thursday or Friday?"<br/><br/>
+          [If no / not now] "Totally understand — when would be a better time to reconnect?"<br/><br/>
+          [If voicemail] Leave 20-second VM referencing emails, drop next email same day.
+        </div>
+        <div class="seq-note">Best call times: Tue–Thu, 8–9am or 4–5pm local time. Call max 2x per prospect in a sequence — don't become a nuisance.</div>
+      </div>
+    </div>
+
+    <!-- TOUCH 5 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--coral)">5</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 8</span>
+          <span class="seq-type type-email">Email</span>
+          <span style="font-size:11px;color:var(--muted)">Value drop · No ask · Build credibility</span>
+        </div>
+        <div class="seq-subject">Subject: The 3 most common MuleSoft implementation mistakes</div>
+        <div class="seq-body">
+          [First Name] — no pitch this time, just something useful.<br/><br/>
+          After implementing MuleSoft for 30+ companies, here are the 3 mistakes we see most:<br/>
+          1. Over-engineering the API layer upfront — costs 3x more, delivers the same result<br/>
+          2. No reusable asset strategy — teams rebuild the same integrations 4–5 times<br/>
+          3. Ignoring the MuleSoft AE relationship — your account team can unlock resources most customers don't know exist<br/><br/>
+          Happy to walk through how we approach this differently. Reply or grab a time: [Calendly link]
+        </div>
+        <div class="seq-note">This email does not ask directly. It gives value, builds credibility, then offers a soft call-to-action. Often gets more replies than harder-ask emails.</div>
+      </div>
+    </div>
+
+    <!-- TOUCH 6 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--purple)">6</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 10</span>
+          <span class="seq-type type-li">LinkedIn DM</span>
+          <span style="font-size:11px;color:var(--muted)">After connection accepted · Reference email thread</span>
+        </div>
+        <div class="seq-subject">LinkedIn DM — short, direct</div>
+        <div class="seq-body">
+          Hey [First Name] — sent a couple of emails your way about MuleSoft implementation. Didn't want to only live in your inbox. We've helped a few [industry] companies get real ROI out of their MuleSoft licence without expanding headcount. Worth a quick chat?
+        </div>
+        <div class="seq-note">Only send if they accepted LinkedIn connection. If not accepted, skip this touch and move to Day 12 email. Keep it conversational — LinkedIn is not the place for formal pitches.</div>
+      </div>
+    </div>
+
+    <!-- TOUCH 7 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--coral)">7</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 13</span>
+          <span class="seq-type type-email">Email</span>
+          <span style="font-size:11px;color:var(--muted)">MuleSoft AE angle · The co-sell hook</span>
+        </div>
+        <div class="seq-subject">Subject: Your MuleSoft team asked us to reach out</div>
+        <div class="seq-body">
+          [First Name] — I'll be direct.<br/><br/>
+          We work closely with the MuleSoft account team covering [region/territory]. They suggested [Company] as a company where there might be implementation value we could add.<br/><br/>
+          We're not MuleSoft — we're the implementation partner that makes sure MuleSoft actually delivers what it promises. Different conversation.<br/><br/>
+          Can we get 20 minutes with you and your MuleSoft AE on the same call?
+        </div>
+        <div class="seq-note">Only use this version if VP Alliances has confirmed the AE partnership and got approval to reference them. Strongest email in the sequence — highest reply rate. Never use without AE's knowledge.</div>
+        <span class="seq-stat">When used correctly: reply rate 8–12%</span>
+      </div>
+    </div>
+
+    <!-- TOUCH 8 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--blue)">8</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 16</span>
+          <span class="seq-type type-call">Cold Call</span>
+          <span style="font-size:11px;color:var(--muted)">Second and final call attempt</span>
+        </div>
+        <div class="seq-subject">Final call — reference full thread</div>
+        <div class="seq-body">
+          "Hi [First Name], [SDR name] from DataSkate again — I've sent you a few emails over the past couple of weeks about your MuleSoft setup. I won't keep calling after this — I just wanted to make sure this landed in front of you personally before I move on. We have a couple of [industry] case studies I think are directly relevant to what you're working on. Worth 20 minutes?"
+        </div>
+        <div class="seq-note">The "I won't keep calling after this" line gets callbacks. It signals respect for their time. Don't lie — if they don't respond after this sequence, move to a 90-day nurture drip, not more aggressive calling.</div>
+      </div>
+    </div>
+
+    <!-- TOUCH 9 -->
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--slate)">9</div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Day 18</span>
+          <span class="seq-type type-email">Email</span>
+          <span style="font-size:11px;color:var(--muted)">Break-up email · Often generates replies</span>
+        </div>
+        <div class="seq-subject">Subject: Closing the loop</div>
+        <div class="seq-body">
+          [First Name] — I've reached out a few times and haven't heard back, so I'm going to assume the timing isn't right.<br/><br/>
+          I'll stop following up — but I'll leave you with this: if you ever find yourself fighting with a MuleSoft or Salesforce integration, or inheriting a project that's gone sideways, we're the team that fixes those.<br/><br/>
+          dataskate.io — or just reply to this email.<br/><br/>
+          [Name]
+        </div>
+        <div class="seq-note">The break-up email consistently gets 15–25% of all replies in a sequence. The honesty and finality triggers people who were meaning to respond. After this — move to 90-day light nurture (1 email/month, no calls).</div>
+        <span class="seq-stat">Break-up emails: often 15–25% of all sequence replies</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  6. OBJECTION HANDLING
+══════════════════════════ -->
+<div class="sec" id="objections">
+  <div class="sec-label">Section 06</div>
+  <div class="sec-title">Objection Handling — What They Say and Exactly What to Respond</div>
+  <div class="sec-sub">Every objection is a buying signal. None of these are dead ends — they're the conversation starting.</div>
+
+  <table class="obj-table">
+    <thead><tr><th>What they say</th><th>What it actually means</th><th>What SDR says back</th><th>Goal</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="obj">"We already have an SI partner"</span></td>
+        <td>They're in a relationship but are they happy? Is the current SI delivering?</td>
+        <td>"Totally understand — most companies we work with had one before us. Are you happy with what you're getting? If yes, great. If you've got any frustrations, that's worth a 15-min conversation."</td>
+        <td>Plant a seed. Don't push. Ask to stay in touch for the renewal.</td>
+      </tr>
+      <tr>
+        <td><span class="obj">"We handle integration internally"</span></td>
+        <td>They have engineers but are probably backlogged or under-resourced</td>
+        <td>"That's actually our most common client — they have an internal team but the queue is always 3 months long. We plug in as an extension, not a replacement. Does your team ever struggle with capacity?"</td>
+        <td>Reframe — not replacing them, extending capacity</td>
+      </tr>
+      <tr>
+        <td><span class="obj">"We don't have budget right now"</span></td>
+        <td>Not a priority, or budget cycle is wrong time</td>
+        <td>"When does your budget cycle reset? We're happy to be a conversation for Q[X]. What I can do is send you something concrete so when the time comes you've already seen what we do — is that OK?"</td>
+        <td>Get into the next budget cycle. Stay in nurture.</td>
+      </tr>
+      <tr>
+        <td><span class="obj">"We're not looking at MuleSoft right now"</span></td>
+        <td>May not understand what DataSkate does, or not in an active project</td>
+        <td>"That's fine — we also do Salesforce, Boomi, and Workato implementations. Is any integration project active at the moment, regardless of platform?"</td>
+        <td>Broaden the platform angle — it's not just MuleSoft</td>
+      </tr>
+      <tr>
+        <td><span class="obj">"Send me some information"</span></td>
+        <td>Polite way to end the call — or genuine interest if tone is right</td>
+        <td>"Happy to — what's the specific thing most relevant to you right now? I want to send you exactly the right thing, not a brochure." [Then send a 1-pager + case study within 1 hour, with a follow-up booked]</td>
+        <td>Qualify before sending. Book the follow-up before hanging up.</td>
+      </tr>
+      <tr>
+        <td><span class="obj">"We're in the middle of a project already"</span></td>
+        <td>Active project = active decision making = perfect time</td>
+        <td>"That's actually the best time to talk — if the project is already running, we can often come in and accelerate it or fix what's not working. Who's running it for you?"</td>
+        <td>Get into the active project — even as a second vendor</td>
+      </tr>
+      <tr>
+        <td><span class="obj">"I'm not the right person"</span></td>
+        <td>Genuine — or a brush-off. Ask before accepting it.</td>
+        <td>"I appreciate that — who would be the right person for a conversation about [platform] implementation? I can reach out to them directly and let them know you suggested it."</td>
+        <td>Get the right name. Use their name as a referral intro.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══════════════════════════
+  7. QUALIFYING CALL SCRIPT
+══════════════════════════ -->
+<div class="sec" id="qualify">
+  <div class="sec-label">Section 07</div>
+  <div class="sec-title">Pre-Booking Qualifying Call Script — 5 Questions, Under 10 Minutes</div>
+  <div class="sec-sub">When a prospect replies with interest, the SDR runs this call before booking the 3-way. Goal: find out which pain bucket they're in so the Alliance Mgr/AE and MuleSoft AE walk into the call already knowing what to say. A 3-way call with no context is a waste of everyone's time.</div>
+
+  <div class="alert" style="background:#FFF7ED;border-color:#FED7AA;margin-bottom:28px">
+    <div class="alert-title" style="color:#9A3412">The 4 pain buckets — every prospect lands in one of these</div>
+    <div class="alert-body" style="color:#7C2D12">
+      <strong>Bucket A — "Just bought, not implemented":</strong> They have a MuleSoft/Salesforce licence sitting unused or partially deployed. Licence waste is the pain. Speed is the pitch.<br/>
+      <strong>Bucket B — "Implemented badly":</strong> A previous SI or internal team built something that's broken, slow, or unmaintainable. Rescue and rebuild is the pitch.<br/>
+      <strong>Bucket C — "Systems don't talk":</strong> They have Salesforce + ERP/other tools that aren't integrated. Data silos, manual work, reporting errors. Integration build is the pitch.<br/>
+      <strong>Bucket D — "Scaling fast, can't keep up":</strong> Engineering team is overwhelmed, backlog is months long, integrations are blocking product/ops velocity. Capacity extension is the pitch.<br/><br/>
+      The qualifying call identifies the bucket. The brief tells the AEs which bucket before they join the 3-way.
+    </div>
+  </div>
+
+  <!-- CALL FRAMEWORK -->
+  <div class="role-overview" style="margin-bottom:28px">
+    <div class="ro-card">
+      <div class="ro-title">Call Setup — Before You Dial</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Pull up their Clay enrichment — tech stack, company size, any job postings, recent news</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Check their LinkedIn profile — recent posts, tenure in role, any changes at the company</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Open HubSpot contact — log the call in real time</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Have the Notion brief template open — fill it as they talk</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">Target call length: 8–12 minutes. Not a discovery — that's the AE's job. This is intake only.</div></div></div>
+    </div>
+    <div class="ro-card">
+      <div class="ro-title">Opening Line — First 20 Seconds</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">"Thanks for making time, [Name] — I want to keep this quick. I have a few short questions so I can bring in the right people from our side and make sure this call is actually worth your hour. Sound good?"</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">Why it works: sets the agenda, positions the SDR as organised, frames the 3-way call as high-value, and respects their time.</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--purple)"></div><div><div class="ro-val">They almost always say yes — it implies you're being selective about who you bring in.</div></div></div>
+    </div>
+  </div>
+
+  <!-- THE 5 QUESTIONS -->
+  <div class="sec-title" style="font-size:18px;margin-bottom:20px">The 5 Questions</div>
+
+  <div class="seq-container">
+
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--coral)">Q1</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Question 1</span>
+          <span class="seq-type type-email" style="background:#FEF3C7;color:#92400E">Situation</span>
+          <span style="font-size:11px;color:var(--muted)">What are they actually running today</span>
+        </div>
+        <div class="seq-subject">"Which platforms are you currently running — Salesforce, MuleSoft, anything else in the integration stack?"</div>
+        <div class="seq-body">
+          <strong>What you're listening for:</strong><br/>
+          — Do they have MuleSoft already? → Likely Bucket A or B<br/>
+          — Do they have Salesforce but NOT MuleSoft? → Likely Bucket C, potential net-new platform sale<br/>
+          — Do they have both but mention other tools (SAP, Oracle, Workday)? → Likely Bucket C or D<br/>
+          — Do they say "we're evaluating MuleSoft"? → AE needs to be on the 3-way to drive the licence conversation<br/><br/>
+          <strong>Probe if needed:</strong> "And is that fully deployed or still being rolled out?"
+        </div>
+        <div class="seq-note">Write exact platforms into the brief. "They run Salesforce Sales Cloud, MuleSoft Anypoint (partially deployed), and SAP S/4HANA" is what the AE needs — not "they have Salesforce."</div>
+      </div>
+    </div>
+
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--purple)">Q2</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Question 2</span>
+          <span class="seq-type type-li">Pain</span>
+          <span style="font-size:11px;color:var(--muted)">What's actually broken or missing</span>
+        </div>
+        <div class="seq-subject">"What's the specific problem you're trying to solve — or what made you reply to my email?"</div>
+        <div class="seq-body">
+          <strong>What you're listening for:</strong><br/>
+          — "It's not working / was built badly" → Bucket B (rescue)<br/>
+          — "We bought it but haven't implemented it" → Bucket A (deployment)<br/>
+          — "Our systems don't talk to each other" → Bucket C (integration build)<br/>
+          — "My team is overwhelmed / we can't scale" → Bucket D (capacity)<br/>
+          — "We're evaluating options" → not yet a pain — probe harder<br/><br/>
+          <strong>Follow-up if vague:</strong> "Can you give me a specific example — what broke last week, or what can't you do today that you need to be able to do?"<br/><br/>
+          <strong>If they say "just exploring":</strong> "Totally fine — what triggered the exploration? Something must have come up." Keep pushing gently. There's always a trigger.
+        </div>
+        <div class="seq-note">Get their exact words. Quote them verbatim in the brief. "We have 4 systems that don't talk to each other and our ops team is doing manual exports every morning" is gold for the AE's opening line.</div>
+      </div>
+    </div>
+
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--teal)">Q3</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Question 3</span>
+          <span class="seq-type type-call">Timeline</span>
+          <span style="font-size:11px;color:var(--muted)">Is this real and urgent or just exploring</span>
+        </div>
+        <div class="seq-subject">"Is there a timeline you're working to — or a deadline that's driving this?"</div>
+        <div class="seq-body">
+          <strong>What you're listening for:</strong><br/>
+          — "We need this done by [date]" → Hot. Flag to VP Alliances immediately. Move fast.<br/>
+          — "We're trying to get something in place this quarter" → Warm. Standard pipeline.<br/>
+          — "No hard deadline, just exploring" → Lower urgency. Still worth the call but manage expectations with AE.<br/>
+          — "We have a board review / audit / go-live in [X weeks]" → Urgent. Escalate to VP Alliances.<br/><br/>
+          <strong>If no urgency stated:</strong> "What would have to happen for this to become urgent?" This surfaces the real trigger even when they haven't articulated it yet.
+        </div>
+        <div class="seq-note">Timeline directly affects whether the Alliance Mgr/AE needs to be on the call this week or can schedule for next week. Always capture this in the brief.</div>
+      </div>
+    </div>
+
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--amber)">Q4</div>
+        <div class="seq-connector"></div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Question 4</span>
+          <span class="seq-type type-vm">Authority</span>
+          <span style="font-size:11px;color:var(--muted)">Are we talking to the right person</span>
+        </div>
+        <div class="seq-subject">"When you bring in an outside partner for something like this — who else is typically involved in that decision?"</div>
+        <div class="seq-body">
+          <strong>Why this phrasing, not "are you the decision maker":</strong><br/>
+          Asking "are you the decision maker" makes people defensive. This version invites them to describe the process, which tells you everything.<br/><br/>
+          <strong>What you're listening for:</strong><br/>
+          — "Mostly me with sign-off from my CTO/CFO" → They're the champion. Get them on the 3-way. CEO/CFO comes later.<br/>
+          — "I'd need to loop in [Name/Title]" → There's a second decision maker. Ask: "Would it make sense to have them on the call too?"<br/>
+          — "Procurement handles vendor selection" → There's a formal process. Ask: "Have you already been through vendor selection or is this early stage?"<br/>
+          — "I'm just researching for my boss" → They're not the buyer. Ask to be connected to the right person directly.<br/><br/>
+          <strong>If they're not the buyer:</strong> "Would you be comfortable making an intro to [name/title]? I can prep a short brief for them so it's easy for you to forward."
+        </div>
+        <div class="seq-note">The 3-way call only works if the right person is in the room. A call with someone who can't influence the decision wastes the MuleSoft AE's time — and that damages the relationship.</div>
+      </div>
+    </div>
+
+    <div class="seq-step">
+      <div class="seq-line-wrap">
+        <div class="seq-circle" style="background:var(--slate)">Q5</div>
+      </div>
+      <div class="seq-content">
+        <div class="seq-meta">
+          <span class="seq-day">Question 5</span>
+          <span class="seq-type type-email" style="background:#D1FAE5;color:#065F46">Expectation Set</span>
+          <span style="font-size:11px;color:var(--muted)">Frame the 3-way call before booking it</span>
+        </div>
+        <div class="seq-subject">"Last question — I want to bring our alliance director and your MuleSoft account team on the call. Does that work for you?"</div>
+        <div class="seq-body">
+          <strong>How to explain the MuleSoft AE's presence if they ask:</strong><br/>
+          "We work alongside the MuleSoft team — they can speak to what's available through the partnership, any resources or commercial flexibility. It means you get two conversations in one. They're not there to sell you — they're there because they work with us on these implementations."<br/><br/>
+          <strong>If they push back on the MuleSoft AE joining:</strong><br/>
+          "Totally fine — we can start with just our team. If it makes sense after that call to loop them in, we can do that separately."<br/>
+          → Book without the AE. Tell VP Alliances immediately. They'll decide whether to push for a 3-way on the next call.<br/><br/>
+          <strong>Once they confirm:</strong><br/>
+          "Great — let me send you a calendar invite. We'll keep it to 30 minutes. I'll send you a short note beforehand so you know exactly who's joining and what we'll cover."<br/><br/>
+          <strong>Then send Calendly link immediately — do not let them leave the call without a time confirmed.</strong>
+        </div>
+        <div class="seq-note">This question does three things: (1) books the call, (2) introduces the MuleSoft AE naturally so they're not a surprise, (3) gives the prospect an easy out if they're uncomfortable — which builds trust and almost always makes them more comfortable.</div>
+        <span class="seq-stat">Prospects who do the qualifying call: 85%+ convert to a booked 3-way</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAIN BUCKET → BRIEF MAPPING -->
+  <div class="sec-title" style="font-size:18px;margin-bottom:16px">Pain Bucket → What to Write in the Brief</div>
+  <table class="obj-table" style="margin-bottom:0">
+    <thead><tr><th>Pain Bucket</th><th>Q2 Answer Sounds Like</th><th>What to Write in AE Brief</th><th>Suggested Opening for AE</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>A — Licence Waste</strong></td>
+        <td>"We bought MuleSoft X months ago and haven't deployed it yet" / "We're only using 20% of what we're paying for"</td>
+        <td>Bucket A. Licence purchased [date], partially/un-deployed. Pain: ROI not being realised. Urgency: [stated]. Budget: licence already spent.</td>
+        <td>"I understand you've had MuleSoft in place for a while — let's talk about what a realistic deployment looks like and what ROI you should be seeing by month 3."</td>
+      </tr>
+      <tr>
+        <td><strong>B — Bad Implementation</strong></td>
+        <td>"The previous partner built something that keeps breaking" / "We inherited a mess" / "Performance is terrible"</td>
+        <td>Bucket B. Existing implementation by [previous vendor/internal]. Specific issue: [what they said]. Urgency: [stated]. They need a rescue and rebuild.</td>
+        <td>"We hear this more than you'd think — let's look at what you've got and give you an honest assessment of what's salvageable vs what needs to be rebuilt."</td>
+      </tr>
+      <tr>
+        <td><strong>C — Integration Build</strong></td>
+        <td>"Salesforce doesn't talk to our ERP" / "We have [X] systems and they're all siloed" / "Manual exports are killing us"</td>
+        <td>Bucket C. Systems identified: [list]. Integration gap between: [specific systems]. Business impact: [manual work / reporting errors / delays]. This is a greenfield build.</td>
+        <td>"You've described exactly what MuleSoft is designed to solve — let me show you how we've connected [same system combo] for companies like yours and what that timeline looks like."</td>
+      </tr>
+      <tr>
+        <td><strong>D — Capacity / Scale</strong></td>
+        <td>"My team is buried" / "We can't keep up with the integrations needed" / "Backlog is 4 months long"</td>
+        <td>Bucket D. Internal team exists but overwhelmed. Backlog: [stated]. Specific projects blocked: [if stated]. They need capacity extension, not replacement.</td>
+        <td>"We work as an extension of your team — you keep the institutional knowledge, we take the execution backlog. Let's talk about what's sitting on the queue right now."</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- ══════════════════════════
+  8. PARTNER AE HANDOFF
+══════════════════════════ -->
+<div class="sec" id="handoff">
+  <div class="sec-label">Section 08</div>
+  <div class="sec-title">Partner AE Handoff Protocol — How to Make the AE Look Good</div>
+  <div class="sec-sub">The handoff is not just an introduction. It is the moment that determines whether the partner AE trusts DataSkate with the next prospect. Get this right every time.</div>
+
+  <div class="handoff-flow">
+    <div class="hf-step">
+      <div class="hf-num" style="color:var(--coral)">1</div>
+      <div class="hf-title">Prospect Confirms Interest</div>
+      <div class="hf-sub">Prospect replies or books via Calendly. SDR does a 5-min qualifying call if needed.</div>
+      <span class="hf-owner" style="background:var(--purple-lt);color:var(--purple-dk)">SDR owns</span>
+    </div>
+    <div class="hf-step">
+      <div class="hf-num" style="color:var(--coral)">2</div>
+      <div class="hf-title">SDR Sends Briefing Note</div>
+      <div class="hf-sub">1-page brief to Alliance Mgr/AE + Partner AE: who the prospect is, what they said, what pain was stated, what was promised.</div>
+      <span class="hf-owner" style="background:var(--purple-lt);color:var(--purple-dk)">SDR owns</span>
+    </div>
+    <div class="hf-step">
+      <div class="hf-num" style="color:var(--coral)">3</div>
+      <div class="hf-title">3-Way Call Booked</div>
+      <div class="hf-sub">Prospect + DataSkate Alliance Mgr/AE + MuleSoft AE. SDR sends calendar invite to all 3. SDR does NOT attend.</div>
+      <span class="hf-owner" style="background:var(--coral-lt);color:var(--coral-dk)">Alliance Mgr/AE takes over</span>
+    </div>
+    <div class="hf-step">
+      <div class="hf-num" style="color:var(--coral)">4</div>
+      <div class="hf-title">AE Debrief to SDR</div>
+      <div class="hf-sub">After call, Alliance Mgr/AE sends SDR a 2-line outcome: converted/not, next steps, any follow-up SDR should send.</div>
+      <span class="hf-owner" style="background:var(--coral-lt);color:var(--coral-dk)">Alliance Mgr/AE</span>
+    </div>
+  </div>
+
+  <div class="role-overview">
+    <div class="ro-card">
+      <div class="ro-title">The 1-Page Prospect Brief (SDR sends before every call)</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Company name, size, industry, location</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Contact name, title, LinkedIn profile link</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Tech stack confirmed (from Apollo/Clay)</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Pain stated in their own words — exact quote if possible</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">What was promised in the outreach — what they expect the call to cover</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Full email thread attached or linked</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Suggested angle for AE to open with</div></div></div>
+    </div>
+    <div class="ro-card">
+      <div class="ro-title">How to Frame the Call for the Prospect</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">SDR confirmation email: "I've invited [MuleSoft AE Name] from the MuleSoft team to join — they work directly with companies in your space and can speak to what's available through the partnership."</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">This positions the MuleSoft AE as an added bonus — not a sales tag-along</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">DataSkate runs the call — MuleSoft AE adds platform credibility and commercial weight</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">If prospect asks "why is MuleSoft on the call?" — "They're our implementation partner — having them here means we can commit to resources and timelines on the spot."</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  9. DAILY CADENCE
+══════════════════════════ -->
+<div class="sec" id="cadence">
+  <div class="sec-label">Section 09</div>
+  <div class="sec-title">SDR Daily, Weekly & Monthly Cadence</div>
+  <div class="sec-sub">Volume is the job. A SDR who isn't contacting 15+ new prospects per day and managing 60+ active sequences is not hitting the activity floor needed for results.</div>
+
+  <div class="cadence-grid">
+    <div class="cad-col">
+      <div class="cad-head"><span class="cad-badge">Daily</span>SDR/BDR</div>
+      <div class="cad-body">
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Check Instantly inbox — any replies overnight? Respond within 1 hour, no exceptions</div><div class="task-tool">🛠 Instantly</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Load 12–15 new prospects into Instantly sequences from Apollo/Clay list</div><div class="task-tool">🛠 Apollo → Clay → Instantly</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Cold calls — 15–20 dials per day. Best windows: 8–9am, 12–1pm, 4–5pm prospect local time</div><div class="task-tool">🛠 Aircall / Salesloft / RingCentral</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">LinkedIn — respond to any accepted connections, send DMs for Day 2 and Day 10 touches</div><div class="task-tool">🛠 LinkedIn Sales Navigator</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Log ALL activity in CRM — every email sent, call made, reply received, meeting booked. Same day.</div><div class="task-tool">🛠 HubSpot CRM</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Send prospect brief to Alliance Mgr/AE for any call booked today — before EOD</div><div class="task-tool">🛠 Notion brief template → Slack</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Review sequence performance — any step with open rate below 30%? Flag for rewrite.</div><div class="task-tool">🛠 Instantly analytics</div></div><span class="tb t-good">Good</span></div>
+      </div>
+    </div>
+    <div class="cad-col">
+      <div class="cad-head"><span class="cad-badge">Weekly</span>SDR/BDR</div>
+      <div class="cad-body">
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Pipeline review with VP Alliances and Alliance Mgr/AE — booked calls, replies, sequence performance</div><div class="task-sub">Mon · 30 min</div><div class="task-tool">🛠 HubSpot dashboard · Google Meet</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Build next week's prospect list — 60+ contacts enriched and verified, loaded into Instantly</div><div class="task-tool">🛠 Apollo → Clay enrichment → email verify → Instantly</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Update VP Alliances on partner AE-sourced account progress — which named accounts engaged?</div><div class="task-tool">🛠 Slack update + HubSpot tag</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">A/B test review — which subject lines, openers, CTAs are winning? Rewrite losers.</div><div class="task-tool">🛠 Instantly A/B reports</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">90-day nurture check — any previously sequenced prospects ready to re-engage?</div><div class="task-tool">🛠 HubSpot nurture filter</div></div><span class="tb t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Listen to 1 recorded discovery call — improve handoff quality and qualification instincts</div><div class="task-tool">🛠 Gong / Chorus / Zoom recording</div></div><span class="tb t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="cad-col">
+      <div class="cad-head"><span class="cad-badge">Monthly</span>SDR/BDR</div>
+      <div class="cad-body">
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Full sequence audit — rewrite any email with reply rate below 2% over 50+ sends</div><div class="task-tool">🛠 Instantly → rewrite in Claude.ai</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">ICP review with VP Alliances — is the targeting still right? New verticals to add?</div><div class="task-tool">🛠 HubSpot won/lost analysis</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Partner AE relationship check — request new named account list from each active AE</div><div class="task-tool">🛠 Slack / email to partner AE via VP Alliances</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Activity vs booking funnel — how many dials/emails per booked call? Identify biggest drop-off step</div><div class="task-tool">🛠 HubSpot funnel report</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Read 1 B2B SaaS outbound playbook or SDR training resource</div><div class="task-tool">🛠 30 Minutes to President's Club / Belkins blog / YouTube</div></div><span class="tb t-self">Self</span></div>
+      </div>
+    </div>
+    <div class="cad-col">
+      <div class="cad-head"><span class="cad-badge">Quarterly</span>SDR/BDR</div>
+      <div class="cad-body">
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Full outbound playbook review — what changed in the market, ICP, or sequence performance? Update with VP Alliances</div><div class="task-tool">🛠 Notion playbook doc</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">QBR contribution — present SDR pipeline contribution to CEO: leads generated, calls booked, deals influenced</div><div class="task-tool">🛠 HubSpot attribution report → Google Slides</div></div><span class="tb t-must">Must</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">New partner AE activation — target 2 new AEs per partner per quarter to bring into the co-prospecting model</div><div class="task-tool">🛠 With VP Alliances lead</div></div><span class="tb t-good">Good</span></div>
+        <div class="task"><div class="cb" onclick="tog(this)"></div><div class="task-body"><div class="task-title">Complete 1 sales training course — cold email, cold calling, or B2B SaaS sales</div><div class="task-tool">🛠 Sandler / MEDDIC / SalesHive training</div></div><span class="tb t-self">Self</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  10. KPIs & TARGETS
+══════════════════════════ -->
+<div class="sec" id="kpi">
+  <div class="sec-label">Section 10</div>
+  <div class="sec-title">KPIs, Activity Floors & Ramp Targets</div>
+  <div class="sec-sub">These are the numbers that determine whether the SDR role is working. Everything traces back to booked calls — because booked calls become pipeline.</div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-val">60</div>
+      <div class="kpi-label">New prospects contacted per week</div>
+      <div class="kpi-note">Activity floor — non-negotiable</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">15–20</div>
+      <div class="kpi-label">Cold dials per day</div>
+      <div class="kpi-note">Best: Tue–Thu 8–9am local</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">4–6</div>
+      <div class="kpi-label">Booked discovery calls per week</div>
+      <div class="kpi-note">Ramp: 2/wk month 1 → 4/wk month 3</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">&lt;3%</div>
+      <div class="kpi-label">Email bounce rate</div>
+      <div class="kpi-note">Above this = domain health at risk</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-val">40%+</div>
+      <div class="kpi-label">Email open rate target</div>
+      <div class="kpi-note">Below 30% = subject line problem</div>
+    </div>
+  </div>
+
+  <div class="role-overview">
+    <div class="ro-card">
+      <div class="ro-title">90-Day Ramp Plan for New SDR</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">Days 1–30: Shadow Alliance Mgr/AE on 3+ discovery calls. Learn the product, the pain, the pitch. Start with 20 contacts/week only.</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">Days 31–60: Ramp to 40 contacts/week. Target 2 booked calls/week. First sequence A/B tests running.</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">Days 61–90: Full 60/week cadence. Target 4+ booked calls/week. Full sequence library in place.</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">Day 90 gate: If not hitting 3+ booked calls/week — review ICP, sequences, and call quality before extending.</div></div></div>
+    </div>
+    <div class="ro-card">
+      <div class="ro-title">Activity-to-Revenue Funnel (Benchmark)</div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">60 prospects contacted/week</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">→ 5% reply or engage = 3 interested prospects/week</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">→ 80% of interested book a call = 4–5 calls booked/week</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">→ 30% of calls become qualified pipeline = 1–2 opportunities/week</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--coral)"></div><div><div class="ro-val">→ 25% close rate on qualified pipeline = 1 new SOW every 2–3 weeks</div></div></div>
+      <div class="ro-item"><div class="ro-dot" style="background:var(--teal)"></div><div><div class="ro-val">= 2 new deals/month at $25–50K avg = $50–100K new ARR/month from 1 SDR</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+  11. TOOL STACK
+══════════════════════════ -->
+<div class="sec" id="tools">
+  <div class="sec-label">Section 11</div>
+  <div class="sec-title">SDR Tool Stack — Every Tool, Every Job</div>
+  <div class="sec-sub">Lean stack. Every tool has one job. Nothing duplicates.</div>
+
+  <div class="tool-grid">
+    <div class="tool-card">
+      <span class="tool-tag" style="background:#DBEAFE;color:#1E40AF">Prospecting</span>
+      <div class="tool-name">Apollo.io</div>
+      <div class="tool-use">Find prospect contacts by: company size, tech stack (MuleSoft/Salesforce detected), job title, industry, location. Export verified emails. 60+ contacts/week sourced here.</div>
+      <span class="tool-cost">~$99/month · SDR plan</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:#EDE9FE;color:#5B21B6">Enrichment</span>
+      <div class="tool-name">Clay</div>
+      <div class="tool-use">Enrich Apollo contacts with: LinkedIn activity, job postings, funding news, tech stack details, company news. Powers personalised first lines. Turns a list into a targeted sequence.</div>
+      <span class="tool-cost">~$149/month · Starter plan</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:#D1FAE5;color:#065F46">Sequencing</span>
+      <div class="tool-name">Instantly</div>
+      <div class="tool-use">Send all outbound email sequences. Rotate sending domains for deliverability. A/B test subject lines. Track open, reply, and booking rates per sequence step. Manage inbox replies.</div>
+      <span class="tool-cost">~$97/month · Growth plan</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:#FEF3C7;color:#92400E">Calling</span>
+      <div class="tool-name">Aircall / RingCentral</div>
+      <div class="tool-use">Power dialler for cold calls. Call recording for review and coaching. Local presence dialling — shows local number to prospect. Integrates with HubSpot for auto-logging.</div>
+      <span class="tool-cost">~$30/month/user</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:#FDF0ED;color:#9B1C0A">CRM</span>
+      <div class="tool-name">HubSpot</div>
+      <div class="tool-use">Log every touch, reply, call, and booking. Pipeline visibility for VP Alliances. Track SDR activity vs targets. Source attribution for every deal. SDR creates contact + deal records same day of booking.</div>
+      <span class="tool-cost">Already in stack</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:var(--slate-lt);color:var(--slate-dk)">Social</span>
+      <div class="tool-name">LinkedIn Sales Navigator</div>
+      <div class="tool-use">Find decision-maker contacts, filter by tech stack signals and seniority. Send Day 2 and Day 10 LinkedIn DMs. Track prospect activity (new job, posts) for personalisation hooks.</div>
+      <span class="tool-cost">~$99/month</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:#F0FDF4;color:#15803D">Scheduling</span>
+      <div class="tool-name">Calendly</div>
+      <div class="tool-use">SDR's booking link in every email CTA. Connects to Alliance Mgr/AE calendar. Automatically books 3-way calls when prospect selects a time. Sends reminders.</div>
+      <span class="tool-cost">~$16/month</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:#EDE9FE;color:#5B21B6">AI Writing</span>
+      <div class="tool-name">Claude.ai</div>
+      <div class="tool-use">Rewrite underperforming email sequences. Generate personalised first lines from Clay enrichment data. Draft objection handling responses. Create new sequence variations for A/B tests.</div>
+      <span class="tool-cost">~$20/month</span>
+    </div>
+    <div class="tool-card">
+      <span class="tool-tag" style="background:var(--amber-lt);color:var(--amber-dk)">Email Health</span>
+      <div class="tool-name">Mailreach / Warmup Inbox</div>
+      <div class="tool-use">Warm up new sending domains before launching sequences. Monitor domain reputation. Keep bounce rate below 3%. Critical — without this, emails land in spam and the whole motion fails.</div>
+      <span class="tool-cost">~$79/month per domain</span>
+    </div>
+  </div>
+
+  <div class="alert" style="background:var(--amber-lt);border-color:var(--amber-md);margin-top:8px">
+    <div class="alert-title" style="color:var(--amber-dk)">Total SDR tool stack cost: ~$589/month. ROI breakeven: 1 closed deal covers 12 months of tools.</div>
+    <div class="alert-body" style="color:var(--amber-dk)">A single $25K SOW pays for the entire SDR tool stack for 42 months. This is not a cost question — it's a hiring and execution question. The tools work when the SDR uses them correctly and consistently.</div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <span>DataSkate · SDR/BDR Outbound Playbook · Q2 2026</span>
+  <span>Owned by VP Alliances · Executed by SDR/BDR · Reviewed monthly</span>
+</footer>
+
+<script>
+function tog(el){el.classList.toggle('checked')}
+function nav(id){
+  document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.pnav').forEach(n=>n.classList.remove('active'));
+  event.target.classList.add('active');
+}
+const sections=['role','motion','icp','sourcing','sequence','objections','qualify','handoff','cadence','kpi','tools'];
+const navs=document.querySelectorAll('.pnav');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const i=sections.indexOf(e.target.id);
+      navs.forEach((n,j)=>n.classList.toggle('active',i===j));
+    }
+  });
+},{threshold:0.2,rootMargin:'-60px 0px -40% 0px'});
+sections.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el)});
+</script>
+</body>
+</html>
+PLACEHOLDER
